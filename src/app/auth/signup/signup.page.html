@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sign up new user</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input inputmode="email" [(ngModel)]="userEmail" required autofocus></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="userPassword" required></ion-input>
+    </ion-item>
+    <ion-button expand="full" color="dark" (click)="authService.doRegister(userEmail, userPassword)">
+      Sign up with email
+    </ion-button>
+    <ion-item-divider></ion-item-divider>
+    <ion-button expand="full" color="danger" (click)="authService.doGoogleLogin()">
+      Google sign up
+    </ion-button>
+    <ion-button expand="full" color="primary" (click)="authService.doFacebookLogin()">
+      Facebook sign up
+    </ion-button>
+    <ion-item-divider></ion-item-divider>
+
+  </ion-list>
+</ion-content>
