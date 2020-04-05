@@ -8,19 +8,28 @@
       <ion-icon *ngIf="trip.countryCode" [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'"></ion-icon>
       {{trip.city}}, {{trip.state}}, {{trip.country}}
     </ion-card-title>
-  </ion-card-header>
-  <ion-content>
-    {{trip.purpose}}
-  </ion-content>
-  <ion-button color="primary" (click)="trip.editMode=true">
-    <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-  </ion-button>
-  <ion-button color="danger" (click)="delete()">
-    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-  </ion-button>
-</ion-card>
-<ion-item >
 
+  </ion-card-header>
+  <ion-card-content>
+    {{trip.purpose}}
+
+  </ion-card-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col offset="8" size="2">
+        <ion-button fill="clear" (click)="trip.editMode=true">
+          <ion-icon slot="icon-only" color="primary" name="create-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button fill="clear" (click)="delete()">
+          <ion-icon slot="icon-only" color="danger" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</ion-card>
+<ion-item>
 
 
 </ion-item>
