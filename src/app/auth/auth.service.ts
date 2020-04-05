@@ -6,8 +6,8 @@ import * as firebase from 'firebase/app';
 export class AuthService {
   user: firebase.User;
 
-  constructor(public afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(user => {
+  constructor(public auth: AngularFireAuth) {
+    this.auth.authState.subscribe(user => {
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
@@ -57,15 +57,15 @@ export class AuthService {
 
   doLogout() {
     localStorage.setItem('user', null);
-    return this.afAuth.auth.signOut();
+    return this.auth.signOut();
   }
 
   async resetPassword(email: string) {
-    return this.afAuth.auth.sendPasswordResetEmail(email);
+    return this.auth.sendPasswordResetEmail(email);
   }
 
   private loginWithProvider(provider) {
-    return this.afAuth.auth.signInWithPopup(provider);
+    return this.auth.signInWithPopup(provider);
   }
 
 
