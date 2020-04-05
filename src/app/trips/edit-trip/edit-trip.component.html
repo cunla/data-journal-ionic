@@ -1,0 +1,39 @@
+<!--
+<form (ngSubmit)="onSubmit(tripForm.value)"
+      [formGroup]="tripForm" novalidate>
+  <ion-list>
+    <ion-item role="listitem">
+      <mat-form-field>
+        <input formControlName="start" matInput readonly [matDatepicker]="picker1" placeholder="Starting date">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input formControlName="end" matInput readonly [matDatepicker]="picker2" placeholder="Ending date">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input type="text" placeholder="Pick a location" aria-label="Location"
+               matInput formControlName="locationName" [matAutocomplete]="auto">
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option *ngFor="let item of filteredOptions | async" [value]="item.locationName">
+            <mat-icon [svgIcon]="'flag-'+item['iso2'].toLowerCase()"></mat-icon>
+            {{item['city'] + ', ' + item['state'] + ', ' + item['country']}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field>
+        <input formControlName="purpose" matInput placeholder="Purpose">
+      </mat-form-field>
+      <button [disabled]="tripForm.invalid" color="primary" mat-raised-button type="submit">
+        <mat-icon>save</mat-icon>
+      </button>
+    </ion-item>
+
+  </ion-list>
+  <mat-error *ngIf="tripForm.hasError('dates')">
+    End date must be after start date
+  </mat-error>
+</form>
+-->
