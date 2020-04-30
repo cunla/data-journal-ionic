@@ -16,8 +16,12 @@
 </ion-header>
 <ion-content fullscreen>
 
-
-  <app-edit-trip [trip]="newTrip"></app-edit-trip>
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal(newTrip)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+<!--  <app-edit-trip [trip]="newTrip"></app-edit-trip>-->
   <ion-list>
 
     <app-trip [trip]="item" *ngFor="let item of trips.data | async"

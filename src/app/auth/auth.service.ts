@@ -1,18 +1,22 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable()
 export class AuthService {
   user: firebase.User;
+  isLoginSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
 
   constructor(public auth: AngularFireAuth) {
     this.auth.authState.subscribe(user => {
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
+        this.isLoginSubject.next(true);
       } else {
         localStorage.setItem('user', null);
+        this.isLoginSubject.next(false);
       }
     });
   }
@@ -20,6 +24,10 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
     return user !== null;
+  }
+
+  loggedinSubject(): Observable<boolean> {
+    return this.isLoginSubject.asObservable();
   }
 
   get userId() {

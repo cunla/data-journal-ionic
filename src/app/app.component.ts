@@ -5,6 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from './auth/auth.service';
 import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
       icon: 'map'
     },
   ];
+  loggedInSubject : Observable<boolean>;
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
@@ -39,6 +41,14 @@ export class AppComponent implements OnInit {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+    });
+    this.loggedInSubject = this.authService.loggedinSubject();
+    this.loggedInSubject.subscribe((val)=>{
+      if(val){
+        this.router.navigateByUrl('/trips/list').then();
+      }else{
+        this.router.navigateByUrl('/auth/login').then();
+      }
     });
   }
 
@@ -50,8 +60,6 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.authService.doLogout().then(() => {
-      this.router.navigateByUrl('/auth/login').then();
-    });
+    this.authService.doLogout().then(() => {});
   }
 }

@@ -6,6 +6,7 @@ import {map, startWith} from 'rxjs/operators';
 import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
+import {ModalController} from '@ionic/angular';
 
 @Component({
   selector: 'app-edit-trip',
@@ -19,7 +20,8 @@ export class EditTripComponent implements OnInit {
   _filter = CitiesService.filterCities;
 
   constructor(public trips: TripsService,
-              private fb: FormBuilder,) {
+              private fb: FormBuilder,
+              public modalController: ModalController,) {
   }
 
   ngOnInit() {
@@ -69,5 +71,11 @@ export class EditTripComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value))
     );
+  }
+
+  public dismissModal() {
+    this.modalController.dismiss({
+      dismissed: true
+    }).then();
   }
 }

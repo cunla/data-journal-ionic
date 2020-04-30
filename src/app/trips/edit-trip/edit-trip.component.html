@@ -1,3 +1,56 @@
+<ng-template #empty
+             let-attrs="attrs">
+  <div class="country-suggestions-empty">
+    <ion-text>That country does not exist!</ion-text>
+
+    <div class="country-suggestions-empty-icon"></div>
+  </div>
+</ng-template>
+
+<ng-template #suggestions let-attrs="attrs">
+  <ion-item>
+    <ion-icon [src]="'/assets/flags/'+attrs.data.iso2.toLowerCase()+'.svg'"></ion-icon>
+    <ion-text>
+            <span
+              [innerHtml]="(attrs.data.city + ', ' + attrs.data.state + ', ' + attrs.data.country) | boldprefix:attrs.keyword"></span>
+    </ion-text>
+  </ion-item>
+</ng-template>
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Add new trip
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form (ngSubmit)="onSubmit(tripForm.value)"
+        [formGroup]="tripForm" novalidate>
+
+    <ion-item>
+      <ion-label>Start date</ion-label>
+      <ion-datetime displayFormat="YYYY MMM DD" formControlName="start"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>End date</ion-label>
+      <ion-datetime displayFormat="YYYY MMM DD" formControlName="end"></ion-datetime>
+    </ion-item>
+    <ion-item>
+
+    </ion-item>
+    <ion-auto-complete [dataProvider]="_filter"
+                       [template]="suggestions"
+                       [emptyTemplate]="empty"
+                       [selectionTemplate]="suggestions"
+                       formControlName="locationName"></ion-auto-complete>
+
+
+  </form>
+</ion-content>
 <!--
 <form (ngSubmit)="onSubmit(tripForm.value)"
       [formGroup]="tripForm" novalidate>
@@ -13,6 +66,7 @@
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
+
       <mat-form-field>
         <input type="text" placeholder="Pick a location" aria-label="Location"
                matInput formControlName="locationName" [matAutocomplete]="auto">
@@ -23,6 +77,7 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
+
       <mat-form-field>
         <input formControlName="purpose" matInput placeholder="Purpose">
       </mat-form-field>

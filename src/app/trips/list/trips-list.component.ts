@@ -3,6 +3,8 @@ import {EMPTY_TRIP, TripInterface, TripsService} from '../trips.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
 import * as moment from 'moment';
+import {ModalController} from '@ionic/angular';
+import {EditTripComponent} from '../edit-trip/edit-trip.component';
 
 @Component({
   selector: 'app-trips',
@@ -13,7 +15,16 @@ export class TripsListComponent implements OnInit {
   newTrip: TripInterface = EMPTY_TRIP;
 
   constructor(public trips: TripsService,
+              public modalController: ModalController,
   ) {
+  }
+
+  async presentModal(trip: TripInterface) {
+    const modal = await this.modalController.create({
+      component: EditTripComponent,
+      componentProps: {trip,}
+    });
+    return await modal.present();
   }
 
   ngOnInit() {
@@ -22,7 +33,7 @@ export class TripsListComponent implements OnInit {
 
   }
 
-   searchByName(event) {
+  searchByName(event) {
     const query = event.target.value.toLowerCase();
     this.trips.init('trips', 'start', {
       reverse: true, prepend: false, searchValue: query,
