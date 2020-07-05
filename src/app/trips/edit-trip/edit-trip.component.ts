@@ -17,10 +17,11 @@ export class EditTripComponent implements OnInit {
   @Input() trip: TripInterface;
   tripForm: FormGroup;
   filteredOptions: Observable<any[]>;
-  _filter = CitiesService.filterCities;
+  // _filter = CitiesService.filterCities;
 
   constructor(public trips: TripsService,
               private fb: FormBuilder,
+              public citiesService:CitiesService,
               public modalController: ModalController,) {
   }
 
@@ -67,10 +68,10 @@ export class EditTripComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
-    this.filteredOptions = this.tripForm.get('locationName').valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+    // this.filteredOptions = this.tripForm.get('locationName').valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value))
+    // );
   }
 
   public dismissModal() {

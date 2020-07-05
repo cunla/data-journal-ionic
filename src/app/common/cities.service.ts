@@ -4,6 +4,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import {containsCaseInsensitive} from './string.tools';
+import { AutoCompleteService } from 'ionic4-auto-complete';
 
 const CITIES = [
   // 'city_ascii/admin_name/country/iso2/iso3/lat/lng/population',
@@ -12033,12 +12034,13 @@ const LNG_INDEX = 6;
 const POPULATION_INDEX = 7;
 
 @Injectable()
-export class CitiesService {
+export class CitiesService implements AutoCompleteService {
+  formValueAttribute = 'locationName';
   constructor() {
   }
 
-  public static filterCities(value: string): LocationInterface[] {
-    const filterValue = value ? value.toLowerCase() : '';
+  public getResults(keyword:string): LocationInterface[] {
+    const filterValue = keyword ? keyword.toLowerCase() : '';
     const res = CITIES
       .filter(item => containsCaseInsensitive(item, filterValue))
       .map(item => {
