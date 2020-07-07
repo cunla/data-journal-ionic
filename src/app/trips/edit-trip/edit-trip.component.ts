@@ -67,10 +67,6 @@ export class EditTripComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
-    // this.filteredOptions = this.tripForm.get('locationName').valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filter(value))
-    // );
   }
 
   public dismissModal() {

@@ -73,15 +73,18 @@
                 [disabled]="tripForm.invalid" type="submit">
       {{trip?.id ? 'Save' : 'Add'}}
     </ion-button>
-
-    <agm-map
-      [zoomControl]="false"
-      [streetViewControl]="false"
-      minZoom="5"
-      maxZoom="8"
-      [latitude]="trip.lat"
-      [longitude]="trip.lng">
-      <agm-marker [latitude]="trip.lat" [longitude]="trip.lng"></agm-marker>
-    </agm-map>
+    <ion-card>
+      <ion-card-content>
+        <agm-map [streetViewControl]="false"
+                 minZoom="5"
+                 maxZoom="8"
+                 [latitude]="trip.lat || 43.7"
+                 [longitude]="trip.lng || -79.42">
+          <agm-marker *ngIf="trip.lat && trip.lng"
+                      [latitude]="trip.lat"
+                      [longitude]="trip.lng"></agm-marker>
+        </agm-map>
+      </ion-card-content>
+    </ion-card>
   </form>
 </ion-content>
