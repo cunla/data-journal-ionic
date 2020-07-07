@@ -21,7 +21,6 @@ export interface QueryConfig {
 }
 
 export interface AddressInterface {
-  editMode: boolean;
   id: number;
   start: Date;
   end: Date;
@@ -36,7 +35,6 @@ export interface AddressInterface {
 }
 
 export const EMPTY_ADDRESS: AddressInterface = {
-  editMode: false,
   id: null,
   start: null,
   end: null,

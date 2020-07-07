@@ -53,7 +53,6 @@ export class EditAddressComponent implements OnInit {
     } else {
       this.addressService.update(this.address.id, value).then(
         () => {
-          this.address.editMode = false;
           this.addressService.refresh();
         }
       );

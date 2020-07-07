@@ -49,7 +49,6 @@ export class EditTripComponent implements OnInit {
     } else {
       this.trips.update(this.trip.id, value).then(
         () => {
-          this.trip.editMode = false;
           this.trips.refresh();
         }
       );

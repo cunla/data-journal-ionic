@@ -19,7 +19,6 @@ export interface QueryConfig {
 }
 
 export interface TripInterface {
-  editMode: boolean;
   id: number;
   start: Date;
   end: Date;
@@ -34,7 +33,6 @@ export interface TripInterface {
 }
 
 export const EMPTY_TRIP: TripInterface = {
-  editMode: false,
   id: null,
   start: null,
   end: null,
