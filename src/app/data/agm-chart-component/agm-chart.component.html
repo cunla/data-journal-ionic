@@ -1,0 +1,28 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Map</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <agm-map
+    [zoomControl]="false"
+    [streetViewControl]="false"
+    minZoom="2"
+    maxZoom="4"
+    [latitude]="currentAddress.lat" [longitude]="currentAddress.lon">
+    <agm-marker *ngFor="let item of cities"
+                [latitude]="item.lat" [longitude]="item.lon">
+    </agm-marker>
+    <agm-polyline *ngFor="let item of trips"
+                  [geodesic]="true"
+                  strokeColor="red"
+                  strokeWeight="1"
+                  strokeOpacity="0.3">
+      <agm-polyline-point [latitude]="item.origin.lat" [longitude]="item.origin.lon"></agm-polyline-point>
+      <agm-polyline-point [latitude]="item.target.lat" [longitude]="item.target.lon"></agm-polyline-point>
+    </agm-polyline>
+  </agm-map>
+</ion-content>

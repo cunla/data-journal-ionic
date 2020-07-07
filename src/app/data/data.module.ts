@@ -2,26 +2,26 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {ToolsModule} from '../common/tools.module';
-import {ChartComponent} from './chart/chart.component';
-import {HighchartsChartModule} from 'highcharts-angular';
 import {IonicModule} from '@ionic/angular';
+import {AgmCoreModule} from '@agm/core';
+import {AgmChartComponent} from './agm-chart-component/agm-chart.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'map', pathMatch: 'full'},
-  {path: 'map', component: ChartComponent},
+  {path: 'map', component: AgmChartComponent},
 ];
 
 
 @NgModule({
   declarations: [
-    ChartComponent,
+    AgmChartComponent,
   ],
   imports: [
-    HighchartsChartModule,
     CommonModule,
     RouterModule.forChild(routes),
     ToolsModule,
     IonicModule,
+    AgmCoreModule,
   ],
   providers: [
   ],
