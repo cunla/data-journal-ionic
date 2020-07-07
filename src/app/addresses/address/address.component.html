@@ -1,0 +1,31 @@
+<ion-card *ngIf="!address.editMode">
+  <ion-card-header>
+    <ion-card-subtitle>
+      {{address.start | date: 'yyyy-MM-dd'}} - {{address.end | date: 'yyyy-MM-dd'}}
+      ({{daysDiff(address.start, address.end)}} days)
+    </ion-card-subtitle>
+    <ion-card-title>
+      <ion-icon *ngIf="address.countryCode" [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
+      {{address.city}}, {{address.state}}, {{address.country}}
+    </ion-card-title>
+
+  </ion-card-header>
+  <ion-card-content>
+
+  </ion-card-content>
+  <ion-footer>
+    <ion-row>
+      <ion-col offset="8" size="2">
+        <ion-button fill="clear" (click)="editClicked.emit(null)">
+          <ion-icon slot="icon-only" color="primary" name="create-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button fill="clear" (click)="delete()">
+          <ion-icon slot="icon-only" color="danger" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+</ion-card>
+

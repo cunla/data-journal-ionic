@@ -1,0 +1,34 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>User addresses journal</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="exportCsv()">
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar id="addressSearchBar"
+                   debounce="500"
+                   placeholder="Filter addresses">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentModal(newAddress)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-list>
+
+    <app-address *ngFor="let item of addressService.data | async"
+                 [address]="item"
+                 (editClicked)="presentModal(item)">
+    </app-address>
+  </ion-list>
+</ion-content>
