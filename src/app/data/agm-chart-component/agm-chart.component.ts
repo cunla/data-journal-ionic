@@ -15,7 +15,7 @@ export interface Path {
   target: Point;
 }
 
-const DEFAULT_ADDRESS={id:'Toronto',lat:43.7,lon:-79.42};
+const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
 
 @Component({
   selector: 'app-agm-chart',
@@ -30,12 +30,14 @@ export class AgmChartComponent implements OnInit {
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {
     this.addressService.data.subscribe(addresses => {
-      this.currentAddress = (addresses.length === 0) ?  DEFAULT_ADDRESS: AgmChartComponent.itemToPoint(addresses[0]);
+      this.currentAddress = AgmChartComponent.itemToPoint(
+        this.addressService.getAddressOnDate(new Date())) || DEFAULT_ADDRESS;
+
       this.tripsService.data.subscribe(trips => {
         const sortedTrips = trips.sort(AgmChartComponent.sortByDates);
         // tslint:disable-next-line:forin
         for (const ind in sortedTrips) {
-          const originCity = AgmChartComponent.findOrigin(addresses, sortedTrips[ind]);
+          const originCity = AgmChartComponent.itemToPoint(this.addressService.getAddressOnDate(sortedTrips[ind].start));
           const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
           if (targetCity && targetCity.lat && targetCity.lon) {
             this.cities.add(targetCity);
@@ -46,27 +48,12 @@ export class AgmChartComponent implements OnInit {
     });
   }
 
-  private static findOrigin(addresses: AddressInterface[], trip: TripInterface) {
-    let ind = 0;
-    while (ind < addresses.length) {
-      if (addresses[ind].start <= trip.start &&
-        (!addresses[ind].end || addresses[ind].end >= trip.end)) {
-        const res = AgmChartComponent.itemToPoint(addresses[ind]);
-        // console.log(`Found address ${ind}: ${res.id} for trip ${trip.city}`);
-        return res;
-      }
-      ++ind;
-    }
-    console.warn('returning last address or no addresses in list');
-    return (addresses.length === 0) ? null : AgmChartComponent.itemToPoint(addresses[addresses.length - 1]);
-  }
-
   private static itemToPoint(item: TripInterface | AddressInterface): Point {
-    return {
+    return item ? {
       id: item.city,
       lon: +item.lng,
       lat: +item.lat,
-    };
+    } : null;
   }
 
   private static sortByDates(a: TripInterface, b: TripInterface) {
