@@ -28,13 +28,10 @@ export class AddressListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const searchbar = document.getElementById('addressSearchBar');
-    searchbar.addEventListener('ionInput', this.searchByName.bind(this));
   }
 
   searchByName(event) {
     const query = event.target.value.toLowerCase();
-    console.log(`Searching for ${query}`);
     this.addressService.init(ADDRESS_HISTORY_PATH, 'start', {
       reverse: true, prepend: false, searchValue: query,
     });
