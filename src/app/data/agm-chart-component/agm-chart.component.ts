@@ -25,7 +25,7 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
 export class AgmChartComponent implements OnInit {
   cities = new Set<Point>();
   trips: Array<Path> = [];
-  private currentAddress: Point;
+  currentAddress: Point;
 
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {
@@ -66,9 +66,6 @@ export class AgmChartComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
   private addTripIfRelevant(origin: Point, target: Point): void {
     if (!origin || origin.id === target.id) {
       return;
@@ -80,5 +77,9 @@ export class AgmChartComponent implements OnInit {
     };
     this.trips.push(t);
   }
+
+  ngOnInit() {
+  }
+
 
 }
