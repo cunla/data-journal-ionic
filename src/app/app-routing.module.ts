@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'addresses',
     loadChildren: () => import('./addresses/address.module').then(m => m.AddressModule)
   },
+  {
+    path: 'map',
+    loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+  },
 ];
 
 @NgModule({
