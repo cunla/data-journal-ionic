@@ -5,6 +5,7 @@ import {saveAs} from 'file-saver';
 import * as moment from 'moment';
 import {ModalController} from '@ionic/angular';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
+import {StateProvider} from '../../common/state.provider';
 
 @Component({
   selector: 'app-trips',
@@ -15,11 +16,16 @@ export class AddressListComponent implements OnInit {
   newAddress: AddressInterface = EMPTY_ADDRESS;
 
   constructor(public addressService: AddressService,
+              private state: StateProvider,
               public modalController: ModalController,
   ) {
   }
 
   async presentModal(address: AddressInterface) {
+    if (this.state.modalOpen) {
+      return;
+    }
+    this.state.modalOpen = true;
     const modal = await this.modalController.create({
       component: EditAddressComponent,
       componentProps: {address,}

@@ -5,6 +5,7 @@ import {saveAs} from 'file-saver';
 import * as moment from 'moment';
 import {ModalController} from '@ionic/angular';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
+import {StateProvider} from '../../common/state.provider';
 
 @Component({
   selector: 'app-trips',
@@ -15,11 +16,16 @@ export class TripsListComponent implements OnInit {
   newTrip: TripInterface = EMPTY_TRIP;
 
   constructor(public trips: TripsService,
+              private state: StateProvider,
               public modalController: ModalController,
   ) {
   }
 
   async presentModal(trip: TripInterface) {
+    if (this.state.modalOpen) {
+      return;
+    }
+    this.state.modalOpen = true;
     const modal = await this.modalController.create({
       component: EditTripComponent,
       componentProps: {trip,}

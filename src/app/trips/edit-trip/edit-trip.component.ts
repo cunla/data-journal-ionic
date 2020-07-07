@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
 import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
+import {StateProvider} from '../../common/state.provider';
 
 @Component({
   selector: 'app-edit-trip',
@@ -15,11 +15,9 @@ import {ModalController} from '@ionic/angular';
 export class EditTripComponent implements OnInit {
   @Input() trip: TripInterface;
   tripForm: FormGroup;
-  filteredOptions: Observable<any[]>;
-
-  // _filter = CitiesService.filterCities;
 
   constructor(public trips: TripsService,
+              private state: StateProvider,
               private fb: FormBuilder,
               public citiesService: CitiesService,
               public modalController: ModalController,) {
@@ -79,6 +77,17 @@ export class EditTripComponent implements OnInit {
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
-    }).then();
+    }).then(() => {
+      this.state.modalOpen = false;
+    });
+  }
+
+  locationChanged(location: TripInterface) {
+    this.trip.lat = location.lat;
+    this.trip.lng = location.lng;
+  }
+
+  resetLocation($event: any) {
+    this.tripForm.get('locationName').reset();
   }
 }

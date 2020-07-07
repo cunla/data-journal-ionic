@@ -49,8 +49,10 @@
                            [template]="suggestions"
                            [emptyTemplate]="empty"
                            [selectionTemplate]="selection"
-                           formControlName="locationName"></ion-auto-complete>
-
+                           (itemSelected)="locationChanged($event)"
+                           (focus)="resetLocation($event)"
+                           formControlName="locationName">
+        </ion-auto-complete>
       </ion-col>
     </ion-row>
     <ion-item>
@@ -72,5 +74,14 @@
       {{trip?.id ? 'Save' : 'Add'}}
     </ion-button>
 
+    <agm-map
+      [zoomControl]="false"
+      [streetViewControl]="false"
+      minZoom="5"
+      maxZoom="8"
+      [latitude]="trip.lat"
+      [longitude]="trip.lng">
+      <agm-marker [latitude]="trip.lat" [longitude]="trip.lng"></agm-marker>
+    </agm-map>
   </form>
 </ion-content>

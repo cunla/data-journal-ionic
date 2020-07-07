@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {CitiesService} from './cities.service';
+import {StateProvider} from './state.provider';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import {CitiesService} from './cities.service';
   ],
   providers: [
     CitiesService,
+    StateProvider,
   ]
 })
 export class ToolsModule {

@@ -5,13 +5,22 @@
       ({{daysDiff(address.start, address.end)}} days)
     </ion-card-subtitle>
     <ion-card-title>
-      <ion-icon *ngIf="address.countryCode" [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
+      <ion-icon *ngIf="address.countryCode"
+                [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
       {{address.city}}, {{address.state}}, {{address.country}}
     </ion-card-title>
 
   </ion-card-header>
   <ion-card-content>
-
+    <agm-map
+      [zoomControl]="false"
+      [streetViewControl]="false"
+      minZoom="5"
+      maxZoom="8"
+      [latitude]="address.lat"
+      [longitude]="address.lng">
+      <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
+    </agm-map>
   </ion-card-content>
   <ion-footer>
     <ion-row>

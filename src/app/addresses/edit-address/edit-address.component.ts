@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
+import {StateProvider} from '../../common/state.provider';
 
 @Component({
   selector: 'app-edit-address',
@@ -20,6 +21,7 @@ export class EditAddressComponent implements OnInit {
   // _filter = CitiesService.filterCities;
 
   constructor(public addressService: AddressService,
+              private state: StateProvider,
               private fb: FormBuilder,
               public citiesService: CitiesService,
               public modalController: ModalController,) {
@@ -74,6 +76,8 @@ export class EditAddressComponent implements OnInit {
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
-    }).then();
+    }).then(() => {
+      this.state.modalOpen = false;
+    });
   }
 }
