@@ -21,11 +21,12 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-<!--  <app-edit-trip [trip]="newTrip"></app-edit-trip>-->
+  <!--  <app-edit-trip [trip]="newTrip"></app-edit-trip>-->
   <ion-list>
 
-    <app-trip [trip]="item" *ngFor="let item of trips.data | async"
-              class="list-group-item list-group-item-action flex-column align-items-start">
+    <app-trip *ngFor="let item of trips.data | async"
+              [trip]="item"
+              (editClicked)="presentModal(item)">
     </app-trip>
   </ion-list>
 </ion-content>

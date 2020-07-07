@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
-import {Dates} from "../../common/dates";
+import {Dates} from '../../common/dates';
+import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-trip',
@@ -9,21 +10,48 @@ import {Dates} from "../../common/dates";
 })
 export class TripComponent implements OnInit {
   @Input() trip: TripInterface;
+  @Output() editClicked = new EventEmitter();
   daysDiff = Dates.daysDiffFunc;
 
-  constructor(private trips: TripsService) {
+  constructor(
+    public alertController: AlertController,
+    private trips: TripsService) {
   }
 
 
   ngOnInit() {
   }
 
-  delete() {
-    this.trips.delete(this.trip.id).then(
-      () => {
-        this.trips.refresh();
-      }, err => {
-        console.log(err);
-      });
+  async delete() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm delete!',
+      message: `Are you sure you want to delete trip to <strong>${this.trip.city}</strong> ` +
+        `between <strong>${this.trip.start.toDateString()}</strong> ` +
+        `and <strong>${this.trip.end?.toDateString()}</strong>`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Delete',
+          handler: () => {
+            this.trips.delete(this.trip.id).then(
+              () => {
+                this.trips.refresh();
+              }, err => {
+                console.log(err);
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
   }
 }

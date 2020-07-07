@@ -26,6 +26,11 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 @import "~ionic4-auto-complete/auto-complete";
-ion-auto-complete ul li {
-  padding: 0;
+
+ion-auto-complete {
+  width: 97vw;
+
+  ul li {
+    padding: 0;
+  }
 }

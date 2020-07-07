@@ -17,7 +17,7 @@
   <ion-footer>
     <ion-row>
       <ion-col offset="8" size="2">
-        <ion-button fill="clear" (click)="trip.editMode=true">
+        <ion-button fill="clear" (click)="editClicked.emit(null)">
           <ion-icon slot="icon-only" color="primary" name="create-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -30,4 +30,3 @@
   </ion-footer>
 </ion-card>
 
-<app-edit-trip [trip]="trip" *ngIf="trip.editMode"></app-edit-trip>

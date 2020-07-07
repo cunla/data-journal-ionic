@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
 import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
@@ -17,15 +16,17 @@ export class EditTripComponent implements OnInit {
   @Input() trip: TripInterface;
   tripForm: FormGroup;
   filteredOptions: Observable<any[]>;
+
   // _filter = CitiesService.filterCities;
 
   constructor(public trips: TripsService,
               private fb: FormBuilder,
-              public citiesService:CitiesService,
+              public citiesService: CitiesService,
               public modalController: ModalController,) {
   }
 
   ngOnInit() {
+    console.log(this.trip);
     this.createForm();
   }
 
@@ -55,14 +56,15 @@ export class EditTripComponent implements OnInit {
         }
       );
     }
+    this.dismissModal();
   }
 
   private createForm() {
     this.tripForm = this.fb.group({
       locationName: [this.trip.locationName, Validators.required],
       purpose: [this.trip.purpose, Validators.required],
-      start: [this.trip.start, Validators.required],
-      end: [this.trip.end,],
+      start: [this.trip.start?.toISOString(), Validators.required],
+      end: [this.trip.end?.toISOString(),],
     }, {
       validator: Validators.compose([
         Dates.dateLessThanValidator('start', 'end'),
