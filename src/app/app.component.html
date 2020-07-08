@@ -6,10 +6,10 @@
           <ion-list-header>Data journal</ion-list-header>
           <ion-note>{{authService.userEmail}}</ion-note>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
-                      detail="false" [class.selected]="selectedIndex == i">
-              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+          <ion-menu-toggle *ngFor="let p of appPages; let i = index" auto-hide="false">
+            <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex == i" [routerLink]="[p.url]" detail="false"
+                      lines="none" routerDirection="root">
+              <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'" slot="start"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -17,7 +17,7 @@
         </ion-list>
         <ion-menu-toggle auto-hide="false">
           <ion-item (click)="logout()">
-            <ion-icon slot="start" name="log-out-outline"></ion-icon>
+            <ion-icon name="log-out-outline" slot="start"></ion-icon>
             <ion-label>Log out</ion-label>
           </ion-item>
         </ion-menu-toggle>

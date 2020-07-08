@@ -1,6 +1,6 @@
 <ion-item-sliding>
   <ion-item lines="full">
-    <ion-label class="ion-text-wrap" (click)="editClicked.emit(null)">
+    <ion-label (click)="editClicked.emit(null)" class="ion-text-wrap">
       <h3>
         {{trip.start | date: 'yyyy-MM-dd'}} - {{trip.end | date: 'yyyy-MM-dd'}}
         ({{daysDiff(trip.start, trip.end)}} days)
@@ -16,11 +16,11 @@
   </ion-item>
 
   <ion-item-options side="end">
-    <ion-item-option color="primary" (click)="editClicked.emit(null)">
-      <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+    <ion-item-option (click)="editClicked.emit(null)" color="primary">
+      <ion-icon name="create-outline" slot="icon-only"></ion-icon>
     </ion-item-option>
-    <ion-item-option color="danger" (click)="delete()">
-      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    <ion-item-option (click)="delete()" color="danger">
+      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
     </ion-item-option>
   </ion-item-options>
 </ion-item-sliding>

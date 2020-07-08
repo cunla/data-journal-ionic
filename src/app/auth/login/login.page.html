@@ -7,21 +7,21 @@
   <ion-list>
     <ion-item>
       <ion-label position="floating">email</ion-label>
-      <ion-input inputmode="email" [(ngModel)]="userEmail" required autofocus></ion-input>
+      <ion-input [(ngModel)]="userEmail" autofocus inputmode="email" required></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" [(ngModel)]="userPassword" required></ion-input>
+      <ion-input [(ngModel)]="userPassword" required type="password"></ion-input>
     </ion-item>
-    <ion-button expand="full" color="dark" (click)="login('email')">
+    <ion-button (click)="login('email')" color="dark" expand="full">
       Email Login
     </ion-button>
     <ion-item-divider></ion-item-divider>
     <ion-item-group>
-      <ion-button expand="full" color="danger" (click)="login('google')">
+      <ion-button (click)="login('google')" color="danger" expand="full">
         Google Login
       </ion-button>
-      <ion-button expand="full" color="primary" (click)="login('facebook')">
+      <ion-button (click)="login('facebook')" color="primary" expand="full">
         Facebook Login
       </ion-button>
     </ion-item-group>
@@ -29,13 +29,13 @@
 
     <ion-item-divider></ion-item-divider>
     <ion-item-group>
-      <ion-button expand="full"
-                  color="dark"
+      <ion-button color="dark"
+                  expand="full"
                   routerLink="/auth/signup">
         Register new user
       </ion-button>
-      <ion-button expand="full"
-                  color="dark"
+      <ion-button color="dark"
+                  expand="full"
                   routerLink="/auth/reset-password">
         Reset password
       </ion-button>

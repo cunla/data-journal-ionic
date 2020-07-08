@@ -10,20 +10,20 @@
   <ion-list>
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input inputmode="email" [(ngModel)]="userEmail" required autofocus></ion-input>
+      <ion-input [(ngModel)]="userEmail" autofocus inputmode="email" required></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" [(ngModel)]="userPassword" required></ion-input>
+      <ion-input [(ngModel)]="userPassword" required type="password"></ion-input>
     </ion-item>
-    <ion-button expand="full" color="dark" (click)="authService.doRegister(userEmail, userPassword)">
+    <ion-button (click)="authService.doRegister(userEmail, userPassword)" color="dark" expand="full">
       Sign up with email
     </ion-button>
     <ion-item-divider></ion-item-divider>
-    <ion-button expand="full" color="danger" (click)="authService.doGoogleLogin()">
+    <ion-button (click)="authService.doGoogleLogin()" color="danger" expand="full">
       Google sign up
     </ion-button>
-    <ion-button expand="full" color="primary" (click)="authService.doFacebookLogin()">
+    <ion-button (click)="authService.doFacebookLogin()" color="primary" expand="full">
       Facebook sign up
     </ion-button>
     <ion-item-divider></ion-item-divider>

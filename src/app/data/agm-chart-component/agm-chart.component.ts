@@ -25,7 +25,7 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
 export class AgmChartComponent implements OnInit {
   cities = new Set<Point>();
   trips: Array<Path> = [];
-  private currentAddress: Point;
+  currentAddress: Point;
 
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {

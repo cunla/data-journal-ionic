@@ -23,8 +23,7 @@ const routes: Routes = [
     IonicModule,
     AgmCoreModule,
   ],
-  providers: [
-  ],
+  providers: [],
 })
 export class DataModule {
 }
