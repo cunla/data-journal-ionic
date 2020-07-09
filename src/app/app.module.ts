@@ -11,11 +11,13 @@ import {AppRoutingModule} from './app-routing.module';
 import {AuthModule} from './auth/auth.module';
 import {AgmCoreModule} from '@agm/core';
 import {environment} from '../environments/environment';
+import {BloodresultsModule} from './bloodresults/bloodresults.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
+    BloodresultsModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,

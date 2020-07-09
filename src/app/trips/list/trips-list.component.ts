@@ -17,7 +17,7 @@ export class TripsListComponent implements OnInit {
 
   constructor(public trips: TripsService,
               private state: StateProvider,
-              public modalController: ModalController,
+              private modalController: ModalController,
   ) {
   }
 

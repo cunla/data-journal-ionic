@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Blood results</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="type">
+      <ion-label>By test type</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="date">
+      <ion-label>By test date</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-fab horizontal="end" slot="fixed" vertical="top">
+    <ion-fab-button (click)="presentModal(newResult)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    <div *ngFor="let header of data.keys()">
+      <ion-list-header>{{header}}</ion-list-header>
+      <ion-item-sliding *ngFor="let item of data.get(header)">
+        <ion-item>
+          {{item.type}} : {{item.value}}
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="presentModal(item)" color="primary">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+          <ion-item-option (click)="delete(item)" color="danger">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+  </ion-list>
+
+</ion-content>

@@ -25,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: 'bloodresults',
-    loadChildren: () => import('./bloodresults/bloodresults.module').then( m => m.BloodresultsPageModule)
+    loadChildren: () => import('./bloodresults/bloodresults.module').then( m => m.BloodresultsModule)
   },
 ];
 

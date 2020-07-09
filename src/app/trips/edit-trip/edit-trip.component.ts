@@ -24,7 +24,6 @@ export class EditTripComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.trip);
     this.createForm();
   }
 
