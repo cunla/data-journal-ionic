@@ -30,6 +30,12 @@ export class AppComponent implements OnInit {
       url: '/map',
       icon: 'map'
     },
+    {
+      title: 'Blood results',
+      url: '/bloodresults',
+      icon: 'eyedrop'
+    },
+
   ];
   loggedInSubject: Observable<boolean>;
 
