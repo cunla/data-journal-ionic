@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>User trips journal</ion-title>
     <ion-buttons slot="end">
-      <ion-button mat-raised-button color="primary" (click)="exportCsv()">
+      <ion-button (click)="exportCsv()" color="primary" mat-raised-button>
         <ion-icon name="download-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,7 +16,7 @@
 </ion-header>
 <ion-content fullscreen>
 
-  <ion-fab vertical="top" horizontal="end" slot="fixed">
+  <ion-fab horizontal="end" slot="fixed" vertical="top">
     <ion-fab-button (click)="presentModal(newTrip)">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -24,9 +24,9 @@
   <!--  <app-edit-trip [trip]="newTrip"></app-edit-trip>-->
   <ion-list>
 
-    <app-trip *ngFor="let item of trips.data | async"
-              [trip]="item"
-              (editClicked)="presentModal(item)">
+    <app-trip (editClicked)="presentModal(item)"
+              *ngFor="let item of trips.data | async"
+              [trip]="item">
     </app-trip>
   </ion-list>
 </ion-content>

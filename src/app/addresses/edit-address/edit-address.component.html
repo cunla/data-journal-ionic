@@ -10,8 +10,8 @@
 
 <ng-template #selection
              let-attrs="attrs">
-  <div style="position: relative"
-       class="flag-image-wrapper">
+  <div class="flag-image-wrapper"
+       style="position: relative">
     <ion-icon [src]="'/assets/flags/'+attrs.data.iso2.toLowerCase()+'.svg'"></ion-icon>
     <ion-text>
             <span
@@ -46,9 +46,9 @@
     <ion-row>
       <ion-col [size]="12">
         <ion-auto-complete [dataProvider]="citiesService"
-                           [template]="suggestions"
                            [emptyTemplate]="empty"
                            [selectionTemplate]="selection"
+                           [template]="suggestions"
                            formControlName="locationName"></ion-auto-complete>
 
       </ion-col>
@@ -62,9 +62,9 @@
       <ion-label>End date</ion-label>
       <ion-datetime displayFormat="YYYY MMM DD" formControlName="end"></ion-datetime>
     </ion-item>
-    <ion-button expand="full" fill="outline"
-                color="primary"
-                [disabled]="addressForm.invalid" type="submit">
+    <ion-button [disabled]="addressForm.invalid" color="primary"
+                expand="full"
+                fill="outline" type="submit">
       {{address?.id ? 'Save' : 'Add'}}
     </ion-button>
 

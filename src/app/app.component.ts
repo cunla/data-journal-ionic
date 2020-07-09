@@ -30,23 +30,29 @@ export class AppComponent implements OnInit {
       url: '/map',
       icon: 'map'
     },
+    {
+      title: 'Blood results',
+      url: '/bloodresults',
+      icon: 'eyedrop'
+    },
+
   ];
-  loggedInSubject : Observable<boolean>;
+  loggedInSubject: Observable<boolean>;
 
   constructor(private platform: Platform,
               private splashScreen: SplashScreen,
               private statusBar: StatusBar,
-              private authService: AuthService,
+              public authService: AuthService,
               private router: Router,) {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
     this.loggedInSubject = this.authService.loggedinSubject();
-    this.loggedInSubject.subscribe((val)=>{
-      if(val){
+    this.loggedInSubject.subscribe((val) => {
+      if (val) {
         this.router.navigateByUrl('/trips/list').then();
-      }else{
+      } else {
         this.router.navigateByUrl('/auth/login').then();
       }
     });
@@ -56,6 +62,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.authService.doLogout().then(() => {});
+    this.authService.doLogout().then(() => {
+    });
   }
 }

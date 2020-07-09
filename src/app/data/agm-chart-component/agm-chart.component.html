@@ -8,19 +8,19 @@
 </ion-header>
 <ion-content fullscreen>
   <agm-map
-    [zoomControl]="false"
+    [latitude]="currentAddress?.lat"
+    [longitude]="currentAddress?.lon"
     [streetViewControl]="false"
-    minZoom="2"
-    maxZoom="4"
-    [latitude]="currentAddress?.lat" [longitude]="currentAddress?.lon">
+    [zoomControl]="false"
+    maxZoom="4" minZoom="2">
     <agm-marker *ngFor="let item of cities"
                 [latitude]="item.lat" [longitude]="item.lon">
     </agm-marker>
     <agm-polyline *ngFor="let item of trips"
                   [geodesic]="true"
                   strokeColor="red"
-                  strokeWeight="1"
-                  strokeOpacity="0.3">
+                  strokeOpacity="0.3"
+                  strokeWeight="1">
       <agm-polyline-point [latitude]="item.origin.lat" [longitude]="item.origin.lon"></agm-polyline-point>
       <agm-polyline-point [latitude]="item.target.lat" [longitude]="item.target.lon"></agm-polyline-point>
     </agm-polyline>

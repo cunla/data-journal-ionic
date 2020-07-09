@@ -103,27 +103,27 @@ export class AddressService {
       this._data.next(this.addresses);
     } else {
       return col.snapshotChanges()
-      .do(arr => {
-        let values = arr.map(snap => {
-          const data = snap.payload.doc.data();
-          data.id = snap.payload.doc.id;
-          const doc = snap.payload.doc;
-          data.start = data.start ? data.start.toDate() : null;
-          data.end = data.end ? data.end.toDate() : null;
-          return {...data, doc};
-        });
-        values = this.query.prepend ? values.reverse() : values;
-        this.addresses = values;
-        this._data.next(values);
-      })
-      .take(1)
-      .subscribe();
+        .do(arr => {
+          let values = arr.map(snap => {
+            const data = snap.payload.doc.data();
+            data.id = snap.payload.doc.id;
+            const doc = snap.payload.doc;
+            data.start = data.start ? data.start.toDate() : null;
+            data.end = data.end ? data.end.toDate() : null;
+            return {...data, doc};
+          });
+          values = this.query.prepend ? values.reverse() : values;
+          this.addresses = values;
+          this._data.next(values);
+        })
+        .take(1)
+        .subscribe();
     }
   }
 
   private queryFn(ref) {
     return ref
-    .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
+      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
   }
 
   refresh() {
@@ -168,7 +168,7 @@ export class AddressService {
 
   private userDoc() {
     return this.db
-    .collection('users')
-    .doc(this.userId);
+      .collection('users')
+      .doc(this.userId);
   }
 }

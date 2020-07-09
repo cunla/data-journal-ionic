@@ -12,26 +12,25 @@
 
   </ion-card-header>
   <ion-card-content>
-    <agm-map
-      [zoomControl]="false"
-      [streetViewControl]="false"
-      minZoom="5"
-      maxZoom="8"
-      [latitude]="address.lat"
-      [longitude]="address.lng">
+    <agm-map [latitude]="address.lat"
+             [longitude]="address.lng"
+             [streetViewControl]="false"
+             [zoomControl]="false"
+             maxZoom="8"
+             minZoom="5">
       <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
     </agm-map>
   </ion-card-content>
   <ion-footer>
     <ion-row>
       <ion-col offset="8" size="2">
-        <ion-button fill="clear" (click)="editClicked.emit(null)">
-          <ion-icon slot="icon-only" color="primary" name="create-outline"></ion-icon>
+        <ion-button (click)="editClicked.emit(null)" fill="clear">
+          <ion-icon color="primary" name="create-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-col>
       <ion-col size="2">
-        <ion-button fill="clear" (click)="delete()">
-          <ion-icon slot="icon-only" color="danger" name="trash-outline"></ion-icon>
+        <ion-button (click)="delete()" fill="clear">
+          <ion-icon color="danger" name="trash-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>User addresses journal</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="primary" (click)="exportCsv()">
+      <ion-button (click)="exportCsv()" color="primary">
         <ion-icon name="download-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -21,16 +21,16 @@
 </ion-header>
 <ion-content fullscreen>
 
-  <ion-fab vertical="top" horizontal="end" slot="fixed">
+  <ion-fab horizontal="end" slot="fixed" vertical="top">
     <ion-fab-button (click)="presentModal(newAddress)">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
   <ion-list>
 
-    <app-address *ngFor="let item of addressService.data | async"
-                 [address]="item"
-                 (editClicked)="presentModal(item)">
+    <app-address (editClicked)="presentModal(item)"
+                 *ngFor="let item of addressService.data | async"
+                 [address]="item">
     </app-address>
   </ion-list>
 </ion-content>

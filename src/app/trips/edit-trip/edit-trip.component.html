@@ -10,8 +10,8 @@
 
 <ng-template #selection
              let-attrs="attrs">
-  <div style="position: relative"
-       class="flag-image-wrapper">
+  <div class="flag-image-wrapper"
+       style="position: relative">
     <ion-icon [src]="'/assets/flags/'+attrs.data.iso2.toLowerCase()+'.svg'"></ion-icon>
     <ion-text>
             <span
@@ -45,12 +45,12 @@
         [formGroup]="tripForm" novalidate>
     <ion-row>
       <ion-col [size]="12">
-        <ion-auto-complete [dataProvider]="citiesService"
-                           [template]="suggestions"
+        <ion-auto-complete (focus)="resetLocation($event)"
+                           (itemSelected)="locationChanged($event)"
+                           [dataProvider]="citiesService"
                            [emptyTemplate]="empty"
                            [selectionTemplate]="selection"
-                           (itemSelected)="locationChanged($event)"
-                           (focus)="resetLocation($event)"
+                           [template]="suggestions"
                            formControlName="locationName">
         </ion-auto-complete>
       </ion-col>
@@ -68,18 +68,18 @@
       <ion-label>End date</ion-label>
       <ion-datetime displayFormat="YYYY MMM DD" formControlName="end"></ion-datetime>
     </ion-item>
-    <ion-button expand="full" fill="outline"
-                color="primary"
-                [disabled]="tripForm.invalid" type="submit">
+    <ion-button [disabled]="tripForm.invalid" color="primary"
+                expand="full"
+                fill="outline" type="submit">
       {{trip?.id ? 'Save' : 'Add'}}
     </ion-button>
     <ion-card>
       <ion-card-content>
-        <agm-map [streetViewControl]="false"
-                 minZoom="5"
+        <agm-map [latitude]="trip.lat || 43.7"
+                 [longitude]="trip.lng || -79.42"
+                 [streetViewControl]="false"
                  maxZoom="8"
-                 [latitude]="trip.lat || 43.7"
-                 [longitude]="trip.lng || -79.42">
+                 minZoom="5">
           <agm-marker *ngIf="trip.lat && trip.lng"
                       [latitude]="trip.lat"
                       [longitude]="trip.lng"></agm-marker>

@@ -4,7 +4,7 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'trips',
+    redirectTo: 'bloodresults',
     pathMatch: 'full'
   },
   {
@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'map',
     loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+  },
+  {
+    path: 'bloodresults',
+    loadChildren: () => import('./bloodresults/bloodresults.module').then( m => m.BloodresultsPageModule)
   },
 ];
 
