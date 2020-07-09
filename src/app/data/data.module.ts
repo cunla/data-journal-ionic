@@ -7,8 +7,8 @@ import {AgmCoreModule} from '@agm/core';
 import {AgmChartComponent} from './agm-chart-component/agm-chart.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: 'map', pathMatch: 'full'},
-  {path: 'map', component: AgmChartComponent},
+  {path: '', redirectTo: 'view', pathMatch: 'full'},
+  {path: 'view', component: AgmChartComponent},
 ];
 
 
