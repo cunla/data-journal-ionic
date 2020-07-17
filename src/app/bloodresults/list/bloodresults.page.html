@@ -25,7 +25,7 @@
       <ion-list-header>{{header}}</ion-list-header>
       <ion-item-sliding *ngFor="let item of data.get(header)">
         <ion-item>
-          {{item.type}} : {{item.value}}
+          {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
         </ion-item>
         <ion-item-options side="end">
           <ion-item-option (click)="presentModal(item)" color="primary">
@@ -36,6 +36,10 @@
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
+      <app-resultchart *ngIf="groupby !== 'date'"
+                       [chartData]="data.get(header)">
+
+      </app-resultchart>
     </div>
   </ion-list>
 

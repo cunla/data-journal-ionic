@@ -3,7 +3,7 @@ import {BioService, BioResult, EMPTY_RESULT} from '../bio.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-bloodresults',
@@ -29,7 +29,7 @@ export class BloodresultsPage implements OnInit {
     this.bioService.getResults().subscribe((allResults) => {
       this.data = new Map<string, Array<BioResult>>();
       allResults.forEach((res) => {
-        const group = (this.groupby === 'date') ? res.date.toDateString() : res.type;
+        const group = (this.groupby === 'date') ? this.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
         }
@@ -54,5 +54,9 @@ export class BloodresultsPage implements OnInit {
     this.bioService.delete(item.id).then(()=>{
       this.bioService.refresh();
     });
+  }
+
+  private transform(date: Date) {
+    return moment(date).format('YYYY-MM-DD dddd');
   }
 }

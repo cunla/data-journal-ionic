@@ -66,7 +66,6 @@ export class BioService {
     this.http.get('/assets/bloodtest-data.json')
     .subscribe((res: Array<BioResultMeta>) => {
       this.bloodtestData = res;
-      console.log(this.bloodtestData);
     });
   }
 

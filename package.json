@@ -32,6 +32,8 @@
     "core-js": "^3.6.5",
     "file-saver": "^2.0.2",
     "firebase": "^7.16.1",
+    "highcharts": "^8.1.2",
+    "highcharts-angular": "^2.4.0",
     "ionic4-auto-complete": "^2.8.1",
     "moment": "^2.27.0",
     "proj4": "^2.6.2",
