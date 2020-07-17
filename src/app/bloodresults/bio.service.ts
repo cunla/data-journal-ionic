@@ -65,27 +65,9 @@ export class BioService {
       value: 47
     },
   ];
-  private bloodtestData: Map<string, BioResultMeta>;
 
   constructor(private http: HttpClient,
   ) {
-    this.http.get('/assets/bloodtest-data.json')
-      .subscribe((res: Array<BioResultMeta>) => {
-        this.bloodtestData = new Map(res.map((x) => [x.test.toLowerCase(), x]));
-      });
-  }
-
-  getTestMetaData(testName: string) {
-    testName = testName.toLowerCase();
-    let res = this.bloodtestData.get(testName);
-    if (res) {
-      return res;
-    }
-    for (let [key, value] of this.bloodtestData) {
-      if (key.indexOf(testName) >= 0) {
-        return value;
-      }
-    }
   }
 
   getResults(): Observable<Array<BioResult>> {
@@ -124,7 +106,4 @@ export class BioService {
     })
   }
 
-  getMetaData() {
-    return of(this.bloodtestData);
-  }
 }

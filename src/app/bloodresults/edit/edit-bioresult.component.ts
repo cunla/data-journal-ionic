@@ -4,6 +4,7 @@ import {StateProvider} from '../../common/state.provider';
 import {ModalController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
+import {BioMetadataService} from '../bio-metadata.service';
 
 @Component({
   selector: 'app-edit',
@@ -14,10 +15,12 @@ export class EditBioresultComponent implements OnInit {
   @Input() bioresult: BioResult;
   bioresultForm: FormGroup;
 
+
   constructor(private state: StateProvider,
               private modalController: ModalController,
               private fb: FormBuilder,
               private bioService: BioService,
+              public bioMetadataService: BioMetadataService,
   ) {
   }
 

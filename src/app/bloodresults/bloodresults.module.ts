@@ -12,6 +12,9 @@ import {EditBioresultComponent} from './edit/edit-bioresult.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ResultChartComponent} from './resultchart/resultchart.component';
 import {HighchartsChartModule} from 'highcharts-angular';
+import {BioService} from './bio.service';
+import {BioMetadataService} from './bio-metadata.service';
+import {AutoCompleteModule} from 'ionic4-auto-complete';
 
 @NgModule({
   imports: [
@@ -23,12 +26,20 @@ import {HighchartsChartModule} from 'highcharts-angular';
     BloodresultsPageRoutingModule,
     ReactiveFormsModule,
     HighchartsChartModule,
+    AutoCompleteModule,
   ],
   declarations: [
     BloodresultsPage,
     EditBioresultComponent,
     ResultChartComponent,
   ],
+  providers: [
+    BioMetadataService,
+    BioService,
+  ],
 })
 export class BloodresultsModule {
+  constructor(private bioMetadataService:BioMetadataService) {
+  }
+
 }

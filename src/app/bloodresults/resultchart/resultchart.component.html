@@ -1,8 +1,11 @@
-<ion-item-divider>Graph</ion-item-divider>
-<highcharts-chart
-  [Highcharts]="Highcharts"
-  [options]="chartOptions"
-  (chartInstance)="logChartInstance($event)"
-  style="display: block;">
-
-</highcharts-chart>
+<ion-card>
+  <ion-card-header>Graph</ion-card-header>
+  <ion-card-content>
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="chartOptions"
+      (chartInstance)="logChartInstance($event)"
+      style="width: 100%; display: block;">
+    </highcharts-chart>
+  </ion-card-content>
+</ion-card>
