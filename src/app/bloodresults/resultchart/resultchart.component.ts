@@ -11,6 +11,7 @@ import {BioResult, BioResultMeta, BioService} from '../bio.service';
 export class ResultChartComponent implements OnInit {
   @Input() chartData: Array<BioResult>;
   @Input() title: string = '';
+  private metadata: BioResultMeta;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     credits: {enabled: false},
@@ -24,25 +25,27 @@ export class ResultChartComponent implements OnInit {
         text: 'Date'
       }
     },
+    yAxis: {
+      gridLineColor: 'transparent',
+    },
     tooltip: {
       headerFormat: '{point.x:%Y-%m-%d}<br/>',
       // pointFormat:'{point.y}',
     },
-    yAxis: {
-      plotBands: [],
-    }
   };
-  private metadata: BioResultMeta;
 
   constructor(private bioService: BioService) {
   }
 
-  logChartInstance(chart){
+  logChartInstance(chart) {
     if (this.metadata) {
       chart.yAxis[0].addPlotBand({
-        color: 'e6ebf5',
+        color: '#FCFFC5',
         from: this.metadata.low,
         to: this.metadata.high,
+        label: {
+          text: 'Normal range',
+        }
       });
     }
   }
@@ -54,6 +57,14 @@ export class ResultChartComponent implements OnInit {
       .sort((a, b) => {
         return a[0] - b[0];
       });
+    let min = 0.9 * data.reduce((a, b) => {
+      return a[1] < b[1] ? a : b;
+    })[1];
+    let max = 1.1 * data.reduce((a, b) => {
+      return a[1] > b[1] ? a : b;
+    })[1];
+    this.chartOptions.yAxis.min = Math.floor(Math.min(this.metadata.low * 0.9, min));
+    this.chartOptions.yAxis.max = Math.ceil(Math.max(this.metadata.high * 1.1, max));
     this.chartOptions.series.push({
       data: data,
       name: this.title,

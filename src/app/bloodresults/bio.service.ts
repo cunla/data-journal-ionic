@@ -38,25 +38,31 @@ export class BioService {
       id: 1,
       date: new Date(2019, 7, 3),
       type: 'Testosterone',
-      value: 5
+      value: 15
+    },
+    {
+      id: 1,
+      date: new Date(2020, 7, 3),
+      type: 'Testosterone',
+      value: 8
     },
     {
       id: 2,
       date: new Date(2019, 7, 3),
       type: 'Hematocrit',
-      value: 0.463
+      value: 46.3
     },
     {
       id: 3,
       date: new Date(2020, 6, 30),
       type: 'Hematocrit',
-      value: 0.43
+      value: 56
     },
     {
       id: 4,
       date: new Date(2018, 11, 29),
       type: 'Hematocrit',
-      value: 0.43
+      value: 47
     },
   ];
   private bloodtestData: Map<string, BioResultMeta>;
@@ -65,12 +71,21 @@ export class BioService {
   ) {
     this.http.get('/assets/bloodtest-data.json')
       .subscribe((res: Array<BioResultMeta>) => {
-        this.bloodtestData = new Map(res.map((x) => [x.test, x]));
+        this.bloodtestData = new Map(res.map((x) => [x.test.toLowerCase(), x]));
       });
   }
 
   getTestMetaData(testName: string) {
-    return this.bloodtestData.get(testName);
+    testName = testName.toLowerCase();
+    let res = this.bloodtestData.get(testName);
+    if (res) {
+      return res;
+    }
+    for (let [key, value] of this.bloodtestData) {
+      if (key.indexOf(testName) >= 0) {
+        return value;
+      }
+    }
   }
 
   getResults(): Observable<Array<BioResult>> {

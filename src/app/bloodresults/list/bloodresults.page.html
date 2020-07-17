@@ -22,7 +22,7 @@
 
   <ion-list>
     <div *ngFor="let header of headers">
-      <ion-list-header>{{header}}</ion-list-header>
+      <ion-item-divider> {{header}} Results</ion-item-divider>
       <ion-item-sliding *ngFor="let item of data.get(header)">
         <ion-item>
           {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
