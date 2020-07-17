@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BioService, BioResult, EMPTY_RESULT} from '../bio.service';
+import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
@@ -14,6 +14,7 @@ export class BloodresultsPage implements OnInit {
   data: Map<any, Array<BioResult>> = new Map<string, Array<BioResult>>();
   groupby = 'date';
   newResult = EMPTY_RESULT;
+  headers: string[] = [];
 
   constructor(private modalController: ModalController,
               private state: StateProvider,
@@ -28,10 +29,12 @@ export class BloodresultsPage implements OnInit {
     this.groupby = groupby?.detail?.value || 'date';
     this.bioService.getResults().subscribe((allResults) => {
       this.data = new Map<string, Array<BioResult>>();
+      this.headers = [];
       allResults.forEach((res) => {
         const group = (this.groupby === 'date') ? this.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
+          this.headers.push(group);
         }
         this.data.get(group).push(res);
       });
@@ -51,7 +54,7 @@ export class BloodresultsPage implements OnInit {
   }
 
   delete(item: BioResult) {
-    this.bioService.delete(item.id).then(()=>{
+    this.bioService.delete(item.id).then(() => {
       this.bioService.refresh();
     });
   }

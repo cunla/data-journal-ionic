@@ -1,7 +1,7 @@
 <highcharts-chart
   [Highcharts]="Highcharts"
   [options]="chartOptions"
-
+  (chartInstance)="logChartInstance($event)"
   style="display: block;">
 
 </highcharts-chart>

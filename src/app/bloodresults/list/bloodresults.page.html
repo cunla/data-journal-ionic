@@ -21,7 +21,7 @@
   </ion-fab>
 
   <ion-list>
-    <div *ngFor="let header of data.keys()">
+    <div *ngFor="let header of headers">
       <ion-list-header>{{header}}</ion-list-header>
       <ion-item-sliding *ngFor="let item of data.get(header)">
         <ion-item>
@@ -37,7 +37,8 @@
         </ion-item-options>
       </ion-item-sliding>
       <app-resultchart *ngIf="groupby !== 'date'"
-                       [chartData]="data.get(header)">
+                       [chartData]="data.get(header)"
+                       [title]="header">
 
       </app-resultchart>
     </div>

@@ -59,14 +59,18 @@ export class BioService {
       value: 0.43
     },
   ];
-  private bloodtestData: Array<BioResultMeta>;
+  private bloodtestData: Map<string, BioResultMeta>;
 
   constructor(private http: HttpClient,
   ) {
     this.http.get('/assets/bloodtest-data.json')
-    .subscribe((res: Array<BioResultMeta>) => {
-      this.bloodtestData = res;
-    });
+      .subscribe((res: Array<BioResultMeta>) => {
+        this.bloodtestData = new Map(res.map((x) => [x.test, x]));
+      });
+  }
+
+  getTestMetaData(testName: string) {
+    return this.bloodtestData.get(testName);
   }
 
   getResults(): Observable<Array<BioResult>> {

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import {BioResult} from '../bio.service';
+import {BioResult, BioResultMeta, BioService} from '../bio.service';
 
 
 @Component({
@@ -24,27 +24,42 @@ export class ResultChartComponent implements OnInit {
         text: 'Date'
       }
     },
-    tooltip:{
-      headerFormat:'{point.x:%Y-%m-%d}<br/>',
+    tooltip: {
+      headerFormat: '{point.x:%Y-%m-%d}<br/>',
       // pointFormat:'{point.y}',
     },
+    yAxis: {
+      plotBands: [],
+    }
   };
+  private metadata: BioResultMeta;
 
-  constructor() {
+  constructor(private bioService: BioService) {
+  }
+
+  logChartInstance(chart){
+    if (this.metadata) {
+      chart.yAxis[0].addPlotBand({
+        color: 'e6ebf5',
+        from: this.metadata.low,
+        to: this.metadata.high,
+      });
+    }
   }
 
   ngOnInit() {
+    this.metadata = this.bioService.getTestMetaData(this.title);
     const data = this.chartData
       .map((point) => [point.date.getTime(), point.value])
       .sort((a, b) => {
         return a[0] - b[0];
       });
-    console.log(data);
     this.chartOptions.series.push({
       data: data,
       name: this.title,
       type: 'spline',
     });
+
   }
 
 }
