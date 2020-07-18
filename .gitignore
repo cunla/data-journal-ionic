@@ -13,6 +13,9 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
 
+environment.ts
+environment.prod.ts
+
 *.log
 log.txt
 npm-debug.log*
