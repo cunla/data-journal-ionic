@@ -22,9 +22,9 @@ export interface BioResultMeta {
   providedIn: 'root'
 })
 export class BioMetadataService implements AutoCompleteService {
+  formValueAttribute = 'test';
   private bloodtestDataMap: Map<string, BioResultMeta>;
   private bloodtestData: Array<BioResultMeta> = [];
-  formValueAttribute = 'test';
   private iconMap = new Map<string, string>();
 
   constructor(private http: HttpClient,
@@ -66,7 +66,7 @@ export class BioMetadataService implements AutoCompleteService {
     );
   }
 
-  getIcon(icon:string) {
+  getIcon(icon: string) {
     return this.iconMap.get(icon) || 'eyedrop-outline';
   }
 

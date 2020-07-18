@@ -12040,27 +12040,6 @@ export class CitiesService implements AutoCompleteService {
   constructor() {
   }
 
-  public getResults(keyword: string): LocationInterface[] {
-    const filterValue = keyword ? keyword.toLowerCase() : '';
-    const res = CITIES
-      .filter(item => containsCaseInsensitive(item, filterValue))
-      .map(item => {
-        const data = item.split('/');
-        return {
-          locationName: `${data[CITY_NAME_INDEX]}, ${data[STATE_NAME_INDEX]}, ${data[COUNTRY_NAME_INDEX]}`,
-          city: data[CITY_NAME_INDEX],
-          state: data[STATE_NAME_INDEX],
-          country: data[COUNTRY_NAME_INDEX],
-          iso2: data[ISO2_INDEX],
-          iso3: data[ISO3_INDEX],
-          lat: +data[LAT_INDEX],
-          lng: +data[LNG_INDEX],
-          population: +data[POPULATION_INDEX],
-        };
-      });
-    return res.slice(0, 10);
-  }
-
   public static filterLocation(value: string): LocationInterface {
     const res = CITIES
       .map(item => {
@@ -12080,7 +12059,6 @@ export class CitiesService implements AutoCompleteService {
       .find(item => item.locationName === value);
     return res;
   }
-
 
   public static getCountry(country: string) {
     return CITIES
@@ -12106,6 +12084,27 @@ export class CitiesService implements AutoCompleteService {
 
   private static onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
+  }
+
+  public getResults(keyword: string): LocationInterface[] {
+    const filterValue = keyword ? keyword.toLowerCase() : '';
+    const res = CITIES
+      .filter(item => containsCaseInsensitive(item, filterValue))
+      .map(item => {
+        const data = item.split('/');
+        return {
+          locationName: `${data[CITY_NAME_INDEX]}, ${data[STATE_NAME_INDEX]}, ${data[COUNTRY_NAME_INDEX]}`,
+          city: data[CITY_NAME_INDEX],
+          state: data[STATE_NAME_INDEX],
+          country: data[COUNTRY_NAME_INDEX],
+          iso2: data[ISO2_INDEX],
+          iso3: data[ISO3_INDEX],
+          lat: +data[LAT_INDEX],
+          lng: +data[LNG_INDEX],
+          population: +data[POPULATION_INDEX],
+        };
+      });
+    return res.slice(0, 10);
   }
 
 }

@@ -23,11 +23,11 @@
     <ion-row>
       <ion-col [size]="12">
         <ion-auto-complete [dataProvider]="bioMetadataService"
-                           [template]="suggestionsBioTest"
                            [options]="{ placeholder : 'Search for test type' }"
+                           [template]="suggestionsBioTest"
+                           formControlName="type"
                            label="Search for test type"
-                           labelPosition="floating"
-                           formControlName="type"></ion-auto-complete>
+                           labelPosition="floating"></ion-auto-complete>
       </ion-col>
     </ion-row>
     <!--    <ion-item>-->

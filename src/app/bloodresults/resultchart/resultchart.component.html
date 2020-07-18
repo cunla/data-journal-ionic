@@ -2,9 +2,9 @@
   <ion-card-header>Graph</ion-card-header>
   <ion-card-content>
     <highcharts-chart
+      (chartInstance)="logChartInstance($event)"
       [Highcharts]="Highcharts"
       [options]="chartOptions"
-      (chartInstance)="logChartInstance($event)"
       style="width: 100%; display: block;">
     </highcharts-chart>
   </ion-card-content>

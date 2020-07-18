@@ -66,6 +66,9 @@ export class AgmChartComponent implements OnInit {
     }
   }
 
+  ngOnInit() {
+  }
+
   private addTripIfRelevant(origin: Point, target: Point): void {
     if (!origin || origin.id === target.id) {
       return;
@@ -76,9 +79,6 @@ export class AgmChartComponent implements OnInit {
       target,
     };
     this.trips.push(t);
-  }
-
-  ngOnInit() {
   }
 
 

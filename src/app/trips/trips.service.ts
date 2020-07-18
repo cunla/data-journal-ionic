@@ -50,17 +50,15 @@ export const EMPTY_TRIP: TripInterface = {
   providedIn: 'root'
 })
 export class TripsService {
-  // Source data
-  private _done = new BehaviorSubject(false);
-  private _loading = new BehaviorSubject(false);
-  private _data = new BehaviorSubject([]);
-
-  private query: QueryConfig;
-
   // Observable data
   data: Observable<TripInterface[]>;
+  // Source data
+  private _done = new BehaviorSubject(false);
   done: Observable<boolean> = this._done.asObservable();
+  private _loading = new BehaviorSubject(false);
   loading: Observable<boolean> = this._loading.asObservable();
+  private _data = new BehaviorSubject([]);
+  private query: QueryConfig;
   private readonly userId: string;
 
 
@@ -94,6 +92,41 @@ export class TripsService {
       return this.queryFn(ref).startAfter(cursor);
     });
     this.mapAndUpdate(more);
+  }
+
+  get(key) {
+    return this.userDoc().collection(this.query.path).doc(key).snapshotChanges();
+  }
+
+  update(key, value) {
+    return this.userDoc().collection(this.query.path).doc(key).set(value);
+  }
+
+  delete(key) {
+    return this.userDoc().collection(this.query.path).doc(key).delete();
+  }
+
+  create(value) {
+    return this.userDoc().collection(this.query.path).add(value);
+  }
+
+  refresh() {
+    const first = this.userDoc().collection(this.query.path, ref => {
+      return this.queryFn(ref);
+    });
+    this.data = null;
+    this._done.next(false);
+    this._loading.next(false);
+    this._data = new BehaviorSubject([]);
+    this.mapAndUpdate(first);
+    // Create the observable array for consumption in components
+    this.data = this._data.asObservable().scan((acc, values) => {
+      const val = values.filter((item: TripInterface) => {
+        return containsCaseInsensitive(item.locationName, this.query.searchValue)
+          || containsCaseInsensitive(item.purpose, this.query.searchValue);
+      });
+      return this.query.prepend ? val.concat(acc) : acc.concat(val);
+    });
   }
 
   private queryFn(ref) {
@@ -149,42 +182,6 @@ export class TripsService {
       })
       .take(1)
       .subscribe();
-  }
-
-
-  get(key) {
-    return this.userDoc().collection(this.query.path).doc(key).snapshotChanges();
-  }
-
-  update(key, value) {
-    return this.userDoc().collection(this.query.path).doc(key).set(value);
-  }
-
-  delete(key) {
-    return this.userDoc().collection(this.query.path).doc(key).delete();
-  }
-
-  create(value) {
-    return this.userDoc().collection(this.query.path).add(value);
-  }
-
-  refresh() {
-    const first = this.userDoc().collection(this.query.path, ref => {
-      return this.queryFn(ref);
-    });
-    this.data = null;
-    this._done.next(false);
-    this._loading.next(false);
-    this._data = new BehaviorSubject([]);
-    this.mapAndUpdate(first);
-    // Create the observable array for consumption in components
-    this.data = this._data.asObservable().scan((acc, values) => {
-      const val = values.filter((item: TripInterface) => {
-        return containsCaseInsensitive(item.locationName, this.query.searchValue)
-          || containsCaseInsensitive(item.purpose, this.query.searchValue);
-      });
-      return this.query.prepend ? val.concat(acc) : acc.concat(val);
-    });
   }
 
   private userDoc() {

@@ -55,19 +55,6 @@ export class EditTripComponent implements OnInit {
     this.dismissModal();
   }
 
-  private createForm() {
-    this.tripForm = this.fb.group({
-      locationName: [this.trip.locationName, Validators.required],
-      purpose: [this.trip.purpose, Validators.required],
-      start: [this.trip.start?.toISOString(), Validators.required],
-      end: [this.trip.end?.toISOString(),],
-    }, {
-      validator: Validators.compose([
-        Dates.dateLessThanValidator('start', 'end'),
-      ])
-    });
-  }
-
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
@@ -83,5 +70,18 @@ export class EditTripComponent implements OnInit {
 
   resetLocation($event: any) {
     this.tripForm.get('locationName').reset();
+  }
+
+  private createForm() {
+    this.tripForm = this.fb.group({
+      locationName: [this.trip.locationName, Validators.required],
+      purpose: [this.trip.purpose, Validators.required],
+      start: [this.trip.start?.toISOString(), Validators.required],
+      end: [this.trip.end?.toISOString(),],
+    }, {
+      validator: Validators.compose([
+        Dates.dateLessThanValidator('start', 'end'),
+      ])
+    });
   }
 }

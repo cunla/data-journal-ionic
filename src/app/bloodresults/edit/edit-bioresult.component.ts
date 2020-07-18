@@ -49,20 +49,20 @@ export class EditBioresultComponent implements OnInit {
     this.dismissModal();
   }
 
-  private createForm() {
-    this.bioresultForm = this.fb.group({
-      type: [this.bioresult.type, Validators.required],
-      date: [this.bioresult.date, Validators.required],
-      value: [this.bioresult.value, Validators.required],
-    },);
-  }
-
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
     }).then(() => {
       this.state.modalOpen = false;
     });
+  }
+
+  private createForm() {
+    this.bioresultForm = this.fb.group({
+      type: [this.bioresult.type, Validators.required],
+      date: [this.bioresult.date, Validators.required],
+      value: [this.bioresult.value, Validators.required],
+    },);
   }
 
 }

@@ -53,6 +53,12 @@ export const EMPTY_ADDRESS: AddressInterface = {
 })
 export class AddressService {
   addresses: Array<AddressInterface> = null;
+  // Observable data
+  data: Observable<AddressInterface[]>;
+  // Source data
+  private _data = new BehaviorSubject([]);
+  private query: QueryConfig;
+  private readonly userId: string;
 
   constructor(public db: AngularFirestore,
               public afAuth: AngularFireAuth) {
@@ -60,15 +66,6 @@ export class AddressService {
     this.userId = user.uid;
     this.init(ADDRESS_HISTORY_PATH, 'start', {});
   }
-
-  // Source data
-  private _data = new BehaviorSubject([]);
-  private query: QueryConfig;
-
-  // Observable data
-  data: Observable<AddressInterface[]>;
-  private readonly userId: string;
-
 
   init(path: string, field: string, opts?: any) {
     this.query = {
@@ -96,34 +93,6 @@ export class AddressService {
       ++ind;
     }
     return null;
-  }
-
-  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
-    if (this.addresses && this.addresses.length > 0) {
-      this._data.next(this.addresses);
-    } else {
-      return col.snapshotChanges()
-        .do(arr => {
-          let values = arr.map(snap => {
-            const data = snap.payload.doc.data();
-            data.id = snap.payload.doc.id;
-            const doc = snap.payload.doc;
-            data.start = data.start ? data.start.toDate() : null;
-            data.end = data.end ? data.end.toDate() : null;
-            return {...data, doc};
-          });
-          values = this.query.prepend ? values.reverse() : values;
-          this.addresses = values;
-          this._data.next(values);
-        })
-        .take(1)
-        .subscribe();
-    }
-  }
-
-  private queryFn(ref) {
-    return ref
-      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
   }
 
   refresh() {
@@ -165,6 +134,33 @@ export class AddressService {
     return this.userDoc().collection(this.query.path).add(value);
   }
 
+  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
+    if (this.addresses && this.addresses.length > 0) {
+      this._data.next(this.addresses);
+    } else {
+      return col.snapshotChanges()
+        .do(arr => {
+          let values = arr.map(snap => {
+            const data = snap.payload.doc.data();
+            data.id = snap.payload.doc.id;
+            const doc = snap.payload.doc;
+            data.start = data.start ? data.start.toDate() : null;
+            data.end = data.end ? data.end.toDate() : null;
+            return {...data, doc};
+          });
+          values = this.query.prepend ? values.reverse() : values;
+          this.addresses = values;
+          this._data.next(values);
+        })
+        .take(1)
+        .subscribe();
+    }
+  }
+
+  private queryFn(ref) {
+    return ref
+      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
+  }
 
   private userDoc() {
     return this.db

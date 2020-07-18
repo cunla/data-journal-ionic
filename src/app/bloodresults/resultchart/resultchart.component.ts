@@ -12,7 +12,6 @@ import {BioMetadataService} from '../bio-metadata.service';
 export class ResultChartComponent implements OnInit {
   @Input() chartData: Array<BioResult>;
   @Input() title: string = '';
-  private metadata: BioResultMeta;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
@@ -39,6 +38,7 @@ export class ResultChartComponent implements OnInit {
       // pointFormat:'{point.y}',
     },
   };
+  private metadata: BioResultMeta;
 
   constructor(private bioMetadataService: BioMetadataService) {
   }

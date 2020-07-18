@@ -60,6 +60,14 @@ export class EditAddressComponent implements OnInit {
     this.dismissModal();
   }
 
+  public dismissModal() {
+    this.modalController.dismiss({
+      dismissed: true
+    }).then(() => {
+      this.state.modalOpen = false;
+    });
+  }
+
   private createForm() {
     this.addressForm = this.fb.group({
       locationName: [this.address.locationName, Validators.required],
@@ -69,14 +77,6 @@ export class EditAddressComponent implements OnInit {
       validator: Validators.compose([
         Dates.dateLessThanValidator('start', 'end'),
       ])
-    });
-  }
-
-  public dismissModal() {
-    this.modalController.dismiss({
-      dismissed: true
-    }).then(() => {
-      this.state.modalOpen = false;
     });
   }
 }

@@ -39,7 +39,7 @@ import {AutoCompleteModule} from 'ionic4-auto-complete';
   ],
 })
 export class BloodresultsModule {
-  constructor(private bioMetadataService:BioMetadataService) {
+  constructor(private bioMetadataService: BioMetadataService) {
   }
 
 }
