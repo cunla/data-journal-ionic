@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import {BioResult, BioResultMeta} from '../bio.service';
-import {BioMetadataService} from '../bio-metadata.service';
+import {BioResult} from '../bio.service';
+import {BioMetadataService, BioResultMeta} from '../bio-metadata.service';
 
 
 @Component({
@@ -32,6 +32,7 @@ export class ResultChartComponent implements OnInit {
     },
     yAxis: {
       gridLineColor: 'transparent',
+      min: null, max: null,
     },
     tooltip: {
       headerFormat: '{point.x:%Y-%m-%d}<br/>',
@@ -58,10 +59,10 @@ export class ResultChartComponent implements OnInit {
 
   ngOnInit() {
     const data = this.chartData
-      .map((point) => [point.date.getTime(), point.value])
-      .sort((a, b) => {
-        return a[0] - b[0];
-      });
+    .map((point) => [point.date.getTime(), point.value])
+    .sort((a, b) => {
+      return a[0] - b[0];
+    });
     const min = 0.9 * data.reduce((a, b) => {
       return a[1] < b[1] ? a : b;
     })[1];
@@ -75,7 +76,9 @@ export class ResultChartComponent implements OnInit {
     });
     // Set min & max for Y axis
     this.metadata = this.bioMetadataService.getTestMetaData(this.title);
+    // @ts-ignore
     this.chartOptions.yAxis.min = Math.floor(Math.min(this.metadata?.low * 0.9, min));
+    // @ts-ignore
     this.chartOptions.yAxis.max = Math.ceil(Math.max(this.metadata?.high * 1.1, max));
   }
 

@@ -8,11 +8,11 @@
 </ion-header>
 
 <ion-content>
-  <ion-segment (ionChange)="segmentChanged($event)">
+  <ion-segment (ionChange)="segmentChanged($event)" [value]="groupby">
     <ion-segment-button value="type">
       <ion-label>By test type</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="date">
+    <ion-segment-button value="date" >
       <ion-label>By test date</ion-label>
     </ion-segment-button>
   </ion-segment>

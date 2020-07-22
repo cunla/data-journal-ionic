@@ -26,6 +26,10 @@ export class AuthService {
     return user !== null;
   }
 
+  loggedinSubject(): Observable<boolean> {
+    return this.isLoginSubject.asObservable();
+  }
+
   get userId() {
     const user = JSON.parse(localStorage.getItem('user'));
     return user.uid;
@@ -34,10 +38,6 @@ export class AuthService {
   get userEmail() {
     const user = JSON.parse(localStorage.getItem('user'));
     return user ? user.email : '';
-  }
-
-  loggedinSubject(): Observable<boolean> {
-    return this.isLoginSubject.asObservable();
   }
 
   doFacebookLogin() {

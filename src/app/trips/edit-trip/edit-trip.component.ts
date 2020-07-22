@@ -40,7 +40,7 @@ export class EditTripComponent implements OnInit {
     if (this.trip.id === null || this.trip.id === undefined) {
       console.log('Saving trip', value);
       this.trips.create(value).then(
-        res => {
+        () => {
           this.trips.refresh();
           this.tripForm.reset();
         }

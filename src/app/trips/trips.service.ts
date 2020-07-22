@@ -88,7 +88,7 @@ export class TripsService {
   // Retrieves additional data from firestore
   more() {
     const cursor = this.getCursor();
-    const more = this.db.collection(this.query.path, ref => {
+    const more = this.userDoc().collection(this.query.path, ref => {
       return this.queryFn(ref).startAfter(cursor);
     });
     this.mapAndUpdate(more);

@@ -1,6 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFireAuth} from '@angular/fire/auth';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/scan';
+import 'rxjs/add/operator/take';
 
 export interface BioResult {
   id: any;
@@ -16,94 +20,107 @@ export const EMPTY_RESULT: BioResult = {
   value: 0,
 }
 
-export interface BioResultMeta {
-  test: string;
-  low: number;
-  high: number;
-  unit: string;
-  abreviation: string;
-  ageVariance: boolean;
-  category: string;
-  wikipedia: string;
-  shortDescription: string;
-  AwesomeList: boolean;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class BioService {
-  private mockData: Array<BioResult> = [
-    {
-      id: 1,
-      date: new Date(2019, 7, 3),
-      type: 'Testosterone',
-      value: 15
-    },
-    {
-      id: 1,
-      date: new Date(2020, 7, 3),
-      type: 'Testosterone',
-      value: 8
-    },
-    {
-      id: 2,
-      date: new Date(2019, 7, 3),
-      type: 'Hematocrit',
-      value: 46.3
-    },
-    {
-      id: 3,
-      date: new Date(2020, 6, 30),
-      type: 'Hematocrit',
-      value: 56
-    },
-    {
-      id: 4,
-      date: new Date(2018, 11, 29),
-      type: 'Hematocrit',
-      value: 47
-    },
-  ];
+  // Observable data
+  data: Observable<BioResult[]>;
+  // Source data
+  private _done = new BehaviorSubject(false);
+  done: Observable<boolean> = this._done.asObservable();
+  private _loading = new BehaviorSubject(false);
+  loading: Observable<boolean> = this._loading.asObservable();
+  private _data = new BehaviorSubject([]);
+  private path: string='bio-results';
+  private readonly userId: string;
 
-  constructor(private http: HttpClient,
-  ) {
+
+  constructor(public db: AngularFirestore,
+              public afAuth: AngularFireAuth) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    this.userId = user.uid;
+    this.refresh();
   }
 
-  getResults(): Observable<Array<BioResult>> {
-    return of(this.mockData);
+  get(key) {
+    return this.userDoc().collection(this.path).doc(key).snapshotChanges();
+  }
+
+  update(key, value) {
+    return this.userDoc().collection(this.path).doc(key).set(value);
+  }
+
+  delete(key) {
+    return this.userDoc().collection(this.path).doc(key).delete();
+  }
+
+  create(value) {
+    return this.userDoc().collection(this.path).add(value);
   }
 
   refresh() {
+    const first = this.userDoc().collection(this.path, ref => {
+      return this.queryFn(ref);
+    });
+    this.data = null;
+    this._done.next(false);
+    this._loading.next(false);
+    this._data = new BehaviorSubject([]);
+    this.mapAndUpdate(first);
+    // Create the observable array for consumption in components
+    this.data = this._data.asObservable().scan((acc, values) => {
+      return values.concat(acc);
+    });
   }
 
-  create(value: BioResult) {
-    if (!value.id) {
-      value.id = 40;
+  private queryFn(ref) {
+    return ref;
+  }
+
+  // Determines the doc snapshot to paginate query
+  private getCursor() {
+    const current = this._data.value;
+    if (current.length) {
+      return current[current.length - 1].doc;
     }
-    this.mockData.push(value);
-    return new Promise<null>((resolve) => {
-      resolve();
-    });
+    return null;
   }
 
-  update(id: any, value: BioResult) {
-    this.mockData.forEach((bioResult) => {
-      if (bioResult.id === id) {
-        bioResult.type = value.type;
-        bioResult.date = value.date;
-        bioResult.value = value.value;
+  // Maps the snapshot to usable format the updates source
+  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
+    if (this._done.value || this._loading.value) {
+      return;
+    }
+    // loading
+    this._loading.next(true);
+    // Map snapshot with doc ref (needed for cursor)
+    return col.snapshotChanges()
+    .do(arr => {
+      let values = arr.map(snap => {
+        const data = snap.payload.doc.data();
+        data.id = snap.payload.doc.id;
+        const doc = snap.payload.doc;
+        data.date = data.date ? data.date.toDate() : null;
+        return {...data, doc};
+      });
+
+      // update source with new values, done loading
+      this._data.next(values);
+      this._loading.next(false);
+
+      // no more values, mark done
+      if (!values.length) {
+        this._done.next(true);
       }
-    });
-    return new Promise<null>((resolve) => {
-      resolve();
-    });
-  }
-
-  delete(id: any) {
-    return new Promise(resolve => {
-      resolve();
     })
+    .take(1)
+    .subscribe();
   }
 
+  private userDoc() {
+    return this.db
+    .collection('users')
+    .doc(this.userId);
+  }
 }

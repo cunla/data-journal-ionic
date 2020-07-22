@@ -27,11 +27,11 @@ export class BloodresultsPage implements OnInit {
 
   segmentChanged(groupby: CustomEvent) {
     this.groupby = groupby?.detail?.value || 'date';
-    this.bioService.getResults().subscribe((allResults) => {
+    this.bioService.data.subscribe((allResults) => {
       this.data = new Map<string, Array<BioResult>>();
       this.headers = [];
       allResults.forEach((res) => {
-        const group = (this.groupby === 'date') ? this.transform(res.date) : res.type;
+        const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
           this.headers.push(group);
@@ -59,7 +59,7 @@ export class BloodresultsPage implements OnInit {
     });
   }
 
-  private transform(date: Date) {
+  private static transform(date: Date) {
     return moment(date).format('YYYY-MM-DD dddd');
   }
 }
