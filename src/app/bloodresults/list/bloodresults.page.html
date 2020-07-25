@@ -16,7 +16,9 @@
       <ion-label>By test date</ion-label>
     </ion-segment-button>
   </ion-segment>
-
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-fab horizontal="end" slot="fixed" vertical="top">
     <ion-fab-button (click)="presentModal(newResult)">
       <ion-icon name="add"></ion-icon>
@@ -31,7 +33,7 @@
           {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option (click)="presentModal(item)" color="primary">
+          <ion-item-option (click)="presentEditModal(item)" color="primary">
             <ion-icon name="create-outline" slot="icon-only"></ion-icon>
           </ion-item-option>
           <ion-item-option (click)="delete(item)" color="danger">

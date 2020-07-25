@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
-import {EditBioresultComponent} from '../edit/edit-bioresult.component';
 import * as moment from 'moment';
+import {EditBioresultComponent} from '../edit/edit-bioresult.component';
 
 @Component({
   selector: 'app-bloodresults',
@@ -22,33 +22,22 @@ export class BloodresultsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.segmentChanged(null);
+    this.doRefresh(null);
   }
 
   segmentChanged(groupby: CustomEvent) {
-    this.groupby = groupby?.detail?.value || 'date';
-    this.bioService.data.subscribe((allResults) => {
-      this.data = new Map<string, Array<BioResult>>();
-      this.headers = [];
-      allResults.forEach((res) => {
-        const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
-        if (!this.data.has(group)) {
-          this.data.set(group, []);
-          this.headers.push(group);
-        }
-        this.data.get(group).push(res);
-      });
-    });
+    this.groupby = groupby?.detail?.value || this.groupby;
+    this.doRefresh(null);
   }
 
-  async presentModal(bioresult: BioResult) {
+  async presentModal(item: BioResult) {
     if (this.state.modalOpen) {
       return;
     }
     this.state.modalOpen = true;
     const modal = await this.modalController.create({
       component: EditBioresultComponent,
-      componentProps: {bioresult,}
+      componentProps: {bioresult: item,}
     });
     return await modal.present();
   }
@@ -61,5 +50,33 @@ export class BloodresultsPage implements OnInit {
 
   private static transform(date: Date) {
     return moment(date).format('YYYY-MM-DD dddd');
+  }
+
+  async presentEditModal(item: BioResult) {
+    if (this.state.modalOpen) {
+      return;
+    }
+    this.state.modalOpen = true;
+    const modal = await this.modalController.create({
+      component: EditBioresultComponent,
+      componentProps: {bioresult: item,}
+    });
+    return await modal.present();
+  }
+
+  doRefresh(event: any) {
+    this.bioService.data.subscribe((allResults) => {
+      this.data = new Map<string, Array<BioResult>>();
+      this.headers = [];
+      allResults.forEach((res) => {
+        const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
+        if (!this.data.has(group)) {
+          this.data.set(group, []);
+          this.headers.push(group);
+        }
+        this.data.get(group).push(res);
+      });
+      event?.target.complete();
+    });
   }
 }

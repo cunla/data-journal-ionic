@@ -58,9 +58,10 @@ export class EditBioresultComponent implements OnInit {
   }
 
   private createForm() {
+    const date = moment(this.bioresult.date || null).format('YYYY-MM-DD');
     this.bioresultForm = this.fb.group({
       type: [this.bioresult.type, Validators.required],
-      date: [this.bioresult.date, Validators.required],
+      date: [date, Validators.required],
       value: [this.bioresult.value, Validators.required],
     },);
   }

@@ -21,6 +21,12 @@
 <ion-content>
   <form (ngSubmit)="onSubmit(bioresultForm.value)"
         [formGroup]="bioresultForm" novalidate>
+
+    <ion-item>
+      <ion-label>Date</ion-label>
+      <ion-datetime displayFormat="YYYY MMM DD" formControlName="date"></ion-datetime>
+    </ion-item>
+
     <ion-row>
       <ion-col [size]="12">
         <ion-auto-complete [dataProvider]="bioMetadataService"
@@ -31,15 +37,6 @@
                            labelPosition="floating"></ion-auto-complete>
       </ion-col>
     </ion-row>
-    <!--    <ion-item>-->
-    <!--      <ion-label position="floating">Type</ion-label>-->
-    <!--      <ion-input formControlName="type"></ion-input>-->
-    <!--    </ion-item>-->
-
-    <ion-item>
-      <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="YYYY MMM DD" formControlName="date"></ion-datetime>
-    </ion-item>
 
     <ion-item>
       <ion-label position="floating">Value</ion-label>
