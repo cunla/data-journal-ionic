@@ -12,7 +12,7 @@
     <ion-segment-button value="type">
       <ion-label>By test type</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="date" >
+    <ion-segment-button value="date">
       <ion-label>By test date</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -27,25 +27,40 @@
 
   <ion-list>
     <div *ngFor="let header of headers">
-      <ion-item-divider> {{header}} Results</ion-item-divider>
-      <ion-item-sliding *ngFor="let item of data.get(header)">
-        <ion-item>
-          {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option (click)="presentEditModal(item)" color="primary">
-            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-          </ion-item-option>
-          <ion-item-option (click)="delete(item)" color="danger">
-            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-      <app-resultchart *ngIf="groupby !== 'date'"
-                       [chartData]="data.get(header)"
-                       [title]="header">
-
-      </app-resultchart>
+      <ion-card>
+        <ion-card-title> {{header}} Results</ion-card-title>
+        <ion-card-content>
+          <ion-segment *ngIf="groupby !== 'date'"
+                       (ionChange)="graphOrList(header,$event)"
+                       [value]="this.graphOrListMap[header] || 'list'">
+            <ion-segment-button value="chart">
+              <ion-label>Graph</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="list">
+              <ion-label>List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="groupby === 'date' || this.graphOrListMap[header] !== 'chart'">
+            <ion-item-sliding *ngFor="let item of data.get(header)">
+              <ion-item>
+                {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option (click)="presentEditModal(item)" color="primary">
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-item-option>
+                <ion-item-option (click)="delete(item)" color="danger">
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </div>
+          <app-resultchart *ngIf="groupby !== 'date' && this.graphOrListMap[header]==='chart'"
+                           [chartData]="data.get(header)"
+                           [title]="header">
+          </app-resultchart>
+        </ion-card-content>
+      </ion-card>
     </div>
   </ion-list>
 

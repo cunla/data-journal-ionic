@@ -15,6 +15,7 @@ export class BloodresultsPage implements OnInit {
   groupby = 'date';
   newResult = EMPTY_RESULT;
   headers: string[] = [];
+  graphOrListMap: Map<string, string> = new Map();
 
   constructor(private modalController: ModalController,
               private state: StateProvider,
@@ -28,6 +29,10 @@ export class BloodresultsPage implements OnInit {
   segmentChanged(groupby: CustomEvent) {
     this.groupby = groupby?.detail?.value || this.groupby;
     this.doRefresh(null);
+  }
+
+  graphOrList(header: string, $event: any) {
+    this.graphOrListMap[header] = $event?.detail?.value || 'list';
   }
 
   async presentModal(item: BioResult) {
@@ -79,4 +84,5 @@ export class BloodresultsPage implements OnInit {
       event?.target.complete();
     });
   }
+
 }
