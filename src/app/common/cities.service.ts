@@ -12066,7 +12066,6 @@ export class CitiesService implements AutoCompleteService {
       .find(item => item.toLowerCase() === country.toLowerCase());
   }
 
-  //todo Remove after setting toronto point as home
   public static getCityLngLat(country: string): any {
     const res = CITIES.find(item => item.toLowerCase().includes(country.toLowerCase()));
     if (res) {
@@ -12088,7 +12087,7 @@ export class CitiesService implements AutoCompleteService {
 
   public getResults(keyword: string): LocationInterface[] {
     const filterValue = keyword ? keyword.toLowerCase() : '';
-    const res = CITIES
+    const res: LocationInterface[] = CITIES
       .filter(item => containsCaseInsensitive(item, filterValue))
       .map(item => {
         const data = item.split('/');
