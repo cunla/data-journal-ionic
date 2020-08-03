@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
+
+
+
+
 import {containsCaseInsensitive} from './string.tools';
 import {AutoCompleteService} from 'ionic4-auto-complete';
 

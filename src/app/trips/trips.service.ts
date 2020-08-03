@@ -1,9 +1,11 @@
+
+import {take, tap, scan} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/scan';
-import 'rxjs/add/operator/take';
+
+
+
 // import * as firebase from 'firebase/app';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
@@ -120,13 +122,13 @@ export class TripsService {
     this._data = new BehaviorSubject([]);
     this.mapAndUpdate(first);
     // Create the observable array for consumption in components
-    this.data = this._data.asObservable().scan((acc, values) => {
+    this.data = this._data.asObservable().pipe(scan((acc, values) => {
       const val = values.filter((item: TripInterface) => {
         return containsCaseInsensitive(item.locationName, this.query.searchValue)
           || containsCaseInsensitive(item.purpose, this.query.searchValue);
       });
       return this.query.prepend ? val.concat(acc) : acc.concat(val);
-    });
+    }));
   }
 
   private queryFn(ref) {
@@ -157,8 +159,8 @@ export class TripsService {
     // loading
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
-    return col.snapshotChanges()
-      .do(arr => {
+    return col.snapshotChanges().pipe(
+      tap(arr => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;
@@ -179,8 +181,8 @@ export class TripsService {
         if (!values.length) {
           this._done.next(true);
         }
-      })
-      .take(1)
+      }),
+      take(1),)
       .subscribe();
   }
 

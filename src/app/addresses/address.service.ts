@@ -1,13 +1,12 @@
+import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/scan';
-import 'rxjs/add/operator/take';
-// import * as firebase from 'firebase/app';
+
+
 import {AngularFireAuth} from '@angular/fire/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
-import {TripInterface} from '../trips/trips.service';
+import {TripInterface} from '../trips/trips.service'
 
 export const ADDRESS_HISTORY_PATH = 'address-history';
 
@@ -106,13 +105,13 @@ export class AddressService {
       });
       this.mapAndUpdate(first);
     }
-    this.data = this._data.asObservable().scan((acc, values) => {
+    this.data = this._data.asObservable().pipe(scan((acc, values) => {
       const val = values.filter((item: TripInterface) => {
         return containsCaseInsensitive(item.locationName, this.query.searchValue)
           || containsCaseInsensitive(item.purpose, this.query.searchValue);
       });
       return this.query.prepend ? val.concat(acc) : acc.concat(val);
-    });
+    }));
   }
 
   get(key) {
@@ -138,8 +137,8 @@ export class AddressService {
     if (this.addresses && this.addresses.length > 0) {
       this._data.next(this.addresses);
     } else {
-      return col.snapshotChanges()
-        .do(arr => {
+      return col.snapshotChanges().pipe(
+        tap(arr => {
           let values = arr.map(snap => {
             const data = snap.payload.doc.data();
             data.id = snap.payload.doc.id;
@@ -151,8 +150,8 @@ export class AddressService {
           values = this.query.prepend ? values.reverse() : values;
           this.addresses = values;
           this._data.next(values);
-        })
-        .take(1)
+        }),
+        take(1),)
         .subscribe();
     }
   }
