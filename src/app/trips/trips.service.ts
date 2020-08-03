@@ -1,9 +1,7 @@
-
-import {take, tap, scan} from 'rxjs/operators';
+import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
-
 
 
 // import * as firebase from 'firebase/app';
@@ -113,6 +111,7 @@ export class TripsService {
   }
 
   refresh() {
+    console.log('trips refresh ', this.query.path);
     const first = this.userDoc().collection(this.query.path, ref => {
       return this.queryFn(ref);
     });
@@ -132,12 +131,7 @@ export class TripsService {
   }
 
   private queryFn(ref) {
-    const res = ref;
-    // if (this.query.filter) {
-    //   res = res.where(this.query.field, '>=', this.query.searchValue)
-    //     .where(this.query.field, '<=', this.query.searchValue + '\uf8ff');
-    // }
-    return res
+    return ref
       .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
       .limit(this.query.limit);
   }
