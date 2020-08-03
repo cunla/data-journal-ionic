@@ -1,6 +1,8 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu contentId="main-content"
+              type="overlay"
+              *ngIf="authService.isLoggedIn">
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header>Data journal</ion-list-header>
