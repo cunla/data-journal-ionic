@@ -54,6 +54,7 @@ export class BloodresultsPage implements OnInit {
 
   delete(item: BioResult) {
     this.bioService.delete(item.id).then(() => {
+      console.log(`Deleted ${item.id}`);
       this.doRefresh(null);
     });
   }
@@ -75,6 +76,7 @@ export class BloodresultsPage implements OnInit {
   }
 
   doRefresh(event: any) {
+    this.bioService.refresh();
     this.bioService.data.subscribe((allResults) => {
       allResults = allResults.sort((a, b) => {
         return b.date.getTime() - a.date.getTime();

@@ -26,8 +26,7 @@
   </ion-fab>
 
   <ion-list>
-    <div *ngFor="let header of headers">
-      <ion-card>
+      <ion-card *ngFor="let header of headers">
         <ion-card-title> {{header}} results</ion-card-title>
         <ion-card-content>
           <ion-segment *ngIf="groupby !== 'date'"
@@ -44,9 +43,9 @@
             <ion-item-sliding *ngFor="let item of data.get(header)">
               <ion-item>
                 <ion-label>{{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}}</ion-label>
-                <ion-label [color]="itemBadgeColor(item)">
+                <ion-badge slot="end" [color]="itemBadgeColor(item)">
                   {{item.value}}
-                </ion-label>
+                </ion-badge>
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option (click)="presentEditModal(item)" color="primary">
@@ -64,7 +63,6 @@
           </app-resultchart>
         </ion-card-content>
       </ion-card>
-    </div>
   </ion-list>
 
 </ion-content>
