@@ -31,22 +31,12 @@ export class EditBioresultComponent implements OnInit {
 
   onSubmit(value) {
     value.date = moment(value.date).toDate();
-    if (this.bioresult.id === null || this.bioresult.id === undefined) {
-      console.log('Saving bioresult', value);
-      this.bioService.create(value).then(
-        res => {
-          this.bioService.refresh();
-          this.bioresultForm.reset();
-        }
-      );
-    } else {
-      this.bioService.update(this.bioresult.id, value).then(
-        () => {
-          this.bioService.refresh();
-        }
-      );
-    }
-    this.dismissModal();
+    this.bioService.update(this.bioresult.id, value).then(() => {
+        this.bioService.refresh();
+        this.dismissModal();
+      }
+    );
+
   }
 
   public dismissModal() {

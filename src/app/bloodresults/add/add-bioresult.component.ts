@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {StateProvider} from '../../common/state.provider';
-import {AlertController, ModalController} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {BioMetadataService} from '../bio-metadata.service';
 import * as moment from 'moment';
 
@@ -21,6 +21,7 @@ export class AddBioresultComponent implements OnInit {
               private fb: FormBuilder,
               private bioService: BioService,
               public bioMetadataService: BioMetadataService,
+              public loadingController: LoadingController,
               private alertController: AlertController,
   ) {
   }
@@ -29,40 +30,20 @@ export class AddBioresultComponent implements OnInit {
     this.createForm();
   }
 
-
   async onSubmit(value) {
-    const previousDate = value.date;
-    value.date = moment(value.date).toDate();
-    console.log('Saving new bioresult', value);
-    this.bioService.create(value).then(
-      (res) => {
-        this.bioService.refresh();
-      }
-    );
-    const alert = await this.alertController.create({
-      header: 'Additional result',
-      message: 'Would you like to add an additional result with this date?',
-      buttons: [
-        {
-          text: 'No',
-          handler: () => {
-            console.log('User chose not to add additional result, closing modal');
-            this.dismissModal();
-          }
-        }, {
-          text: 'Yes',
-          handler: () => {
-            this.bioresultForm.reset();
-            this.bioresultForm.setValue({
-              type: '',
-              value: null,
-              date: previousDate,
-            });
-          }
-        }
-      ]
+    const loading = await this.loadingController.create({
+      message: 'Adding results',
     });
-    await alert.present();
+    await loading.present();
+    value.date = moment(value.date).toDate();
+    let p = [];
+    for (const val of value.values) {
+      p.push(this.bioService.create(value.date, val.type, val.value));
+    }
+    Promise.all(p).then((res) => {
+      loading.dismiss();
+      this.dismissModal();
+    });
   }
 
   public dismissModal() {
@@ -75,9 +56,28 @@ export class AddBioresultComponent implements OnInit {
 
   private createForm() {
     this.bioresultForm = this.fb.group({
-      type: [this.bioresult.type, Validators.required],
       date: [this.bioresult.date, Validators.required],
-      value: [this.bioresult.value, Validators.required],
+      values: this.fb.array([]),
+      type: [this.bioresult.type],
     },);
   }
+
+  getValuesArrays(): FormArray {
+    return <FormArray>this.bioresultForm.controls['values'];
+  }
+
+  addInput(): void {
+    const newType = this.bioresultForm.controls['type'].value;
+    this.bioresultForm.controls['type'].setValue('');
+    const arrayControl = this.getValuesArrays();
+    if (arrayControl.getRawValue().some(x => x.type === newType)) {
+      return;
+    }
+    const newGroup = this.fb.group({
+      type: [newType, Validators.required],
+      value: [this.bioresult.value, Validators.required],
+    });
+    arrayControl.push(newGroup);
+  }
+
 }

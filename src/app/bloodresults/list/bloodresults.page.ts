@@ -4,6 +4,8 @@ import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import * as moment from 'moment';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
+import {AddBioresultComponent} from "../add/add-bioresult.component";
+import {BioMetadataService} from "../bio-metadata.service";
 
 @Component({
   selector: 'app-bloodresults',
@@ -19,6 +21,7 @@ export class BloodresultsPage implements OnInit {
 
   constructor(private modalController: ModalController,
               private state: StateProvider,
+              private bioMetadataService: BioMetadataService,
               private bioService: BioService) {
   }
 
@@ -35,21 +38,23 @@ export class BloodresultsPage implements OnInit {
     this.graphOrListMap[header] = $event?.detail?.value || 'list';
   }
 
-  async presentModal(item: BioResult) {
+  async presentAddModal(item: BioResult) {
     if (this.state.modalOpen) {
       return;
     }
     this.state.modalOpen = true;
     const modal = await this.modalController.create({
-      component: EditBioresultComponent,
+      component: AddBioresultComponent,
       componentProps: {bioresult: item,}
     });
-    return await modal.present();
+    modal.present().then(() => {
+      this.doRefresh(null);
+    });
   }
 
   delete(item: BioResult) {
     this.bioService.delete(item.id).then(() => {
-      this.bioService.refresh();
+      this.doRefresh(null);
     });
   }
 
@@ -71,9 +76,12 @@ export class BloodresultsPage implements OnInit {
 
   doRefresh(event: any) {
     this.bioService.data.subscribe((allResults) => {
+      allResults = allResults.sort((a, b) => {
+        return b.date.getTime() - a.date.getTime();
+      })
       this.data = new Map<string, Array<BioResult>>();
       this.headers = [];
-      allResults.forEach((res) => {
+      allResults.forEach((res: BioResult) => {
         const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
@@ -85,4 +93,8 @@ export class BloodresultsPage implements OnInit {
     });
   }
 
+  itemBadgeColor(item: BioResult) {
+    const metadata = this.bioMetadataService.getTestMetaData(item.type);
+    return (item.value < metadata.low || item.value > metadata.high) ? 'danger' : 'success';
+  }
 }

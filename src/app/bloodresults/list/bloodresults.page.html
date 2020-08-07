@@ -20,7 +20,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-fab horizontal="end" slot="fixed" vertical="top">
-    <ion-fab-button (click)="presentModal(newResult)">
+    <ion-fab-button (click)="presentAddModal(newResult)">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
@@ -28,7 +28,7 @@
   <ion-list>
     <div *ngFor="let header of headers">
       <ion-card>
-        <ion-card-title> {{header}} Results</ion-card-title>
+        <ion-card-title> {{header}} results</ion-card-title>
         <ion-card-content>
           <ion-segment *ngIf="groupby !== 'date'"
                        (ionChange)="graphOrList(header,$event)"
@@ -43,7 +43,10 @@
           <div *ngIf="groupby === 'date' || this.graphOrListMap[header] !== 'chart'">
             <ion-item-sliding *ngFor="let item of data.get(header)">
               <ion-item>
-                {{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}} : {{item.value}}
+                <ion-label>{{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}}</ion-label>
+                <ion-label [color]="itemBadgeColor(item)">
+                  {{item.value}}
+                </ion-label>
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option (click)="presentEditModal(item)" color="primary">

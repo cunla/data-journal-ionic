@@ -1,11 +1,8 @@
-
-import {take, tap, scan} from 'rxjs/operators';
+import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {AngularFireAuth} from '@angular/fire/auth';
-
-
 
 
 export interface BioResult {
@@ -34,7 +31,7 @@ export class BioService {
   private _loading = new BehaviorSubject(false);
   loading: Observable<boolean> = this._loading.asObservable();
   private _data = new BehaviorSubject([]);
-  private path: string='bio-results';
+  private path: string = 'bio-results';
   private readonly userId: string;
 
 
@@ -57,8 +54,14 @@ export class BioService {
     return this.userDoc().collection(this.path).doc(key).delete();
   }
 
-  create(value) {
-    return this.userDoc().collection(this.path).add(value);
+  create(date, type, value) {
+    const record = {
+      date: date,
+      type: type,
+      value: value,
+    }
+    console.log('Saving value: ', record);
+    return this.userDoc().collection(this.path).add(record);
   }
 
   refresh() {
@@ -98,31 +101,31 @@ export class BioService {
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-    tap(arr => {
-      let values = arr.map(snap => {
-        const data = snap.payload.doc.data();
-        data.id = snap.payload.doc.id;
-        const doc = snap.payload.doc;
-        data.date = data.date ? data.date.toDate() : null;
-        return {...data, doc};
-      });
+      tap(arr => {
+        let values = arr.map(snap => {
+          const data = snap.payload.doc.data();
+          data.id = snap.payload.doc.id;
+          const doc = snap.payload.doc;
+          data.date = data.date ? data.date.toDate() : null;
+          return {...data, doc};
+        });
 
-      // update source with new values, done loading
-      this._data.next(values);
-      this._loading.next(false);
+        // update source with new values, done loading
+        this._data.next(values);
+        this._loading.next(false);
 
-      // no more values, mark done
-      if (!values.length) {
-        this._done.next(true);
-      }
-    }),
-    take(1),)
-    .subscribe();
+        // no more values, mark done
+        if (!values.length) {
+          this._done.next(true);
+        }
+      }),
+      take(1),)
+      .subscribe();
   }
 
   private userDoc() {
     return this.db
-    .collection('users')
-    .doc(this.userId);
+      .collection('users')
+      .doc(this.userId);
   }
 }
