@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     this.loggedInSubject = this.authService.loggedinSubject();
     this.loggedInSubject.subscribe((val) => {
       if (val) {
-        this.router.navigateByUrl('/bloodresults').then();
+        this.router.navigateByUrl('/trips').then();
       } else {
         this.router.navigateByUrl('/auth/login').then();
       }
