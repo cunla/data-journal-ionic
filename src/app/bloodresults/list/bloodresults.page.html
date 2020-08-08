@@ -46,6 +46,10 @@
                 <ion-badge slot="end" [color]="itemBadgeColor(item)">
                   {{item.value}}
                 </ion-badge>
+                <app-bioresultbar [value]="item.value"
+                                  [high]="item.metadata.high"
+                                  [low]="item.metadata.low">
+                </app-bioresultbar>
               </ion-item>
               <ion-item-options side="end">
                 <ion-item-option (click)="presentEditModal(item)" color="primary">

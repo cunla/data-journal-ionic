@@ -10,6 +10,7 @@ export interface BioResult {
   date: Date;
   type: string;
   value: number;
+  metadata: any;
 }
 
 export const EMPTY_RESULT: BioResult = {
@@ -17,6 +18,7 @@ export const EMPTY_RESULT: BioResult = {
   date: new Date(),
   type: '',
   value: 0,
+  metadata: null,
 }
 
 @Injectable({

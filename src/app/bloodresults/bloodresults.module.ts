@@ -16,6 +16,7 @@ import {BioService} from './bio.service';
 import {BioMetadataService} from './bio-metadata.service';
 import {AutoCompleteModule} from 'ionic4-auto-complete';
 import {AddBioresultComponent} from './add/add-bioresult.component';
+import {BioresultBarModule} from "./bioresult-bar/bioresult-bar.module";
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {AddBioresultComponent} from './add/add-bioresult.component';
     ReactiveFormsModule,
     HighchartsChartModule,
     AutoCompleteModule,
+    BioresultBarModule,
   ],
   declarations: [
     BloodresultsPage,

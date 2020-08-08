@@ -84,6 +84,7 @@ export class BloodresultsPage implements OnInit {
       this.data = new Map<string, Array<BioResult>>();
       this.headers = [];
       allResults.forEach((res: BioResult) => {
+        res.metadata = this.bioMetadataService.getTestMetaData(res.type);
         const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
@@ -96,7 +97,7 @@ export class BloodresultsPage implements OnInit {
   }
 
   itemBadgeColor(item: BioResult) {
-    const metadata = this.bioMetadataService.getTestMetaData(item.type);
+    const metadata = item.metadata || this.bioMetadataService.getTestMetaData(item.type);
     return (item.value < metadata.low || item.value > metadata.high) ? 'danger' : 'success';
   }
 }
