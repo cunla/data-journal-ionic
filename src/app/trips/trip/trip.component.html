@@ -1,15 +1,18 @@
 <ion-item-sliding>
   <ion-item lines="full">
+    <ion-thumbnail slot="start">
+      <img [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'">
+    </ion-thumbnail>
     <ion-label (click)="editClicked.emit(null)" class="ion-text-wrap">
       <h3>
         {{trip.start | date: 'yyyy-MM-dd'}} - {{trip.end | date: 'yyyy-MM-dd'}}
         ({{daysDiff(trip.start, trip.end)}} days)
       </h3>
       <h2>
-        <ion-icon *ngIf="trip.countryCode" [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'"></ion-icon>
+        <!--        <ion-icon *ngIf="trip.countryCode" [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'"></ion-icon>-->
         {{trip.city}}, {{trip.state}}, {{trip.country}}
       </h2>
-      <p>
+      <p style="white-space: pre-wrap">
         {{trip.purpose}}
       </p>
     </ion-label>
