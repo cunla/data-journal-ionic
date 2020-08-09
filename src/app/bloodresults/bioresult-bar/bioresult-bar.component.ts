@@ -21,15 +21,15 @@ export class BioresultBarComponent implements OnInit {
 
   ngOnInit() {
     if (this.value < this.low) {
-      this.showString = "*[.....] ";
+      this.showString = "*[.....].";
       this.color = this.colorLow;
     } else if (this.value > this.high) {
-      this.showString = " [.....]*";
+      this.showString = ".[.....]*";
       this.color = this.colorHigh;
-    } else {
-      const result = " [.....] ";
-      const index = Math.floor((this.value - this.low) / (this.high - this.low) * 5)+2;
-      this.showString = result.substr(0, index) + "*" + result.substr(index + 1);
+    } else { // this.low <= this.value <= this.high
+      const result = ".....";
+      const index = Math.floor(Math.abs(this.value - this.low-1) / (this.high - this.low) * 5);
+      this.showString = ".["+result.substr(0, index) + "*" + result.substr(index + 1)+"].";
       this.color = this.colorNormal;
     }
   }

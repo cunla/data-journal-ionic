@@ -5,9 +5,6 @@
     </ion-buttons>
     <ion-title>Blood results</ion-title>
   </ion-toolbar>
-</ion-header>
-
-<ion-content>
   <ion-segment (ionChange)="segmentChanged($event)" [value]="groupby">
     <ion-segment-button value="type">
       <ion-label>By test type</ion-label>
@@ -16,6 +13,10 @@
       <ion-label>By test date</ion-label>
     </ion-segment-button>
   </ion-segment>
+</ion-header>
+
+<ion-content>
+
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

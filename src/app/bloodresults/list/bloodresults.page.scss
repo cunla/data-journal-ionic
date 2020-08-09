@@ -1,7 +1,24 @@
-ion-card-title {
-  padding: 10px;
+ion-card {
+  margin-left: 10px;
+  margin-right: 10px;
+
+  ion-card-title {
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  ion-card-content {
+    padding: 0;
+  }
+
 }
 
 ion-note {
   font-size: 16px;
+}
+
+ion-badge {
+  padding: 5px;
+  margin: 0 5px 0 5px;
+  width: 30px;
 }
