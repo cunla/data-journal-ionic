@@ -19,7 +19,7 @@ export const EMPTY_RESULT: BioResult = {
   type: '',
   value: 0,
   metadata: null,
-}
+};
 
 @Injectable({
   providedIn: 'root'
@@ -27,11 +27,6 @@ export const EMPTY_RESULT: BioResult = {
 export class BioService {
   // Observable data
   data: Observable<BioResult[]>;
-  // Source data
-  private _done = new BehaviorSubject(false);
-  done: Observable<boolean> = this._done.asObservable();
-  private _loading = new BehaviorSubject(false);
-  loading: Observable<boolean> = this._loading.asObservable();
   private _data = new BehaviorSubject([]);
   private path: string = 'bio-results';
   private readonly userId: string;
@@ -61,7 +56,7 @@ export class BioService {
       date: date,
       type: type,
       value: value,
-    }
+    };
     console.log('Saving value: ', record);
     return this.userDoc().collection(this.path).add(record);
   }
@@ -71,14 +66,13 @@ export class BioService {
       return this.queryFn(ref);
     });
     this.data = null;
-    this._done.next(false);
-    this._loading.next(false);
     this._data = new BehaviorSubject([]);
     this.mapAndUpdate(first);
     // Create the observable array for consumption in components
-    this.data = this._data.asObservable().pipe(scan((acc, values) => {
-      return values.concat(acc);
-    }));
+    this.data = this._data.asObservable()
+      .pipe(scan((acc, values) => {
+        return values;
+      }));
   }
 
   private queryFn(ref) {
@@ -96,11 +90,6 @@ export class BioService {
 
   // Maps the snapshot to usable format the updates source
   private mapAndUpdate(col: AngularFirestoreCollection<any>) {
-    if (this._done.value || this._loading.value) {
-      return;
-    }
-    // loading
-    this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
       tap(arr => {
@@ -114,12 +103,6 @@ export class BioService {
 
         // update source with new values, done loading
         this._data.next(values);
-        this._loading.next(false);
-
-        // no more values, mark done
-        if (!values.length) {
-          this._done.next(true);
-        }
       }),
       take(1),)
       .subscribe();

@@ -21,7 +21,10 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <!--  <app-edit-trip [trip]="newTrip"></app-edit-trip>-->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
 
     <app-trip (editClicked)="presentModal(item)"

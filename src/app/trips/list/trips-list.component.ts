@@ -36,7 +36,7 @@ export class TripsListComponent implements OnInit {
   ngOnInit() {
     const searchbar = document.querySelector('ion-searchbar');
     searchbar.addEventListener('ionInput', this.searchByName.bind(this));
-
+    this.trips.refresh();
   }
 
   searchByName(event) {
@@ -70,5 +70,10 @@ export class TripsListComponent implements OnInit {
       });
     });
     return res;
+  }
+
+  doRefresh(event: any) {
+    this.trips.refresh();
+    event?.target.complete();
   }
 }
