@@ -1,10 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Login to Data Journal</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <ion-list>
+
+    <img src="/assets/icon/favicon.png" class="center"/>
     <ion-item>
       <ion-label position="floating">email</ion-label>
       <ion-input [(ngModel)]="userEmail" autofocus inputmode="email" required></ion-input>
@@ -49,9 +51,6 @@
       <ion-button (click)="authService.doLogout()">
         Logout
       </ion-button>
-    </ion-item>
-    <ion-item *ngIf="!authService.isLoggedIn">
-      Not logged in
     </ion-item>
   </ion-list>
 </ion-content>
