@@ -1,0 +1,21 @@
+<ion-item-sliding>
+  <ion-item>
+<!--    <ion-label>{{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}}</ion-label>-->
+    <ion-label>{{label}}</ion-label>
+    <ion-badge slot="end" [color]="itemBadgeColor()">
+      {{value}}
+    </ion-badge>
+    <app-bioresultbar [value]="value"
+                      [high]="high"
+                      [low]="low">
+    </app-bioresultbar>
+  </ion-item>
+  <ion-item-options side="end">
+    <ion-item-option (click)="editClicked.emit(null)" color="primary">
+      <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+    </ion-item-option>
+    <ion-item-option (click)="deleteClicked.emit(null)" color="danger">
+      <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

@@ -27,47 +27,35 @@
   </ion-fab>
 
   <ion-list>
-      <ion-card *ngFor="let header of headers">
-        <ion-card-title> {{header}} results</ion-card-title>
-        <ion-card-content>
-          <ion-segment *ngIf="groupby !== 'date'"
-                       (ionChange)="graphOrList(header,$event)"
-                       [value]="this.graphOrListMap[header] || 'list'">
-            <ion-segment-button value="chart">
-              <ion-label>Graph</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="list">
-              <ion-label>List</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-          <div *ngIf="groupby === 'date' || this.graphOrListMap[header] !== 'chart'">
-            <ion-item-sliding *ngFor="let item of data.get(header)">
-              <ion-item>
-                <ion-label>{{ groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')}}</ion-label>
-                <ion-badge slot="end" [color]="itemBadgeColor(item)">
-                  {{item.value}}
-                </ion-badge>
-                <app-bioresultbar [value]="item.value"
-                                  [high]="item.metadata.high"
-                                  [low]="item.metadata.low">
-                </app-bioresultbar>
-              </ion-item>
-              <ion-item-options side="end">
-                <ion-item-option (click)="presentEditModal(item)" color="primary">
-                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-                </ion-item-option>
-                <ion-item-option (click)="delete(item)" color="danger">
-                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-                </ion-item-option>
-              </ion-item-options>
-            </ion-item-sliding>
-          </div>
-          <app-resultchart *ngIf="groupby !== 'date' && this.graphOrListMap[header]==='chart'"
-                           [chartData]="data.get(header)"
-                           [title]="header">
-          </app-resultchart>
-        </ion-card-content>
-      </ion-card>
+    <ion-card *ngFor="let header of headers">
+      <ion-card-title> {{header}} results</ion-card-title>
+      <ion-card-content>
+        <ion-segment *ngIf="groupby !== 'date'"
+                     (ionChange)="graphOrList(header,$event)"
+                     [value]="this.graphOrListMap[header] || 'list'">
+          <ion-segment-button value="chart">
+            <ion-label>Graph</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="list">
+            <ion-label>List</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <div *ngIf="groupby === 'date' || this.graphOrListMap[header] !== 'chart'">
+          <app-bioresult-item *ngFor="let item of data.get(header)"
+                              [label]="groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')"
+                              [value]="item.value"
+                              [high]="item.metadata.high"
+                              [low]="item.metadata.low"
+                              (deleteClicked)="delete(item)"
+                              (editClicked)="presentEditModal(item)">
+          </app-bioresult-item>
+        </div>
+        <app-resultchart *ngIf="groupby !== 'date' && this.graphOrListMap[header]==='chart'"
+                         [chartData]="data.get(header)"
+                         [title]="header">
+        </app-resultchart>
+      </ion-card-content>
+    </ion-card>
   </ion-list>
 
 </ion-content>

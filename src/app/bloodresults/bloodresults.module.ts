@@ -17,6 +17,7 @@ import {BioMetadataService} from './bio-metadata.service';
 import {AutoCompleteModule} from 'ionic4-auto-complete';
 import {AddBioresultComponent} from './add/add-bioresult.component';
 import {BioresultBarModule} from "./bioresult-bar/bioresult-bar.module";
+import {BioresultItemComponent} from "./bioresult-item/bioresult-item.component";
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import {BioresultBarModule} from "./bioresult-bar/bioresult-bar.module";
     EditBioresultComponent,
     ResultChartComponent,
     AddBioresultComponent,
+    BioresultItemComponent,
   ],
   providers: [
     BioMetadataService,
