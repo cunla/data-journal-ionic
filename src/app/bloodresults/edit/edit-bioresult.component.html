@@ -11,7 +11,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{bioresult?.id ? 'Save' : 'Add new'}} bio-result
+      Save bio-result
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
@@ -48,8 +48,9 @@
 
     <ion-button [disabled]="bioresultForm.invalid" color="primary"
                 expand="full"
-                fill="outline" type="submit">
-      {{bioresult?.id ? 'Save' : 'Add'}}
+                fill="outline"
+                type="submit">
+      'Save'
     </ion-button>
 
   </form>

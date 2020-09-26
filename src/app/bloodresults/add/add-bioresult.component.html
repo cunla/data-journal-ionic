@@ -3,7 +3,7 @@
     <ion-icon [name]="bioMetadataService.getIcon(attrs.data.category)"></ion-icon>
     <ion-text>
       <span [innerHtml]="(attrs.data.test)| boldprefix:attrs.keyword"></span>
-      ({{attrs.data.low}} - {{attrs.data.high}}{{attrs.data.unit}})
+      ({{attrs.data.low}} - {{attrs.data.high}} {{attrs.data.unit}})
     </ion-text>
   </ion-item>
 </ng-template>
@@ -11,7 +11,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{bioresult?.id ? 'Save' : 'Add new'}} bio-result
+      Add bio-results for date
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
@@ -21,12 +21,6 @@
 <ion-content>
   <form (ngSubmit)="onSubmit(bioresultForm.value)"
         [formGroup]="bioresultForm" novalidate>
-
-    <ion-item>
-      <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="YYYY MMM DD" formControlName="date"></ion-datetime>
-    </ion-item>
-
     <ion-row>
       <ion-col [size]="9">
         <ion-auto-complete [dataProvider]="bioMetadataService"
@@ -37,29 +31,45 @@
                            labelPosition="floating">
         </ion-auto-complete>
       </ion-col>
-      <ion-col [size]="2">
-        <ion-button (click)="addInput()"
-                    [disabled]="bioresultForm.controls['type'].value === ''">
-          <ion-icon name="add"></ion-icon>
-        </ion-button>
-      </ion-col>
     </ion-row>
+    <ion-button (click)="addInput()"
+                expand="full"
+                color="secondary"
+                [disabled]="bioresultForm.controls['type'].value === ''">
+      Add bio-marker
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
 
-
-    <div *ngFor="let control of bioValues.controls; let i = index">
-      <div [formGroup]="control">
+    <ion-card>
+      <ion-title>
+        Results for date
+      </ion-title>
+      <ion-card-header>
         <ion-item>
-          <ion-label position="floating">{{control.controls['type'].value}}</ion-label>
-          <ion-input formControlName="value" type="number"></ion-input>
+          <ion-label>Pick a date</ion-label>
+          <ion-datetime displayFormat="YYYY MMM DD" formControlName="date"></ion-datetime>
         </ion-item>
-      </div>
-    </div>
+      </ion-card-header>
+      <ion-card-content>
+        <div *ngFor="let control of bioValues.controls; let i = index">
+          <div [formGroup]="control">
+            <ion-item>
+              <ion-label position="floating">{{control.controls['type'].value}}</ion-label>
+              <ion-input formControlName="value" type="number"></ion-input>
+            </ion-item>
+          </div>
+        </div>
+        <div *ngIf="bioValues.controls.length===0">
+          No results were added for date
+        </div>
+      </ion-card-content>
+    </ion-card>
 
     <ion-button [disabled]="bioresultForm.invalid || bioValues.controls.length === 0"
                 color="primary"
                 expand="full"
                 fill="outline" type="submit">
-      {{bioresult?.id ? 'Save' : 'Add'}}
+      Add results
     </ion-button>
 
   </form>
