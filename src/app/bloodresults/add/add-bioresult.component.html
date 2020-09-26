@@ -28,23 +28,25 @@
     </ion-item>
 
     <ion-row>
-      <ion-col [size]="10">
+      <ion-col [size]="9">
         <ion-auto-complete [dataProvider]="bioMetadataService"
                            [options]="{ placeholder : 'Search for test type' }"
                            [template]="suggestionsBioTest"
                            formControlName="type"
                            label="Search for test type"
-                           labelPosition="floating"></ion-auto-complete>
+                           labelPosition="floating">
+        </ion-auto-complete>
       </ion-col>
       <ion-col [size]="2">
-        <ion-button (click)="addInput()">
+        <ion-button (click)="addInput()"
+                    [disabled]="bioresultForm.controls['type'].value === ''">
           <ion-icon name="add"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>
 
 
-    <div *ngFor="let control of getValuesArrays().controls; let i = index">
+    <div *ngFor="let control of bioValues.controls; let i = index">
       <div [formGroup]="control">
         <ion-item>
           <ion-label position="floating">{{control.controls['type'].value}}</ion-label>
@@ -53,7 +55,8 @@
       </div>
     </div>
 
-    <ion-button [disabled]="bioresultForm.invalid" color="primary"
+    <ion-button [disabled]="bioresultForm.invalid || bioValues.controls.length === 0"
+                color="primary"
                 expand="full"
                 fill="outline" type="submit">
       {{bioresult?.id ? 'Save' : 'Add'}}

@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {StateProvider} from '../../common/state.provider';
-import {AlertController, LoadingController, ModalController} from '@ionic/angular';
+import {LoadingController, ModalController} from '@ionic/angular';
 import {BioMetadataService} from '../bio-metadata.service';
 import * as moment from 'moment';
 
@@ -22,7 +22,6 @@ export class AddBioresultComponent implements OnInit {
               private bioService: BioService,
               public bioMetadataService: BioMetadataService,
               public loadingController: LoadingController,
-              private alertController: AlertController,
   ) {
   }
 
@@ -59,22 +58,23 @@ export class AddBioresultComponent implements OnInit {
       date: [this.bioresult.date, Validators.required],
       values: this.fb.array([]),
       type: [this.bioresult.type],
-    },);
+    });
   }
 
-  getValuesArrays(): FormArray {
-    return <FormArray>this.bioresultForm.controls['values'];
+
+  get bioValues(): FormArray {
+    return this.bioresultForm.controls['values'] as FormArray;
   }
 
   addInput(): void {
     const newType = this.bioresultForm.controls['type'].value;
     this.bioresultForm.controls['type'].setValue('');
-    const arrayControl = this.getValuesArrays();
+    const arrayControl = this.bioValues;
     if (arrayControl.getRawValue().some(x => x.type === newType)) {
       return;
     }
     const newGroup = this.fb.group({
-      type: [newType, Validators.required],
+      type: [newType, [Validators.required, Validators.minLength(1)]],
       value: [this.bioresult.value, Validators.required],
     });
     arrayControl.push(newGroup);
