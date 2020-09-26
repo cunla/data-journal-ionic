@@ -59,10 +59,10 @@ export class ResultChartComponent implements OnInit {
 
   ngOnInit() {
     const data = this.chartData
-    .map((point) => [point.date.getTime(), point.value])
-    .sort((a, b) => {
-      return a[0] - b[0];
-    });
+      .map((point) => [point.date.getTime(), point.value])
+      .sort((a, b) => {
+        return a[0] - b[0];
+      });
     const min = 0.9 * data.reduce((a, b) => {
       return a[1] < b[1] ? a : b;
     })[1];

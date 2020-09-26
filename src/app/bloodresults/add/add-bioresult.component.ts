@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
-import {FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {StateProvider} from '../../common/state.provider';
 import {LoadingController, ModalController} from '@ionic/angular';
 import {BioMetadataService} from '../bio-metadata.service';
@@ -23,6 +23,10 @@ export class AddBioresultComponent implements OnInit {
               public bioMetadataService: BioMetadataService,
               public loadingController: LoadingController,
   ) {
+  }
+
+  get bioValues(): FormArray {
+    return this.bioresultForm.controls['values'] as FormArray;
   }
 
   ngOnInit() {
@@ -53,19 +57,6 @@ export class AddBioresultComponent implements OnInit {
     });
   }
 
-  private createForm() {
-    this.bioresultForm = this.fb.group({
-      date: [this.bioresult.date, Validators.required],
-      values: this.fb.array([]),
-      type: [this.bioresult.type],
-    });
-  }
-
-
-  get bioValues(): FormArray {
-    return this.bioresultForm.controls['values'] as FormArray;
-  }
-
   addInput(): void {
     const newType = this.bioresultForm.controls['type'].value;
     this.bioresultForm.controls['type'].setValue('');
@@ -78,6 +69,14 @@ export class AddBioresultComponent implements OnInit {
       value: [this.bioresult.value, Validators.required],
     });
     arrayControl.push(newGroup);
+  }
+
+  private createForm() {
+    this.bioresultForm = this.fb.group({
+      date: [this.bioresult.date, Validators.required],
+      values: this.fb.array([]),
+      type: [this.bioresult.type],
+    });
   }
 
 }

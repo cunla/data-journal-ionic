@@ -28,8 +28,8 @@ export class BioresultBarComponent implements OnInit {
       this.color = this.colorHigh;
     } else { // this.low <= this.value <= this.high
       const result = ".....";
-      const index = Math.floor(Math.abs(this.value - this.low-1) / (this.high - this.low) * 5);
-      this.showString = ".["+result.substr(0, index) + "*" + result.substr(index + 1)+"].";
+      const index = Math.floor(Math.abs(this.value - this.low - 1) / (this.high - this.low) * 5);
+      this.showString = ".[" + result.substr(0, index) + "*" + result.substr(index + 1) + "].";
       this.color = this.colorNormal;
     }
   }

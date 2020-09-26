@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {BioResult, BioService} from "../bio.service";
-import {EditBioresultComponent} from "../edit/edit-bioresult.component";
+import {BioService} from "../bio.service";
 import {ModalController} from "@ionic/angular";
 import {StateProvider} from "../../common/state.provider";
 
@@ -24,7 +23,6 @@ export class BioresultItemComponent implements OnInit {
 
   ngOnInit() {
   }
-
 
   itemBadgeColor() {
     return (this.value < this.low || this.value > this.high) ? 'danger' : 'success';

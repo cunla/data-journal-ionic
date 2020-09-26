@@ -33,9 +33,9 @@
       </ion-col>
     </ion-row>
     <ion-button (click)="addInput()"
-                expand="full"
+                [disabled]="bioresultForm.controls['type'].value === ''"
                 color="secondary"
-                [disabled]="bioresultForm.controls['type'].value === ''">
+                expand="full">
       Add bio-marker
       <ion-icon name="add"></ion-icon>
     </ion-button>

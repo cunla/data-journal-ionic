@@ -17,7 +17,7 @@
 
 <ion-content>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher (ionRefresh)="doRefresh($event)" slot="fixed">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-fab horizontal="end" slot="fixed" vertical="top">
@@ -30,8 +30,8 @@
     <ion-card *ngFor="let header of headers">
       <ion-card-title> {{header}} results</ion-card-title>
       <ion-card-content>
-        <ion-segment *ngIf="groupby !== 'date'"
-                     (ionChange)="graphOrList(header,$event)"
+        <ion-segment (ionChange)="graphOrList(header,$event)"
+                     *ngIf="groupby !== 'date'"
                      [value]="this.graphOrListMap[header] || 'list'">
           <ion-segment-button value="chart">
             <ion-label>Graph</ion-label>
@@ -41,13 +41,13 @@
           </ion-segment-button>
         </ion-segment>
         <div *ngIf="groupby === 'date' || this.graphOrListMap[header] !== 'chart'">
-          <app-bioresult-item *ngFor="let item of data.get(header)"
-                              [label]="groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')"
-                              [value]="item.value"
+          <app-bioresult-item (deleteClicked)="delete(item)"
+                              (editClicked)="presentEditModal(item)"
+                              *ngFor="let item of data.get(header)"
                               [high]="item.metadata.high"
+                              [label]="groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')"
                               [low]="item.metadata.low"
-                              (deleteClicked)="delete(item)"
-                              (editClicked)="presentEditModal(item)">
+                              [value]="item.value">
           </app-bioresult-item>
         </div>
         <app-resultchart *ngIf="groupby !== 'date' && this.graphOrListMap[header]==='chart'"

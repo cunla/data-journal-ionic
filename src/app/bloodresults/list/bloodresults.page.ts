@@ -25,6 +25,10 @@ export class BloodresultsPage implements OnInit {
               private bioService: BioService) {
   }
 
+  private static transform(date: Date) {
+    return moment(date).format('YYYY-MM-DD dddd');
+  }
+
   ngOnInit() {
     this.doRefresh(null);
   }
@@ -57,10 +61,6 @@ export class BloodresultsPage implements OnInit {
       console.log(`Deleted ${item.id}`);
       this.doRefresh(null);
     });
-  }
-
-  private static transform(date: Date) {
-    return moment(date).format('YYYY-MM-DD dddd');
   }
 
   async presentEditModal(item: BioResult) {

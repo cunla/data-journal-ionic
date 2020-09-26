@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 
 
-
-
 import {containsCaseInsensitive} from './string.tools';
 import {AutoCompleteService} from 'ionic4-auto-complete';
 
