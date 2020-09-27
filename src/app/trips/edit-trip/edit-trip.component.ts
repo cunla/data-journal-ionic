@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-edit-trip',
@@ -35,8 +35,8 @@ export class EditTripComponent implements OnInit {
     value.countryCode = location.iso2;
     value.lat = location.lat;
     value.lng = location.lng;
-    value.start = moment(value.start).toDate();
-    value.end = value.end ? moment(value.end).toDate() : value.end;
+    value.start = DateTime.fromISO(value.start).toJSDate();
+    value.end = value.end ? DateTime.fromISO(value.end).toJSDate() : value.end;
     if (this.trip.id === null || this.trip.id === undefined) {
       console.log('Saving trip', value);
       this.trips.create(value).then(

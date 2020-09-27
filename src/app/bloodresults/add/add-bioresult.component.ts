@@ -4,7 +4,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {StateProvider} from '../../common/state.provider';
 import {LoadingController, ModalController} from '@ionic/angular';
 import {BioMetadataService} from '../bio-metadata.service';
-import * as moment from 'moment';
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-add-bioresult',
@@ -38,7 +38,7 @@ export class AddBioresultComponent implements OnInit {
       message: 'Adding results',
     });
     await loading.present();
-    value.date = moment(value.date).toDate();
+    value.date = DateTime.fromISO(value.date).toJSDate();
     let p = [];
     for (const val of value.values) {
       p.push(this.bioService.create(value.date, val.type, val.value));
@@ -68,7 +68,7 @@ export class AddBioresultComponent implements OnInit {
       type: [newType, [Validators.required, Validators.minLength(1)]],
       value: [this.bioresult.value, Validators.required],
     });
-    arrayControl.push(newGroup);
+    arrayControl.insert(0, newGroup);
   }
 
   private createForm() {

@@ -3,8 +3,8 @@ import {BioResult, BioService} from '../bio.service';
 import {StateProvider} from '../../common/state.provider';
 import {ModalController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import * as moment from 'moment';
 import {BioMetadataService} from '../bio-metadata.service';
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-edit',
@@ -30,7 +30,7 @@ export class EditBioresultComponent implements OnInit {
 
 
   onSubmit(value) {
-    value.date = moment(value.date).toDate();
+    value.date = DateTime.fromISO(value.date).toJSDate();
     this.bioService.update(this.bioresult.id, value).then(() => {
         this.bioService.refresh();
         this.dismissModal();
@@ -48,7 +48,7 @@ export class EditBioresultComponent implements OnInit {
   }
 
   private createForm() {
-    const date = moment(this.bioresult.date || null).format('YYYY-MM-DD');
+    const date = DateTime.fromJSDate(this.bioresult.date || null).toISODate();
     this.bioresultForm = this.fb.group({
       type: [this.bioresult.type, Validators.required],
       date: [date, Validators.required],

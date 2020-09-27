@@ -2,11 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AddressInterface, AddressService} from '../address.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import * as moment from 'moment';
 import {Dates} from '../../common/dates';
 import {CitiesService, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-edit-address',
@@ -40,8 +40,8 @@ export class EditAddressComponent implements OnInit {
     value.countryCode = location.iso2;
     value.lat = location.lat;
     value.lng = location.lng;
-    value.start = moment(value.start).toDate();
-    value.end = value.end ? moment(value.end).toDate() : value.end;
+    value.start = DateTime.fromISO(value.start).toJSDate();
+    value.end = value.end ? DateTime.fromISO(value.end).toJSDate() : value.end;
     if (this.address.id === null || this.address.id === undefined) {
       console.log('Saving address', value);
       this.addressService.create(value).then(

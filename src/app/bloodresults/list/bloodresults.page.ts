@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
-import * as moment from 'moment';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
 import {AddBioresultComponent} from "../add/add-bioresult.component";
 import {BioMetadataService} from "../bio-metadata.service";
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-bloodresults',
@@ -26,7 +26,7 @@ export class BloodresultsPage implements OnInit {
   }
 
   private static transform(date: Date) {
-    return moment(date).format('YYYY-MM-DD dddd');
+    return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd EEEE\t');
   }
 
   ngOnInit() {

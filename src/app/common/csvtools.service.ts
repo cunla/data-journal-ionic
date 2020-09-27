@@ -1,4 +1,5 @@
-import * as moment from 'moment';
+import {DateTime} from "luxon";
+
 
 export class CsvTools {
   static convertToCsv(objArray, headerList): string {
@@ -25,7 +26,7 @@ export class CsvTools {
 
   private static formatAsString(obj) {
     if (obj instanceof Date) {
-      return moment(obj).format('"YYYY-MM-DD"');
+      return DateTime.fromJSDate(obj).toISO();
     }
     if (obj === null) {
       return '""';

@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ADDRESS_HISTORY_PATH, AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
-import * as moment from 'moment';
 import {ModalController} from '@ionic/angular';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
 import {StateProvider} from '../../common/state.provider';
+import {DateTime, Duration} from "luxon";
 
 @Component({
   selector: 'app-trips',
@@ -60,10 +60,14 @@ export class AddressListComponent implements OnInit {
         if (!res.has(address.country)) {
           res.set(address.country, 0);
         }
-        const end = moment.min(moment(address.end), moment([year, 11, 31]));
-        const start = moment.max(moment(address.start), moment([year, 0, 1]));
-        const days = end.diff(start);
-        res.set(address.country, res.get(address.country) + days);
+        const end = DateTime.min(
+          DateTime.fromJSDate(address.end),
+          DateTime.local(year, 12, 31));
+        const start = DateTime.max(
+          DateTime.fromJSDate(address.start),
+          DateTime.local(year, 1, 1));
+        const days = end.diff(start).as('days');
+        res.set(address.country, days + res.get(address.country));
       });
     });
     return res;

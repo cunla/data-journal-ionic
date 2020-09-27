@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {EMPTY_TRIP, TripInterface, TripsService} from '../trips.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
-import * as moment from 'moment';
 import {ModalController} from '@ionic/angular';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
 import {StateProvider} from '../../common/state.provider';
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-trips',
@@ -63,9 +63,14 @@ export class TripsListComponent implements OnInit {
         if (!res.has(trip.country)) {
           res.set(trip.country, 0);
         }
-        const end = moment.min(moment(trip.end), moment([year, 11, 31]));
-        const start = moment.max(moment(trip.start), moment([year, 0, 1]));
-        const days = end.diff(start);
+        const end = DateTime.min(
+          DateTime.fromJSDate(trip.end),
+          DateTime.local(year, 12, 31));
+        const start = DateTime.max(
+          DateTime.fromJSDate(trip.start),
+          DateTime.local(year, 1, 1));
+        const days = end.diff(start).as('days');
+        res.set(trip.country, days + res.get(trip.country));
         res.set(trip.country, res.get(trip.country) + days);
       });
     });
