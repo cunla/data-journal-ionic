@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
 import {BehaviorSubject, Observable} from 'rxjs';
+import firebase from "firebase/app";
 
 @Injectable()
 export class AuthService {
   user: firebase.User;
   isLoginSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
 
-  constructor(public auth: AngularFireAuth) {
-    this.auth.authState.subscribe(user => {
+  constructor(public afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
@@ -65,15 +65,15 @@ export class AuthService {
 
   doLogout() {
     localStorage.setItem('user', null);
-    return this.auth.signOut();
+    return this.afAuth.signOut();
   }
 
   async resetPassword(email: string) {
-    return this.auth.sendPasswordResetEmail(email);
+    return this.afAuth.sendPasswordResetEmail(email);
   }
 
   private loginWithProvider(provider) {
-    return this.auth.signInWithPopup(provider);
+    return this.afAuth.signInWithPopup(provider);
   }
 
 
