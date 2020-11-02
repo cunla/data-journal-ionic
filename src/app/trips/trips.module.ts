@@ -13,7 +13,6 @@ import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../environments/environment';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {IonicModule} from '@ionic/angular';
-import {AutoCompleteModule} from 'ionic4-auto-complete';
 import {AgmCoreModule} from '@agm/core';
 import {PlacesModule} from "../places/places.module";
 
@@ -38,7 +37,6 @@ const routes: Routes = [
     HomeGuardModule,
     ToolsModule,
     IonicModule,
-    AutoCompleteModule,
     AgmCoreModule,
     PlacesModule,
   ],

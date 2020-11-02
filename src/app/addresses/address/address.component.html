@@ -7,7 +7,7 @@
     <ion-card-title>
       <ion-icon *ngIf="address.countryCode"
                 [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
-      {{address.city}}, {{address.state}}, {{address.country}}
+      {{address.locationName}}
     </ion-card-title>
 
   </ion-card-header>

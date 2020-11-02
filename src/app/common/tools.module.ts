@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {CitiesService} from './cities.service';
 import {StateProvider} from './state.provider';
 
 
@@ -12,7 +11,6 @@ import {StateProvider} from './state.provider';
     HttpClientModule,
   ],
   providers: [
-    CitiesService,
     StateProvider,
   ]
 })

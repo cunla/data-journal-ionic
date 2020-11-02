@@ -2,11 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dates} from '../../common/dates';
-import {EMPTY_LOCATION, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
-import {GeocoderResult} from "@agm/core";
+import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
 
 @Component({
   selector: 'app-edit-trip',
@@ -68,7 +67,7 @@ export class EditTripComponent implements OnInit {
 
   private createForm() {
     this.tripForm = this.fb.group({
-      locationName: [this.trip.locationName],
+      locationName: [this.trip.locationName,],
       purpose: [this.trip.purpose, Validators.required],
       start: [this.trip.start?.toISOString(), Validators.required],
       end: [this.trip.end?.toISOString(),],
@@ -79,21 +78,9 @@ export class EditTripComponent implements OnInit {
     });
   }
 
-  detail(address: GeocoderResult) {
-    console.log(address);
-    this.location.lat = address.geometry.location.lat();
-    this.location.lng = address.geometry.location.lng();
-    address.address_components.forEach(component => {
-      if (component.types.some(i => i === 'administrative_area_level_1')) {
-        this.location.state = component.long_name;
-      } else if (component.types.some(i => i === "country")) {
-        this.location.country = component.long_name;
-        this.location.iso2 = component.short_name;
-      } else if (component.types.some(i => i === "locality")) {
-        this.location.city = component.long_name;
-      }
-    });
-    this.location.locationName = address.formatted_address;
+  detail(location: LocationInterface) {
+    console.log(location);
+    this.location = location;
     this.trip.lat = this.location.lat;
     this.trip.lng = this.location.lng;
   }

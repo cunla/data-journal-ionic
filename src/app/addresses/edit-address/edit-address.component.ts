@@ -3,10 +3,10 @@ import {AddressInterface, AddressService} from '../address.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {Dates} from '../../common/dates';
-import {CitiesService, LocationInterface} from '../../common/cities.service';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
+import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
 
 @Component({
   selector: 'app-edit-address',
@@ -19,11 +19,11 @@ export class EditAddressComponent implements OnInit {
   filteredOptions: Observable<any[]>;
 
   // _filter = CitiesService.filterCities;
+  private location: LocationInterface = EMPTY_LOCATION;
 
   constructor(public addressService: AddressService,
               private state: StateProvider,
               private fb: FormBuilder,
-              public citiesService: CitiesService,
               public modalController: ModalController,) {
   }
 
@@ -33,7 +33,9 @@ export class EditAddressComponent implements OnInit {
   }
 
   onSubmit(value) {
-    const location: LocationInterface = CitiesService.filterLocation(value.locationName);
+    // const location: LocationInterface = CitiesService.filterLocation(value.locationName);
+    const location = this.location;
+    value.locationName = location.locationName;
     value.city = location.city;
     value.state = location.state;
     value.country = location.country;
@@ -70,7 +72,7 @@ export class EditAddressComponent implements OnInit {
 
   private createForm() {
     this.addressForm = this.fb.group({
-      locationName: [this.address.locationName, Validators.required],
+      locationName: [this.address.locationName,],
       start: [this.address.start?.toISOString(), Validators.required],
       end: [this.address.end?.toISOString(),],
     }, {
@@ -78,5 +80,12 @@ export class EditAddressComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
+  }
+
+  detail(location: LocationInterface) {
+    console.log(location);
+    this.location = location;
+    this.address.lat = this.location.lat;
+    this.address.lng = this.location.lng;
   }
 }
