@@ -15,6 +15,7 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
 import {IonicModule} from '@ionic/angular';
 import {AutoCompleteModule} from 'ionic4-auto-complete';
 import {AgmCoreModule} from '@agm/core';
+import {PlacesModule} from "../places/places.module";
 
 const routes: Routes = [
   {path: '', redirectTo: 'list', pathMatch: 'full'},
@@ -39,6 +40,7 @@ const routes: Routes = [
     IonicModule,
     AutoCompleteModule,
     AgmCoreModule,
+    PlacesModule,
   ],
   providers: [
     TripsService,

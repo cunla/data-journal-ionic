@@ -1,35 +1,3 @@
-<ng-template #empty
-             let-attrs="attrs">
-  <div class="country-suggestions-empty">
-    <ion-text>That country does not exist!</ion-text>
-
-    <div class="country-suggestions-empty-icon"></div>
-  </div>
-</ng-template>
-
-
-<ng-template #selection
-             let-attrs="attrs">
-  <div class="flag-image-wrapper"
-       style="position: relative">
-    <ion-icon [src]="'/assets/flags/'+attrs.data.iso2.toLowerCase()+'.svg'"></ion-icon>
-    <ion-text>
-            <span
-              [innerHtml]="(attrs.data.city + ', ' + attrs.data.state + ', ' + attrs.data.country) | boldprefix:attrs.keyword"></span>
-    </ion-text>
-  </div>
-</ng-template>
-
-<ng-template #suggestions let-attrs="attrs">
-  <ion-item>
-    <ion-icon [src]="'/assets/flags/'+attrs.data.iso2.toLowerCase()+'.svg'"></ion-icon>
-    <ion-text>
-            <span
-              [innerHtml]="(attrs.data.city + ', ' + attrs.data.state + ', ' + attrs.data.country) | boldprefix:attrs.keyword"></span>
-    </ion-text>
-  </ion-item>
-</ng-template>
-
 <ion-header>
   <ion-toolbar>
     <ion-title>
@@ -43,18 +11,11 @@
 <ion-content>
   <form (ngSubmit)="onSubmit(tripForm.value)"
         [formGroup]="tripForm" novalidate>
-    <ion-row>
-      <ion-col [size]="12">
-        <ion-auto-complete (focus)="resetLocation($event)"
-                           (itemSelected)="locationChanged($event)"
-                           [dataProvider]="citiesService"
-                           [emptyTemplate]="empty"
-                           [selectionTemplate]="selection"
-                           [template]="suggestions"
-                           formControlName="locationName">
-        </ion-auto-complete>
-      </ion-col>
-    </ion-row>
+    <google-places-autocomplete (callback)="detail($event[0])"
+                                [value]="trip.locationName"
+                                placeholder="Enter trip place">
+    </google-places-autocomplete>
+
     <ion-item>
       <ion-label position="floating">Purpose of trip</ion-label>
       <ion-textarea auto-grow=true
@@ -70,7 +31,8 @@
       <ion-label>End date</ion-label>
       <ion-datetime displayFormat="YYYY MMM DD" formControlName="end"></ion-datetime>
     </ion-item>
-    <ion-button [disabled]="tripForm.invalid" color="primary"
+    <ion-button [disabled]="tripForm.invalid || !location.locationName"
+                color="primary"
                 expand="full"
                 fill="outline" type="submit">
       {{trip?.id ? 'Save' : 'Add'}}

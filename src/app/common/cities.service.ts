@@ -12106,6 +12106,18 @@ export class CitiesService implements AutoCompleteService {
 
 }
 
+export const EMPTY_LOCATION: LocationInterface = {
+  country: null,
+  city: null,
+  state: null,
+  iso2: null,
+  iso3: null,
+  locationName: null,
+  lat: null,
+  lng: null,
+  population: null,
+}
+
 export interface LocationInterface {
   country: string;
   city: string;
