@@ -12,7 +12,8 @@
             <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex == i" [routerLink]="[p.url]"
                       detail="false"
                       lines="none" routerDirection="root">
-              <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'" slot="start"></ion-icon>
+              <ion-icon *ngIf="p.icon" [name]="p.icon + '-outline'" slot="start"></ion-icon>
+              <ion-icon *ngIf="p.iconSource" [src]="p.iconSource" slot="start"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
