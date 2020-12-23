@@ -1,20 +1,34 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import {IonicModule} from '@ionic/angular';
 
-import { IioPageRoutingModule } from './iio-routing.module';
+import {IioPage} from './list/iio.page';
+import {InterviewComponent} from './interview/interview.component';
+import {EditInterviewComponent} from './edit-interview/edit-interview.component';
+import {RouterModule, Routes} from '@angular/router';
 
-import { IioPage } from './iio.page';
+const routes: Routes = [
+  {
+    path: '',
+    component: IioPage
+  }
+];
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
-    IioPageRoutingModule
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
   ],
-  declarations: [IioPage]
+  declarations: [
+    IioPage,
+    InterviewComponent,
+    EditInterviewComponent,
+  ]
 })
-export class IioPageModule {}
+export class IioPageModule {
+}

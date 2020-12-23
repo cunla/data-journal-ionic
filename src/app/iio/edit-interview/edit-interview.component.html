@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{interview?.id ? 'Save' : 'Add new'}} interview
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form (ngSubmit)="onSubmit(interviewForm.value)"
+        [formGroup]="interviewForm" novalidate>
+    <ion-item>
+      <ion-label>Interview type</ion-label>
+      <ion-select (ionChange)="interviewTypeChanged($event)"
+                  placeholder="Type"
+                  interface="action-sheet"
+                  mode="ios"
+                  formControlName="type">
+        <ion-select-option *ngFor="let item of interviewTypes"
+                           [value]="item.name">
+          {{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Planned date and time</ion-label>
+      <ion-datetime displayFormat="YYYY-MMM-DD, HH:mm"
+                    minuteValues="0"
+                    formControlName="plannedDate"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Candidate name</ion-label>
+      <ion-input formControlName="candidateName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Status</ion-label>
+      <ion-select placeholder="Status"
+                  interface="action-sheet"
+                  mode="ios"
+                  formControlName="status">
+        <ion-select-option *ngFor="let item of InterviewStatusTypes"
+                           [value]="item">
+          {{item}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="interviewForm.get('status').value=='Paid'">
+      <ion-label>Paid date</ion-label>
+      <ion-datetime displayFormat="YYYY-MMM-DD, HH:mm"
+                    minuteValues="0"
+                    formControlName="paidDate"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Interview feedback</ion-label>
+      <ion-textarea auto-grow=true
+                    formControlName="feedback">
+      </ion-textarea>
+    </ion-item>
+
+
+    <ion-button [disabled]="interviewForm.invalid"
+                color="primary"
+                expand="full"
+                fill="outline" type="submit">
+      {{interview?.id ? 'Save' : 'Add'}}
+    </ion-button>
+  </form>
+</ion-content>

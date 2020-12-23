@@ -19,7 +19,7 @@ export class EditAddressComponent implements OnInit {
   filteredOptions: Observable<any[]>;
 
   // _filter = CitiesService.filterCities;
-  private location: LocationInterface = EMPTY_LOCATION;
+  location: LocationInterface = EMPTY_LOCATION;
 
   constructor(public addressService: AddressService,
               private state: StateProvider,
