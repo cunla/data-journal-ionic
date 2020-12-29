@@ -34,6 +34,7 @@ export class EditInterviewComponent implements OnInit {
   interviewForm: FormGroup;
   interviewTypes = INTERVIEW_TYPES;
   InterviewStatusTypes = Object.keys(InterviewStatus);
+  maxYear = new Date().getFullYear()+1;
 
   constructor(public iio: IioService,
               private state: StateProvider,

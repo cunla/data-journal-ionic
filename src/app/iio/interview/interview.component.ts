@@ -13,6 +13,13 @@ export class InterviewComponent implements OnInit {
   @Input() interview: InterviewInterface;
   @Output() editClicked = new EventEmitter();
   InterviewStatusTypes = InterviewStatus;
+  InterviewStatusIconMap = {
+    'Scheduled': {'icon': 'calendar-outline', color: 'dark'},
+    'Paid': {'icon': 'logo-paypal', color: 'tertiary'},
+    'Done': {'icon': 'checkbox-outline', color: 'success'},
+    'Cancelled': {'icon': 'close', color: 'dark'},
+    'NoShow': {'icon': 'close-outline', color: 'dark'},
+  };
 
   constructor(public alertController: AlertController,
               private iio: IioService,) {

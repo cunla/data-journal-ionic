@@ -1,13 +1,9 @@
 <ion-item-sliding [id]="'slidingItem-' + interview.id">
   <ion-item lines="full">
-    <ion-icon name="close-outline" slot="start" color="dark"
-              *ngIf="interview.status===InterviewStatusTypes.Cancelled"></ion-icon>
-    <ion-icon name="logo-paypal" slot="start"
-              *ngIf="interview.status===InterviewStatusTypes.Paid"
-              color="tertiary"></ion-icon>
-    <ion-icon name="checkbox-outline" slot="start"
-              *ngIf="interview.status===InterviewStatusTypes.Done"
-              color="success"></ion-icon>
+    <ion-icon [name]="InterviewStatusIconMap[interview.status]?.icon"
+              [color]="InterviewStatusIconMap[interview.status]?.color"
+              slot="start">
+    </ion-icon>
     <ion-label (click)="editClicked.emit(null)" class="ion-text-wrap">
       <h3>
         {{interview.plannedDate | date: 'yyyy-MM-dd hh:mm'}}

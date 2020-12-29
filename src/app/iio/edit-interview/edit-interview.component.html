@@ -28,6 +28,8 @@
       <ion-label>Planned date and time</ion-label>
       <ion-datetime displayFormat="YYYY-MMM-DD, HH:mm"
                     minuteValues="0"
+                    min="2019"
+                    [max]="maxYear"
                     formControlName="plannedDate"></ion-datetime>
     </ion-item>
     <ion-item>
@@ -49,7 +51,9 @@
 
     <ion-item *ngIf="interviewForm.get('status').value=='Paid'">
       <ion-label>Paid date</ion-label>
-      <ion-datetime displayFormat="YYYY-MMM-DD, HH:mm"
+      <ion-datetime displayFormat="YYYY-MMM-DD"
+                    min="2019"
+                    [max]="maxYear"
                     minuteValues="0"
                     formControlName="paidDate"></ion-datetime>
     </ion-item>
