@@ -8,6 +8,7 @@ import {IioPage} from './list/iio.page';
 import {InterviewComponent} from './interview/interview.component';
 import {EditInterviewComponent} from './edit-interview/edit-interview.component';
 import {RouterModule, Routes} from '@angular/router';
+import {GroupByMonthPipe} from './list/groupby.pipe';
 
 const routes: Routes = [
   {
@@ -28,6 +29,7 @@ const routes: Routes = [
     IioPage,
     InterviewComponent,
     EditInterviewComponent,
+    GroupByMonthPipe,
   ]
 })
 export class IioPageModule {

@@ -26,9 +26,18 @@
   </ion-refresher>
 
   <ion-list>
-    <app-interview (editClicked)="presentModal(item)"
-                   *ngFor="let item of iio.data | async"
-                   [interview]="item">
-    </app-interview>
+    <div *ngFor="let item of ((iio.data | async) | groupByMonth)">
+      <ion-item-divider>
+        {{item.month}}
+        <ion-icon name="logo-paypal"
+                  slot="end"
+                  size="small"
+                  (click)="markAllAsPaid(item.events)"></ion-icon>
+      </ion-item-divider>
+      <app-interview (editClicked)="presentModal(item)"
+                     *ngFor="let interview of item.events"
+                     [interview]="interview">
+      </app-interview>
+    </div>
   </ion-list>
 </ion-content>

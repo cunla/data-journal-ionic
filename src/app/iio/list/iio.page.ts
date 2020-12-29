@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {CsvTools} from '../../common/csvtools.service';
-import {EMPTY_INTERVIEW, IioService, InterviewInterface} from '../iio.service';
+import {EMPTY_INTERVIEW, IioService, InterviewInterface, InterviewStatus} from '../iio.service';
 import {saveAs} from 'file-saver';
 import {StateProvider} from '../../common/state.provider';
-import {ModalController} from '@ionic/angular';
+import {LoadingController, ModalController} from '@ionic/angular';
 import {EditInterviewComponent} from '../edit-interview/edit-interview.component';
 
 @Component({
@@ -16,6 +16,7 @@ export class IioPage implements OnInit {
 
   constructor(public iio: IioService,
               private state: StateProvider,
+              private loadingController: LoadingController,
               private modalController: ModalController,) {
   }
 
@@ -56,5 +57,25 @@ export class IioPage implements OnInit {
       componentProps: {interview,}
     });
     return await modal.present();
+  }
+
+  async markAllAsPaid(items: Array<InterviewInterface>) {
+    const loading = await this.loadingController.create({
+      message: 'Please wait...',
+    });
+    await loading.present();
+    const updates = [];
+    for (const item of items) {
+      if (item.status == InterviewStatus.Cancelled) {
+        continue;
+      }
+      item.status = InterviewStatus.Paid;
+      item.paidDate = new Date().toString();
+      updates.push(this.iio.update(item.id, item));
+    }
+    Promise.all(updates).then(() => {
+      loading.dismiss();
+    });
+
   }
 }
