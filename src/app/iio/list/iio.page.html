@@ -28,7 +28,7 @@
   <ion-list>
     <div *ngFor="let item of ((iio.data | async) | groupByMonth)">
       <ion-item-divider>
-        {{item.month}}
+        {{item.month}} ({{item.total}}USD)
         <ion-icon name="logo-paypal"
                   slot="end"
                   size="small"

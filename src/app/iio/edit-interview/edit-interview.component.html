@@ -41,6 +41,7 @@
       <ion-select placeholder="Status"
                   interface="action-sheet"
                   mode="ios"
+                  (ionChange)="interviewStatusChanged($event)"
                   formControlName="status">
         <ion-select-option *ngFor="let item of InterviewStatusTypes"
                            [value]="item">

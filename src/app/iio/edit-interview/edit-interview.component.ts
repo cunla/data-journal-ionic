@@ -34,7 +34,7 @@ export class EditInterviewComponent implements OnInit {
   interviewForm: FormGroup;
   interviewTypes = INTERVIEW_TYPES;
   InterviewStatusTypes = Object.keys(InterviewStatus);
-  maxYear = new Date().getFullYear()+1;
+  maxYear = new Date().getFullYear() + 1;
 
   constructor(public iio: IioService,
               private state: StateProvider,
@@ -86,10 +86,20 @@ export class EditInterviewComponent implements OnInit {
   }
 
   interviewTypeChanged($event: any) {
+    if (this.interviewForm.get('status').value === InterviewStatus.NoShow) {
+      return;
+    }
     const interviewTypeValue = $event.detail.value;
     const interviewType = INTERVIEW_TYPES.find(x => x.name === interviewTypeValue);
     if (interviewType) {
       this.interviewForm.get('value').setValue(interviewType.value);
+    }
+  }
+
+  interviewStatusChanged($event: any) {
+    const interviewStatusValue = $event.detail.value;
+    if (interviewStatusValue === InterviewStatus.NoShow) {
+      this.interviewForm.get('value').setValue(20);
     }
   }
 }
