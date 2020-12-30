@@ -13,10 +13,13 @@
         {{interview.type}} <small>({{interview.value}} USD)</small>,
         {{interview.candidateName}}
       </h2>
-      <p style="white-space: pre-wrap">
+      <p style="white-space: pre-wrap" [hidden]="hideFeedback">
         {{interview.feedback}}
       </p>
     </ion-label>
+    <ion-icon [name]="hideFeedback?'chevron-down-outline':'chevron-up-outline'"
+              slot="end"
+              (click)="hideFeedback=!hideFeedback"></ion-icon>
   </ion-item>
 
   <ion-item-options side="end">

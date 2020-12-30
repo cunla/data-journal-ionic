@@ -20,6 +20,7 @@ export class InterviewComponent implements OnInit {
     'Cancelled': {'icon': 'close', color: 'dark'},
     'NoShow': {'icon': 'close-outline', color: 'dark'},
   };
+  hideFeedback: boolean = true;
 
   constructor(public alertController: AlertController,
               private iio: IioService,) {
