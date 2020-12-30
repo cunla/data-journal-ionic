@@ -10,11 +10,11 @@ export class GroupByMonthPipe implements PipeTransform {
       let item = acc.find(item => item.month === plannedDate);
       if (item) {
         item.events.push(curr);
-        item.sum+=curr.value;
+        item.total += +curr.value;
       } else {
         acc.push({
           'month': plannedDate,
-          'total': curr.value,
+          'total': +curr.value,
           'events': [curr]
         });
       }

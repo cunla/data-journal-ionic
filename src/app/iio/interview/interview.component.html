@@ -19,6 +19,7 @@
     </ion-label>
     <ion-icon [name]="hideFeedback?'chevron-down-outline':'chevron-up-outline'"
               slot="end"
+              [hidden]="!interview.feedback"
               (click)="hideFeedback=!hideFeedback"></ion-icon>
   </ion-item>
 
