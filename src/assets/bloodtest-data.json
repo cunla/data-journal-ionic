@@ -546,6 +546,48 @@
     "AwesomeList": true
   },
   {
+    "test": "SEX HORMONE BINDING GLOB",
+    "low": 12,
+    "high": 60,
+    "idealLow": "",
+    "idealHigh": "",
+    "unit": "nmol/L",
+    "abreviation": "SEX HORMONE BINDING GLOB",
+    "ageVariance": false,
+    "category": "Hormones",
+    "wikipedia": "",
+    "shortDescription": "",
+    "AwesomeList": true
+  },
+  {
+    "test": "LUTEINIZING HORMONE",
+    "low": 1.3,
+    "high": 9.6,
+    "idealLow": "",
+    "idealHigh": "",
+    "unit": "lU/L",
+    "abreviation": "LH",
+    "ageVariance": false,
+    "category": "Hormones",
+    "wikipedia": "https://en.wikipedia.org/wiki/Luteinizing_hormone",
+    "shortDescription": "",
+    "AwesomeList": true
+  },
+  {
+    "test": "FOLLICLE STIMULATING HORMONE",
+    "low": 1,
+    "high": 16,
+    "idealLow": "",
+    "idealHigh": "",
+    "unit": "lU/L",
+    "abreviation": "FSH",
+    "ageVariance": false,
+    "category": "Hormones",
+    "wikipedia": "https://en.wikipedia.org/wiki/Follicle-stimulating_hormone",
+    "shortDescription": "",
+    "AwesomeList": true
+  },
+  {
     "test": "Methylmalonic",
     "low": 87,
     "high": 318.0,
