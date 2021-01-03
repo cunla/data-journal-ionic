@@ -4,7 +4,7 @@ import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AuthService} from './auth/auth.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -55,11 +55,25 @@ export class AppComponent implements OnInit {
     this.loggedInSubject = this.authService.loggedinSubject();
     this.loggedInSubject.subscribe((val) => {
       if (val) {
-        this.router.navigateByUrl('/trips').then();
+        const url = this.userLastUrl || '/trips';
+        this.router.navigateByUrl(url).then();
       } else {
         this.router.navigateByUrl('/auth/login').then();
       }
     });
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && this.authService.isLoggedIn) {
+        this.userLastUrl = event.url;
+      }
+    });
+  }
+
+  get userLastUrl(): string {
+    return localStorage.getItem('userLastUrl');
+  }
+
+  set userLastUrl(lastUrl: string) {
+    localStorage.setItem('userLastUrl', lastUrl);
   }
 
   ngOnInit() {
