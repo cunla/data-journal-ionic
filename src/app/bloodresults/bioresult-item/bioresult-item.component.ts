@@ -13,6 +13,7 @@ export class BioresultItemComponent implements OnInit {
   @Input() low: number;
   @Input() high: number;
   @Input() value: number;
+  @Input() units: number;
   @Output() editClicked = new EventEmitter();
   @Output() deleteClicked = new EventEmitter();
 

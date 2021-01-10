@@ -1,9 +1,11 @@
 <ion-item-sliding>
   <ion-item>
-    <ion-label>{{label}}</ion-label>
-    <ion-badge [color]="itemBadgeColor()" slot="end">
-      {{value}}
-    </ion-badge>
+    <ion-label>
+      {{label}}
+      <ion-text [color]="itemBadgeColor()">
+        {{value}}<small>{{units}}</small>
+      </ion-text>
+    </ion-label>
     <app-bioresultbar [high]="high" [low]="low" [value]="value"></app-bioresultbar>
   </ion-item>
   <ion-item-options side="end">

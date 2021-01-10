@@ -47,6 +47,7 @@
                               [high]="item.metadata.high"
                               [label]="groupby === 'date' ? item.type : (item.date | date: 'yyyy-MM-dd')"
                               [low]="item.metadata.low"
+                              [units]="item.metadata.unit"
                               [value]="item.value">
           </app-bioresult-item>
         </div>
