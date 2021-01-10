@@ -35,7 +35,7 @@ export class IioPage implements OnInit {
   exportCsv() {
     this.iio.data.subscribe(res => {
       const interviewsCsv = CsvTools.convertToCsv(res,
-        ['plannedDate', 'type', 'candidateName', 'value', 'done', 'noshow', 'paid', 'paidDate']);
+        ['plannedDate', 'type', 'candidateName', 'value', 'status', 'paidDate']);
       console.log(interviewsCsv);
       const blob = new Blob([interviewsCsv], {type: 'text/plain;charset=utf-8'});
       saveAs(blob, 'data.csv');
