@@ -7,11 +7,11 @@ import {containsCaseInsensitive} from '../common/string.tools';
 
 
 export enum InterviewStatus {
-  Scheduled='Scheduled',
-  Cancelled='Cancelled',
-  Done='Done',
-  NoShow='NoShow',
-  Paid='Paid',
+  Scheduled = 'Scheduled',
+  Cancelled = 'Cancelled',
+  Done = 'Done',
+  NoShow = 'NoShow',
+  Paid = 'Paid',
 }
 
 export interface QueryConfig {
@@ -75,7 +75,7 @@ export class IioService {
     this.query = {
       path: path,
       field: field,
-      limit: 50,
+      limit: 20,
       reverse: true,
       prepend: false,
       searchValue: '',
@@ -83,15 +83,6 @@ export class IioService {
       ...opts
     };
     this.refresh();
-  }
-
-  // Retrieves additional data from firestore
-  more() {
-    const cursor = this.getCursor();
-    const more = this.userDoc().collection(this.query.path, ref => {
-      return this.queryFn(ref).startAfter(cursor);
-    });
-    this.mapAndUpdate(more);
   }
 
   get(key) {
@@ -149,7 +140,7 @@ export class IioService {
   // Maps the snapshot to usable format the updates source
   private mapAndUpdate(col: AngularFirestoreCollection<any>) {
     if (this._done.value || this._loading.value) {
-      return;
+      return null;
     }
     // loading
     this._loading.next(true);
@@ -179,6 +170,15 @@ export class IioService {
       }),
       take(1),)
       .subscribe();
+  }
+
+  // Retrieves additional data from firestore
+  more() {
+    const cursor = this.getCursor();
+    const more = this.userDoc().collection(this.query.path, ref => {
+      return this.queryFn(ref).startAfter(cursor);
+    });
+    return this.mapAndUpdate(more);
   }
 
   private userDoc() {

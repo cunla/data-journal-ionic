@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {CsvTools} from '../../common/csvtools.service';
 import {EMPTY_INTERVIEW, IioService, InterviewInterface, InterviewStatus} from '../iio.service';
 import {saveAs} from 'file-saver';
 import {StateProvider} from '../../common/state.provider';
-import {LoadingController, ModalController} from '@ionic/angular';
+import {IonInfiniteScroll, LoadingController, ModalController} from '@ionic/angular';
 import {EditInterviewComponent} from '../edit-interview/edit-interview.component';
 
 @Component({
@@ -13,6 +13,8 @@ import {EditInterviewComponent} from '../edit-interview/edit-interview.component
 })
 export class IioPage implements OnInit {
   newInterview: InterviewInterface = EMPTY_INTERVIEW;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
 
   constructor(public iio: IioService,
               private state: StateProvider,
@@ -77,5 +79,16 @@ export class IioPage implements OnInit {
       loading.dismiss();
     });
 
+  }
+
+  loadMoreData(event: any) {
+    this.iio.done.subscribe(res => {
+      if (!res) {
+        this.iio.more();
+        this.infiniteScroll.complete().then();
+      } else {
+        this.infiniteScroll.disabled = true;
+      }
+    });
   }
 }
