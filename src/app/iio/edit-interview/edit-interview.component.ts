@@ -22,6 +22,12 @@ export const INTERVIEW_TYPES = [{
 }, {
   name: 'Company Behavioral',
   value: '150',
+}, {
+  name: 'Eng Mgmt',
+  value: '175',
+}, {
+  name: 'Company Eng Mgmt',
+  value: '200',
 },];
 
 @Component({
