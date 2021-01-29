@@ -75,7 +75,7 @@ export class IioService {
     this.query = {
       path: path,
       field: field,
-      limit: 20,
+      limit: 40,
       reverse: true,
       prepend: false,
       searchValue: '',
