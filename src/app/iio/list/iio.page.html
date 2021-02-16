@@ -25,27 +25,32 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-
-  <ion-item-group *ngFor="let item of ((iio.data | async) | groupByMonth)">
-    <ion-item-divider>
-      {{item.month}}
-      {{item.total}}<small>USD</small>, {{item.events.length}} interviews
-      <p>
-      <span *ngFor="let status of item.status| keyvalue">
-        | {{status.value[0]}} {{status.key}}:
-        {{status.value[1]}}<small>USD</small>
+  <ion-card *ngFor="let item of ((iio.data | async) | groupByMonth)">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-item lines="none">
+          {{item.month}}
+          {{item.total}}<small>USD</small>, {{item.events.length}} interviews
+          <ion-icon name="logo-paypal"
+                    slot="end"
+                    size="small"
+                    (click)="markAllAsPaid(item.events)"></ion-icon>
+        </ion-item>
+      </ion-card-title>
+      <ion-card-subtitle>
+       <span *ngFor="let status of item.status | keyvalue">
+         {{status.value[0]}} {{status.key}}:
+         {{status.value[1]}}<small>USD</small> |
       </span>
-      </p>
-      <ion-icon name="logo-paypal"
-                slot="end"
-                size="small"
-                (click)="markAllAsPaid(item.events)"></ion-icon>
-    </ion-item-divider>
-    <app-interview (editClicked)="presentModal(interview)"
-                   *ngFor="let interview of item.events"
-                   [interview]="interview">
-    </app-interview>
-  </ion-item-group>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <app-interview (editClicked)="presentModal(interview)"
+                     *ngFor="let interview of item.events"
+                     [interview]="interview">
+      </app-interview>
+    </ion-card-content>
+  </ion-card>
 
   <ion-infinite-scroll threshold="100px"
                        (ionInfinite)="loadMoreData($event)">
