@@ -26,6 +26,8 @@ export class GroupByMonthPipe implements PipeTransform {
       item.status[curr.status][0] += 1;
       item.status[curr.status][1] += +curr.value;
       return acc;
-    }, []);
+    }, []).sort((a, b) => {
+      return a.month - b.month;
+    });
   }
 }
