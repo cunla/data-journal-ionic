@@ -55,7 +55,7 @@ export class BioMetadataService implements AutoCompleteService {
 
     return observable.pipe(
       map(
-        (result) => {
+        (result: any) => {
           return result.filter(
             (item) => {
               return item.test.toLowerCase().indexOf(keyword.toLowerCase()) >= 0;

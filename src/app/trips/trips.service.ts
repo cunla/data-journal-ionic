@@ -121,13 +121,14 @@ export class TripsService {
     this._data = new BehaviorSubject([]);
     this.mapAndUpdate(first);
     // Create the observable array for consumption in components
-    this.data = this._data.asObservable().pipe(scan((acc, values) => {
-      const val = values.filter((item: TripInterface) => {
-        return containsCaseInsensitive(item.locationName, this.query.searchValue)
-          || containsCaseInsensitive(item.purpose, this.query.searchValue);
-      });
-      return this.query.prepend ? val.concat(acc) : acc.concat(val);
-    }));
+    this.data = this._data.asObservable()
+      .pipe(scan((acc: any[], values: any[]) => {
+        const val = values.filter((item: TripInterface) => {
+          return containsCaseInsensitive(item.locationName, this.query.searchValue)
+            || containsCaseInsensitive(item.purpose, this.query.searchValue);
+        });
+        return this.query.prepend ? val.concat(acc) : acc.concat(val);
+      }));
   }
 
   private queryFn(ref) {
@@ -154,7 +155,7 @@ export class TripsService {
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-      tap(arr => {
+      tap((arr: any) => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;

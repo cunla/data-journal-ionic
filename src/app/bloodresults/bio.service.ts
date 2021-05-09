@@ -92,7 +92,7 @@ export class BioService {
   private mapAndUpdate(col: AngularFirestoreCollection<any>) {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-      tap(arr => {
+      tap((arr: any) => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;
