@@ -70,6 +70,13 @@ export class EditAddressComponent implements OnInit {
     });
   }
 
+  detail(location: LocationInterface) {
+    console.log(location);
+    this.location = location;
+    this.address.lat = this.location.lat;
+    this.address.lng = this.location.lng;
+  }
+
   private createForm() {
     this.addressForm = this.fb.group({
       locationName: [this.address.locationName,],
@@ -80,12 +87,5 @@ export class EditAddressComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
-  }
-
-  detail(location: LocationInterface) {
-    console.log(location);
-    this.location = location;
-    this.address.lat = this.location.lat;
-    this.address.lng = this.location.lng;
   }
 }

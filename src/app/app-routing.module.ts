@@ -29,7 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'iio',
-    loadChildren: () => import('./iio/iio.module').then( m => m.IioPageModule)
+    loadChildren: () => import('./iio/iio.module').then(m => m.IioPageModule)
   },
 ];
 

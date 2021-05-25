@@ -10,7 +10,7 @@ import {AlertController} from '@ionic/angular';
 export class ResetPasswordPage implements OnInit {
   userEmail: string;
 
-  constructor(private  authService: AuthService,
+  constructor(private authService: AuthService,
               private alertController: AlertController) {
   }
 

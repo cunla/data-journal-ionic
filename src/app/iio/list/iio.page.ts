@@ -27,13 +27,6 @@ export class IioPage implements OnInit {
     searchbar.addEventListener('ionInput', this.searchByName.bind(this));
   }
 
-  private searchByName(event) {
-    const query = event.target.value.toLowerCase();
-    this.iio.init('iio-data', 'plannedDate', {
-      reverse: true, prepend: false, searchValue: query,
-    });
-  }
-
   exportCsv() {
     this.iio.data.subscribe(res => {
       const interviewsCsv = CsvTools.convertToCsv(res,
@@ -89,6 +82,13 @@ export class IioPage implements OnInit {
       } else {
         this.infiniteScroll.disabled = true;
       }
+    });
+  }
+
+  private searchByName(event) {
+    const query = event.target.value.toLowerCase();
+    this.iio.init('iio-data', 'plannedDate', {
+      reverse: true, prepend: false, searchValue: query,
     });
   }
 }

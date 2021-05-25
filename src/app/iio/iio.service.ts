@@ -123,6 +123,15 @@ export class IioService {
       }));
   }
 
+  // Retrieves additional data from firestore
+  more() {
+    const cursor = this.getCursor();
+    const more = this.userDoc().collection(this.query.path, ref => {
+      return this.queryFn(ref).startAfter(cursor);
+    });
+    return this.mapAndUpdate(more);
+  }
+
   private queryFn(ref) {
     return ref
       .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
@@ -171,15 +180,6 @@ export class IioService {
       }),
       take(1),)
       .subscribe();
-  }
-
-  // Retrieves additional data from firestore
-  more() {
-    const cursor = this.getCursor();
-    const more = this.userDoc().collection(this.query.path, ref => {
-      return this.queryFn(ref).startAfter(cursor);
-    });
-    return this.mapAndUpdate(more);
   }
 
   private userDoc() {
