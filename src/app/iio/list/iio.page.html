@@ -31,10 +31,10 @@
         <ion-item lines="none">
           {{item.month}}
           {{item.total}}<small>USD</small>, {{item.events.length}} interviews
-          <ion-icon name="logo-paypal"
-                    slot="end"
+          <ion-icon (click)="markAllAsPaid(item.events)"
+                    name="logo-paypal"
                     size="small"
-                    (click)="markAllAsPaid(item.events)"></ion-icon>
+                    slot="end"></ion-icon>
         </ion-item>
       </ion-card-title>
       <ion-card-subtitle>
@@ -52,8 +52,8 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-infinite-scroll threshold="100px"
-                       (ionInfinite)="loadMoreData($event)">
+  <ion-infinite-scroll (ionInfinite)="loadMoreData($event)"
+                       threshold="100px">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Loading more data...">

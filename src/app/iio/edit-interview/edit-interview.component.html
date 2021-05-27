@@ -14,10 +14,10 @@
     <ion-item>
       <ion-label>Interview type</ion-label>
       <ion-select (ionChange)="interviewTypeChanged($event)"
-                  placeholder="Type"
+                  formControlName="type"
                   interface="action-sheet"
                   mode="ios"
-                  formControlName="type">
+                  placeholder="Type">
         <ion-select-option *ngFor="let item of interviewTypes"
                            [value]="item.name">
           {{item.name}}
@@ -26,11 +26,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Planned date and time</ion-label>
-      <ion-datetime displayFormat="YYYY-MMM-DD, HH:mm"
-                    minuteValues="0"
+      <ion-datetime [max]="maxYear"
+                    displayFormat="YYYY-MMM-DD, HH:mm"
+                    formControlName="plannedDate"
                     min="2019"
-                    [max]="maxYear"
-                    formControlName="plannedDate"></ion-datetime>
+                    minuteValues="0"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Candidate name</ion-label>
@@ -38,11 +38,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Status</ion-label>
-      <ion-select placeholder="Status"
+      <ion-select (ionChange)="interviewStatusChanged($event)"
+                  formControlName="status"
                   interface="action-sheet"
                   mode="ios"
-                  (ionChange)="interviewStatusChanged($event)"
-                  formControlName="status">
+                  placeholder="Status">
         <ion-select-option *ngFor="let item of InterviewStatusTypes"
                            [value]="item">
           {{item}}
@@ -52,11 +52,11 @@
 
     <ion-item *ngIf="interviewForm.get('status').value=='Paid'">
       <ion-label>Paid date</ion-label>
-      <ion-datetime displayFormat="YYYY-MMM-DD"
+      <ion-datetime [max]="maxYear"
+                    displayFormat="YYYY-MMM-DD"
+                    formControlName="paidDate"
                     min="2019"
-                    [max]="maxYear"
-                    minuteValues="0"
-                    formControlName="paidDate"></ion-datetime>
+                    minuteValues="0"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Interview feedback</ion-label>

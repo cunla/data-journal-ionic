@@ -5,7 +5,7 @@ import {saveAs} from 'file-saver';
 import {ModalController} from '@ionic/angular';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
 import {StateProvider} from '../../common/state.provider';
-import {DateTime, Duration} from "luxon";
+import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-trips',

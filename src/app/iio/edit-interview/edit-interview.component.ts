@@ -77,20 +77,6 @@ export class EditInterviewComponent implements OnInit {
     });
   }
 
-  private createForm() {
-    const plannedDate = new Date(this.interview.plannedDate).toISOString();
-    const paidDate = this.interview.paidDate ? new Date(this.interview.paidDate).toISOString() : null;
-    this.interviewForm = this.fb.group({
-      plannedDate: [plannedDate, Validators.required],
-      type: [this.interview.type, Validators.required],
-      candidateName: [this.interview.candidateName,],
-      feedback: [this.interview.feedback,],
-      value: [this.interview.value, Validators.required],
-      status: [this.interview.status, Validators.required],
-      paidDate: [paidDate,],
-    }, {});
-  }
-
   interviewTypeChanged($event: any) {
     if (this.interviewForm.get('status').value === InterviewStatus.NoShow) {
       return;
@@ -107,5 +93,19 @@ export class EditInterviewComponent implements OnInit {
     if (interviewStatusValue === InterviewStatus.NoShow) {
       this.interviewForm.get('value').setValue(20);
     }
+  }
+
+  private createForm() {
+    const plannedDate = new Date(this.interview.plannedDate).toISOString();
+    const paidDate = this.interview.paidDate ? new Date(this.interview.paidDate).toISOString() : null;
+    this.interviewForm = this.fb.group({
+      plannedDate: [plannedDate, Validators.required],
+      type: [this.interview.type, Validators.required],
+      candidateName: [this.interview.candidateName,],
+      feedback: [this.interview.feedback,],
+      value: [this.interview.value, Validators.required],
+      status: [this.interview.status, Validators.required],
+      paidDate: [paidDate,],
+    }, {});
   }
 }

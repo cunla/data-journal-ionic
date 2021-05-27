@@ -65,6 +65,13 @@ export class EditTripComponent implements OnInit {
     this.tripForm.get('locationName').reset();
   }
 
+  detail(location: LocationInterface) {
+    console.log(location);
+    this.location = location;
+    this.trip.lat = this.location.lat;
+    this.trip.lng = this.location.lng;
+  }
+
   private createForm() {
     this.tripForm = this.fb.group({
       locationName: [this.trip.locationName,],
@@ -76,12 +83,5 @@ export class EditTripComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
-  }
-
-  detail(location: LocationInterface) {
-    console.log(location);
-    this.location = location;
-    this.trip.lat = this.location.lat;
-    this.trip.lng = this.location.lng;
   }
 }
