@@ -6,7 +6,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 
 import {AngularFireAuth} from '@angular/fire/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
-import {TripInterface} from '../trips/trips.service'
+import {TripInterface} from '../trips/trips.service';
 
 export const ADDRESS_HISTORY_PATH = 'address-history';
 
