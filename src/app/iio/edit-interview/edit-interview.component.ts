@@ -6,7 +6,7 @@ import {ModalController} from '@ionic/angular';
 
 export const INTERVIEW_TYPES = [{
   name: 'Standard coding',
-  value: '50',
+  value: '60',
 }, {
   name: 'Company coding',
   value: '115',
