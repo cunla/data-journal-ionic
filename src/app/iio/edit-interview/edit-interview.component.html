@@ -25,6 +25,10 @@
       </ion-select>
     </ion-item>
     <ion-item>
+      <ion-label position="floating">Payment expected</ion-label>
+      <ion-input formControlName="value" type="number"></ion-input>
+    </ion-item>
+    <ion-item>
       <ion-label>Planned date and time</ion-label>
       <ion-datetime [max]="maxYear"
                     displayFormat="YYYY-MMM-DD, HH:mm"
