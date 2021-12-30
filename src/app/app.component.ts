@@ -33,11 +33,6 @@ export class AppComponent implements OnInit {
       url: '/bloodresults',
       icon: 'eyedrop'
     },
-    {
-      title: 'interviewing.io',
-      url: '/iio',
-      iconSource: '/assets/iio.svg'
-    },
   ];
   loggedInSubject: Observable<boolean>;
 

@@ -27,10 +27,6 @@ const routes: Routes = [
     path: 'bloodresults',
     loadChildren: () => import('./bloodresults/bloodresults.module').then(m => m.BloodresultsModule)
   },
-  {
-    path: 'iio',
-    loadChildren: () => import('./iio/iio.module').then(m => m.IioPageModule)
-  },
 ];
 
 @NgModule({
