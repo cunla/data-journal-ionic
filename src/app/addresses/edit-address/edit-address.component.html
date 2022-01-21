@@ -18,11 +18,37 @@
 
     <ion-item>
       <ion-label>Start date</ion-label>
-      <ion-datetime displayFormat="YYYY MMM DD" formControlName="start"></ion-datetime>
+      <ion-text slot="end">{{ addressForm.get('start').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-button fill="clear" id="open-date-input-1" slot="end">
+        <ion-icon icon="calendar"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="open-date-input-1"
+                   dismiss-on-select="true"
+                   show-backdrop="false">
+        <ng-template>
+          <ion-datetime
+            presentation="date"
+            formControlName="start"
+          ></ion-datetime>
+        </ng-template>
+      </ion-popover>
     </ion-item>
     <ion-item>
       <ion-label>End date</ion-label>
-      <ion-datetime displayFormat="YYYY MMM DD" formControlName="end"></ion-datetime>
+      <ion-text slot="end">{{ addressForm.get('end').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-button fill="clear" id="open-date-input-2" slot="end">
+        <ion-icon icon="calendar"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="open-date-input-2"
+                   dismiss-on-select="true"
+                   show-backdrop="false">
+        <ng-template>
+          <ion-datetime
+            presentation="date"
+            formControlName="end"
+          ></ion-datetime>
+        </ng-template>
+      </ion-popover>
     </ion-item>
     <ion-button [disabled]="addressForm.invalid || !location.locationName"
                 color="primary"

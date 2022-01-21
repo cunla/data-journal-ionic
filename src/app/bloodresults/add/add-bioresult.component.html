@@ -47,7 +47,20 @@
       <ion-card-header>
         <ion-item>
           <ion-label>Pick a date</ion-label>
-          <ion-datetime displayFormat="YYYY MMM DD" formControlName="date"></ion-datetime>
+          <ion-text slot="end">{{ bioresultForm.get('date').value | date:'YYYY-MM-dd'}}</ion-text>
+          <ion-button fill="clear" id="open-date-input-2" slot="end">
+            <ion-icon icon="calendar"></ion-icon>
+          </ion-button>
+          <ion-popover trigger="open-date-input-2"
+                       show-backdrop="false"
+                       dismiss-on-select="true">
+            <ng-template>
+              <ion-datetime
+                presentation="date"
+                formControlName="date"
+              ></ion-datetime>
+            </ng-template>
+          </ion-popover>
         </ion-item>
       </ion-card-header>
       <ion-card-content>

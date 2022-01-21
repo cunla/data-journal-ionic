@@ -6,6 +6,8 @@ import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
+import {format, parseISO} from 'date-fns';
+
 
 @Component({
   selector: 'app-edit-trip',
@@ -83,5 +85,11 @@ export class EditTripComponent implements OnInit {
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });
+  }
+
+  setDate(formControlName: string, value: string) {
+    this.tripForm.get(formControlName)
+      .setValue(format(parseISO(value), 'yyyy/MM/dd'));
+
   }
 }
