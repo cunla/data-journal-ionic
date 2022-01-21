@@ -24,11 +24,13 @@
     </ion-item>
     <ion-item>
       <ion-label>Start date</ion-label>
-      <ion-text slot="end">{{ tripForm.get('start').value }}</ion-text>
-      <ion-button fill="clear" id="open-date-input-2">
+      <ion-text slot="end">{{ tripForm.get('start').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-button fill="clear" id="open-date-input-2" slot="end">
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
-      <ion-popover trigger="open-date-input-2" show-backdrop="false">
+      <ion-popover trigger="open-date-input-2"
+                   dismiss-on-select="true"
+                   show-backdrop="false">
         <ng-template>
           <ion-datetime
             presentation="date"
@@ -39,11 +41,13 @@
     </ion-item>
     <ion-item>
       <ion-label>End date</ion-label>
-      <ion-text slot="end">{{ tripForm.get('end').value }}</ion-text>
-      <ion-button fill="clear" id="open-date-input-1">
+      <ion-text slot="end">{{ tripForm.get('end').value | date:'YYYY-MM-dd' }}</ion-text>
+      <ion-button fill="clear" id="open-date-input-1" slot="end">
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
-      <ion-popover trigger="open-date-input-1" show-backdrop="false">
+      <ion-popover trigger="open-date-input-1"
+                   dismiss-on-select="true"
+                   show-backdrop="false">
         <ng-template>
           <ion-datetime
             presentation="date"

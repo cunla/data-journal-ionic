@@ -15,7 +15,7 @@ export interface BioResult {
 
 export const EMPTY_RESULT: BioResult = {
   id: null,
-  date: new Date(),
+  date: null,
   type: '',
   value: 0,
   metadata: null,
