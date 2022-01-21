@@ -13,7 +13,7 @@
         [formGroup]="addressForm" novalidate>
     <google-places-autocomplete (callback)="detail($event)"
                                 [value]="address.locationName"
-                                placeholder="Enter trip place">
+                                placeholder="Enter address">
     </google-places-autocomplete>
 
     <ion-item>
