@@ -1,10 +1,10 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
 import {TripInterface} from '../trips/trips.service';
 

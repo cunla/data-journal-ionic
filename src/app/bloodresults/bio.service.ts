@@ -1,8 +1,8 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 
 
 export interface BioResult {

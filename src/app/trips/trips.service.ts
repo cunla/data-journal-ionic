@@ -1,11 +1,11 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 
-// import * as firebase from 'firebase/app';
-import {AngularFireAuth} from '@angular/fire/auth';
+// import * as firebase from 'firebase/compat/app';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
 
 export interface QueryConfig {
