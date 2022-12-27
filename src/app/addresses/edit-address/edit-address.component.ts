@@ -83,7 +83,7 @@ export class EditAddressComponent implements OnInit {
       start: [this.address.start?.toISOString(), Validators.required],
       end: [this.address.end?.toISOString(),],
     }, {
-      validator: Validators.compose([
+      validators: Validators.compose([
         Dates.dateLessThanValidator('start', 'end'),
       ])
     });

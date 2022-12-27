@@ -1,12 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControlOptions, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
-import {format, parseISO} from 'date-fns';
 
 
 @Component({
@@ -56,16 +55,12 @@ export class EditTripComponent implements OnInit {
   }
 
   public dismissModal() {
+    this.state.modalOpen = false;
     this.modalController.dismiss({
       dismissed: true
-    }).then(() => {
-      this.state.modalOpen = false;
     });
   }
 
-  resetLocation($event: any) {
-    this.tripForm.get('locationName').reset();
-  }
 
   detail(location: LocationInterface) {
     console.log(location);
@@ -75,21 +70,24 @@ export class EditTripComponent implements OnInit {
   }
 
   private createForm() {
+    const controlOptions: AbstractControlOptions = {
+      validators: Validators.compose([
+        Dates.dateLessThanValidator('start', 'end'),
+      ])
+    };
     this.tripForm = this.fb.group({
       locationName: [this.trip.locationName,],
       purpose: [this.trip.purpose, Validators.required],
       start: [this.trip.start?.toISOString(), Validators.required],
       end: [this.trip.end?.toISOString(),],
-    }, {
-      validator: Validators.compose([
-        Dates.dateLessThanValidator('start', 'end'),
-      ])
-    });
+    }, controlOptions);
   }
 
-  setDate(formControlName: string, value: string) {
-    this.tripForm.get(formControlName)
-      .setValue(format(parseISO(value), 'yyyy/MM/dd'));
-
-  }
+  // setDate(formControlName: string, value: string) {
+  //   this.tripForm.get(formControlName)
+  //     .setValue(format(parseISO(value), 'yyyy/MM/dd'));
+  // }
+  // resetLocation($event: any) {
+  //   this.tripForm.get('locationName').reset();
+  // }
 }

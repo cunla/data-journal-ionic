@@ -23,13 +23,13 @@
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
       <ion-popover trigger="open-date-input-1"
-                   dismiss-on-select="true"
                    show-backdrop="false">
         <ng-template>
-          <ion-datetime
-            presentation="date"
-            formControlName="start"
-          ></ion-datetime>
+          <ng-template>
+            <ion-datetime presentation="date"
+                          [showDefaultButtons]="true"
+                          formControlName="start"></ion-datetime>
+          </ng-template>
         </ng-template>
       </ion-popover>
     </ion-item>
@@ -40,13 +40,13 @@
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
       <ion-popover trigger="open-date-input-2"
-                   dismiss-on-select="true"
                    show-backdrop="false">
         <ng-template>
-          <ion-datetime
-            presentation="date"
-            formControlName="end"
-          ></ion-datetime>
+          <ng-template>
+            <ion-datetime presentation="date"
+                          [showDefaultButtons]="true"
+                          formControlName="end"></ion-datetime>
+          </ng-template>
         </ng-template>
       </ion-popover>
     </ion-item>
