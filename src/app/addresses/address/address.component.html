@@ -12,14 +12,12 @@
 
   </ion-card-header>
   <ion-card-content>
-    <agm-map [latitude]="address.lat"
-             [longitude]="address.lng"
-             [streetViewControl]="false"
-             [zoomControl]="false"
-             maxZoom="8"
-             minZoom="5">
-      <agm-marker [latitude]="address.lat" [longitude]="address.lng"></agm-marker>
-    </agm-map>
+    <google-map width="100%"
+                [center]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"
+                [options]="{minZoom:5,maxZoom:8,zoomControl:false,streetViewControl:false,}">
+      <map-marker *ngIf="address.lat && address.lng"
+                  [position]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"></map-marker>
+    </google-map>
   </ion-card-content>
   <ion-footer>
     <ion-row>

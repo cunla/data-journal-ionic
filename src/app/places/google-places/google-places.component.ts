@@ -1,5 +1,4 @@
 import {Component, ElementRef, EventEmitter, Input, NgZone, Output} from '@angular/core';
-import {GeocoderResult, GeocoderStatus} from "@agm/core";
 
 declare var google;
 
@@ -79,7 +78,7 @@ export class GooglePlacesAutocompleteComponent {
 
   selectedItem(item) {
     this.geocoder.geocode({placeId: item.place_id},
-      (results: Array<GeocoderResult>, status: GeocoderStatus) => {
+      (results, status) => {
         const address = results[0];
         const location: LocationInterface = EMPTY_LOCATION;
         location.lat = address.geometry.location.lat();

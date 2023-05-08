@@ -5,22 +5,18 @@ import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {AuthModule} from './auth/auth.module';
-import {AgmCoreModule} from '@agm/core';
-import {environment} from '../environments/environment';
 import {BloodresultsModule} from './bloodresults/bloodresults.module';
+import {GoogleMapsModule} from "@angular/google-maps";
 
 @NgModule({
   declarations: [AppComponent,],
-  entryComponents: [],
   imports: [
     BloodresultsModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     AuthModule,
-    AgmCoreModule.forRoot({
-      apiKey: environment.firebase.apiKey
-    }),
+    GoogleMapsModule,
   ],
   providers: [
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}

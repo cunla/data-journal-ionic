@@ -13,8 +13,8 @@ import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../../environments/environment';
 import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
 import {IonicModule} from '@ionic/angular';
-import {AgmCoreModule} from '@agm/core';
 import {PlacesModule} from "../places/places.module";
+import {GoogleMapsModule} from "@angular/google-maps";
 
 const routes: Routes = [
   {path: '', redirectTo: 'list', pathMatch: 'full'},
@@ -37,8 +37,8 @@ const routes: Routes = [
     HomeGuardModule,
     ToolsModule,
     IonicModule,
-    AgmCoreModule,
     PlacesModule,
+    GoogleMapsModule,
   ],
   providers: [
     TripsService,

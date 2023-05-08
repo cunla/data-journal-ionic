@@ -3,8 +3,8 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {ToolsModule} from '../common/tools.module';
 import {IonicModule} from '@ionic/angular';
-import {AgmCoreModule} from '@agm/core';
 import {AgmChartComponent} from './agm-chart-component/agm-chart.component';
+import {GoogleMapsModule} from "@angular/google-maps";
 
 const routes: Routes = [
   {path: '', redirectTo: 'view', pathMatch: 'full'},
@@ -21,7 +21,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ToolsModule,
     IonicModule,
-    AgmCoreModule,
+    GoogleMapsModule,
   ],
   providers: [],
 })

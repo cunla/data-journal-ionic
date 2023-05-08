@@ -62,14 +62,12 @@
     </ion-button>
     <ion-card>
       <ion-card-content>
-        <agm-map [latitude]="trip.lat || 43.7"
-                 [longitude]="trip.lng || -79.42"
-                 maxZoom="8"
-                 minZoom="5">
-          <agm-marker *ngIf="trip.lat && trip.lng"
-                      [latitude]="trip.lat"
-                      [longitude]="trip.lng"></agm-marker>
-        </agm-map>
+        <google-map width="100%"
+                    [center]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"
+                    [options]="{maxZoom:8,minZoom:5}">
+          <map-marker *ngIf="trip.lat && trip.lng"
+                      [position]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"></map-marker>
+        </google-map>
       </ion-card-content>
     </ion-card>
   </form>

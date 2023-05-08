@@ -7,22 +7,13 @@
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-  <agm-map
-    [latitude]="currentAddress?.lat"
-    [longitude]="currentAddress?.lon"
-    [streetViewControl]="false"
-    [zoomControl]="false"
-    maxZoom="4" minZoom="2">
-    <agm-marker *ngFor="let item of cities"
-                [latitude]="item.lat" [longitude]="item.lon">
-    </agm-marker>
-    <agm-polyline *ngFor="let item of trips"
-                  [geodesic]="true"
-                  strokeColor="red"
-                  strokeOpacity="0.3"
-                  strokeWeight="1">
-      <agm-polyline-point [latitude]="item.origin.lat" [longitude]="item.origin.lon"></agm-polyline-point>
-      <agm-polyline-point [latitude]="item.target.lat" [longitude]="item.target.lon"></agm-polyline-point>
-    </agm-polyline>
-  </agm-map>
+  <google-map height="100%" width="100%"
+              [center]="{lat: currentAddress?.lat, lng: currentAddress?.lon}"
+              [options]="{minZoom:2,maxZoom:4,zoomControl:false,streetViewControl:false,}">
+    <map-marker *ngFor="let item of cities"
+                [position]="{lat: item.lat, lng: item.lon}"></map-marker>
+    <map-polyline *ngFor="let item of trips"
+                  [options]="{geodesic:true,strokeColor:'red',strokeWeight:1}"
+                  [path]="item"></map-polyline>
+  </google-map>
 </ion-content>

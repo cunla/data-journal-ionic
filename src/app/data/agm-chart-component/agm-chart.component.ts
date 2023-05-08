@@ -24,7 +24,7 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
 })
 export class AgmChartComponent implements OnInit {
   cities = new Set<Point>();
-  trips: Array<Path> = [];
+  trips: google.maps.LatLngLiteral[][] = [];
   currentAddress: Point;
 
   constructor(private tripsService: TripsService,
@@ -78,7 +78,9 @@ export class AgmChartComponent implements OnInit {
       origin,
       target,
     };
-    this.trips.push(t);
+    this.trips.push(
+      [{lat: origin.lat, lng: origin.lon},
+        {lat: target.lat, lng: target.lon},]);
   }
 
 
