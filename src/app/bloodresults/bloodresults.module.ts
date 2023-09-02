@@ -14,9 +14,9 @@ import {ResultChartComponent} from './resultchart/resultchart.component';
 import {HighchartsChartModule} from 'highcharts-angular';
 import {BioService} from './bio.service';
 import {BioMetadataService} from './bio-metadata.service';
-import {AutoCompleteModule} from 'ionic4-auto-complete';
 import {AddBioresultComponent} from './add/add-bioresult.component';
 import {BioresultItemModule} from "./bioresult-item/bioresult-item.module";
+import {AutoCompleteModule} from "../autocomplete/autocomplete.module";
 
 @NgModule({
   imports: [

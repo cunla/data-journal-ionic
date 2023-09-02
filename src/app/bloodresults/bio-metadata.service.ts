@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {AutoCompleteService} from 'ionic4-auto-complete';
 import {map} from 'rxjs/operators';
+import {AutoCompleteService} from "../autocomplete/auto-complete.service";
 
 
 export interface BioResultMeta {
