@@ -1,6 +1,5 @@
 ion-auto-complete {
   overflow: hidden !important;
-  width:    90vw;
   display:  inline-block;
 
   ion-searchbar {
@@ -14,7 +13,6 @@ ion-auto-complete {
 
   ul {
     position:        absolute;
-    width:           90vw;
     margin-top:      0;
     background:      #FFF;
     list-style-type: none;
@@ -26,10 +24,6 @@ ion-auto-complete {
     li {
       padding:       15px;
       border-bottom: 1px solid #c1c1c1;
-
-      span {
-        pointer-events: none;
-      }
     }
 
     ion-auto-complete-item {
@@ -41,8 +35,7 @@ ion-auto-complete {
       border: none;
     }
 
-    li:focus,
-    li.focus {
+    li:hover {
       cursor:     pointer;
       background: #f1f1f1
     }
@@ -53,12 +46,8 @@ ion-auto-complete {
   }
 
   .loading input.searchbar-input {
-    background:      white url(/assets/loading.gif) no-repeat right 4px center;
+    background:      white url(/assets/loading.gif) no-repeat right center;
     background-size: 25px 25px;
-  }
-
-  .searchbar-clear-button.sc-ion-searchbar-md {
-    right: 34px;
   }
 
   .selected-items {
