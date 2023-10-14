@@ -8,12 +8,17 @@
 
     <img class="center" src="/assets/icon/favicon.png"/>
     <ion-item>
-      <ion-label position="floating">email</ion-label>
-      <ion-input [(ngModel)]="userEmail" autofocus inputmode="email" required></ion-input>
+      <ion-input label="email" label-placement="floating"
+                 [(ngModel)]="userEmail"
+                 [autofocus]="true" inputmode="email"
+                 [required]="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input [(ngModel)]="userPassword" required type="password"></ion-input>
+      <ion-input label="Password"
+                 label-placement="floating"
+                 [(ngModel)]="userPassword"
+                 [required]="true"
+                 type="password"></ion-input>
     </ion-item>
     <ion-button (click)="login('email')" color="dark" expand="full">
       Email Login
