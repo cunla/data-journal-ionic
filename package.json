@@ -17,7 +17,7 @@
     "@angular/animations": "~17.0.6",
     "@angular/common": "~17.0.6",
     "@angular/core": "~17.0.6",
-    "@angular/fire": "^7.6.1",
+    "@angular/fire": "^17.0.0",
     "@angular/forms": "~17.0.6",
     "@angular/google-maps": "^17.0.3",
     "@angular/platform-browser": "~17.0.6",
@@ -29,14 +29,14 @@
     "@ionic/storage": "^4.0.0",
     "date-fns": "^2.30.0",
     "file-saver": "^2.0.5",
-    "firebase": "9.23.0",
+    "firebase": "^10.7.1",
     "highcharts": "^11.2.0",
     "highcharts-angular": "^3.1.2",
     "luxon": "3.4.4",
     "proj4": "^2.9.2",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.2",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.14.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.6",
