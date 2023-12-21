@@ -27,7 +27,7 @@
     "@ionic/angular": "^7.6.2",
     "@ionic/core": "^7.6.2",
     "@ionic/storage": "^4.0.0",
-    "date-fns": "^3.0.1",
+    "date-fns": "^3.0.5",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
     "highcharts": "^11.2.0",
