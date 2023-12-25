@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, NgZone, Output} from '@angular/core';
 
-declare var google;
+declare let google;
 
 export const EMPTY_LOCATION: LocationInterface = {
   country: null,
@@ -45,8 +45,8 @@ export interface LocationInterface {
   `
 })
 export class GooglePlacesAutocompleteComponent {
-  @Output("callback") callback: EventEmitter<any> = new EventEmitter();
-  @Input('placeholder') placeholder: string = 'Search for place';
+  @Output() callback: EventEmitter<any> = new EventEmitter();
+  @Input() placeholder: string = 'Search for place';
   @Input('value') initialValue: string = '';
   autocomplete: { input: string; };
   autocompleteItems: any[];

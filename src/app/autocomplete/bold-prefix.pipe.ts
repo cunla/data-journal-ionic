@@ -13,7 +13,7 @@ export class BoldPrefix implements PipeTransform {
       return value;
     }
     
-    let escaped_keyword = keyword.replace(
+    const escaped_keyword = keyword.replace(
       /[.*+?^${}()|[\]\\]/g, 
       '\\$&'
     );

@@ -76,7 +76,7 @@ export class BioMetadataService implements AutoCompleteService {
     if (res) {
       return res;
     }
-    for (let [key, value] of this.bloodtestDataMap) {
+    for (const [key, value] of this.bloodtestDataMap) {
       if (key.indexOf(testName) >= 0) {
         return value;
       }

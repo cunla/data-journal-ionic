@@ -355,7 +355,7 @@ export class AutoCompleteComponent implements AfterViewChecked, ControlValueAcce
       return null;
     }
 
-    let attr = this.provider.formValueAttribute == null ?
+    const attr = this.provider.formValueAttribute == null ?
         this.provider.labelAttribute : this.provider.formValueAttribute;
 
     if (typeof selection === 'object' && attr) {
@@ -467,7 +467,7 @@ export class AutoCompleteComponent implements AfterViewChecked, ControlValueAcce
       return '';
     }
 
-    let attr = this.provider.formValueAttribute == null ?
+    const attr = this.provider.formValueAttribute == null ?
         this.provider.labelAttribute : this.provider.formValueAttribute;
 
     let value = selection;

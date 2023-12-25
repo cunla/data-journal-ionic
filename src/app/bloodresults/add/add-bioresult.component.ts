@@ -39,7 +39,7 @@ export class AddBioresultComponent implements OnInit {
     });
     await loading.present();
     value.date = DateTime.fromISO(value.date).toJSDate();
-    let p = [];
+    const p = [];
     for (const val of value.values) {
       p.push(this.bioService.create(value.date, val.type, val.value));
     }

@@ -93,7 +93,7 @@ export class BioService {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
       tap((arr: any) => {
-        let values = arr.map(snap => {
+        const values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;
           const doc = snap.payload.doc;
