@@ -77,7 +77,7 @@ export class TripsListComponent implements OnInit {
     return res;
   }
 
-  doRefresh(event: any) {
+  doRefresh(event: Event ) {
     this.trips.refresh();
     event?.target.complete();
   }

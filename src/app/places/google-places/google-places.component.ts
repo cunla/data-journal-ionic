@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, NgZone, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, NgZone, Output, OnInit} from '@angular/core';
 
 declare let google;
 
@@ -35,7 +35,7 @@ export interface LocationInterface {
                      [placeholder]="placeholder"
                      (ionClear)="ClearAutocomplete()">
       </ion-searchbar>
-      <ion-list [hidden]="autocompleteItems.length == 0">
+      <ion-list [hidden]="autocompleteItems.length === 0">
         <ion-item *ngFor="let item of autocompleteItems" tappable
                   (click)="selectedItem(item)">
           {{ item.description }}
@@ -44,7 +44,7 @@ export interface LocationInterface {
     </ion-toolbar>
   `
 })
-export class GooglePlacesAutocompleteComponent {
+export class GooglePlacesAutocompleteComponent implements OnInit {
   @Output() callback: EventEmitter<any> = new EventEmitter();
   @Input() placeholder: string = 'Search for place';
   @Input('value') initialValue: string = '';
@@ -72,6 +72,7 @@ export class GooglePlacesAutocompleteComponent {
     }
     this.googlePlaces.getPlacePredictions({input: this.autocomplete.input},
       (predictions, status) => {
+        console.log(status);
         this.autocompleteItems = [...predictions];
       });
   }
@@ -79,6 +80,7 @@ export class GooglePlacesAutocompleteComponent {
   selectedItem(item) {
     this.geocoder.geocode({placeId: item.place_id},
       (results, status) => {
+        console.log(status);
         const address = results[0];
         const location: LocationInterface = EMPTY_LOCATION;
         location.lat = address.geometry.location.lat();

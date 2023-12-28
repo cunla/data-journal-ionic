@@ -12,7 +12,7 @@ export class HomeGuard implements CanActivate {
   }
 
   canActivate(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (this.userId !== null) {
         resolve(true);
       } else {

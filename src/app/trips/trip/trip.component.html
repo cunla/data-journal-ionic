@@ -1,7 +1,8 @@
 <ion-item-sliding>
   <ion-item lines="full">
     <ion-thumbnail slot="start">
-      <img [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'">
+      <img [src]="'/assets/flags/'+trip.countryCode.toLowerCase()+'.svg'"
+           alt="Flag">
     </ion-thumbnail>
     <ion-label (click)="editClicked.emit(null)" class="ion-text-wrap">
       <h3>

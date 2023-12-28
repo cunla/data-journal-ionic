@@ -19,9 +19,6 @@ export class TripComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-  }
-
   async delete() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
@@ -34,7 +31,7 @@ export class TripComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
+          handler: () => {
             console.log('Confirm Cancel: blah');
           }
         }, {
