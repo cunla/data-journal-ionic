@@ -11,10 +11,10 @@
 <ion-content>
   <form (ngSubmit)="onSubmit(addressForm.value)"
         [formGroup]="addressForm" novalidate>
-    <google-places-autocomplete (callback)="detail($event)"
+    <app-google-places-autocomplete (callback)="detail($event)"
                                 [value]="address.locationName"
                                 placeholder="Enter address">
-    </google-places-autocomplete>
+    </app-google-places-autocomplete>
 
     <ion-item>
       <ion-label>Start date</ion-label>

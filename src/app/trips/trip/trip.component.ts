@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {Dates} from '../../common/dates';
 import {AlertController} from '@ionic/angular';
@@ -8,7 +8,7 @@ import {AlertController} from '@ionic/angular';
   templateUrl: './trip.component.html',
   styleUrls: ['./trip.component.scss']
 })
-export class TripComponent implements OnInit {
+export class TripComponent {
   @Input() trip: TripInterface;
   @Output() editClicked = new EventEmitter();
   daysDiff = Dates.daysDiffFunc;

@@ -27,7 +27,7 @@ export interface LocationInterface {
 }
 
 @Component({
-  selector: 'google-places-autocomplete',
+  selector: 'app-google-places-autocomplete',
   template: `
     <ion-toolbar>
       <ion-searchbar [(ngModel)]="autocomplete.input"
@@ -45,7 +45,7 @@ export interface LocationInterface {
   `
 })
 export class GooglePlacesAutocompleteComponent implements OnInit {
-  @Output() callback: EventEmitter<any> = new EventEmitter();
+  @Output() callback: EventEmitter<LocationInterface> = new EventEmitter();
   @Input() placeholder: string = 'Search for place';
   @Input('value') initialValue: string = '';
   autocomplete: { input: string; };

@@ -11,10 +11,10 @@
 <ion-content>
   <form (ngSubmit)="onSubmit(tripForm.value)"
         [formGroup]="tripForm" novalidate>
-    <google-places-autocomplete (callback)="detail($event)"
+    <app-google-places-autocomplete (callback)="detail($event)"
                                 [value]="trip.locationName"
                                 placeholder="Enter trip place">
-    </google-places-autocomplete>
+    </app-google-places-autocomplete>
 
     <ion-item>
       <ion-textarea label="Purpose of trip"

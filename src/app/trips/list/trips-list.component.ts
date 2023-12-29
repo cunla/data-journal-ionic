@@ -6,6 +6,7 @@ import {ModalController} from '@ionic/angular';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
+import {IonRefresherCustomEvent} from "@ionic/core/dist/types/components";
 
 @Component({
   selector: 'app-trips',
@@ -77,8 +78,8 @@ export class TripsListComponent implements OnInit {
     return res;
   }
 
-  doRefresh(event: Event ) {
+  doRefresh(event: IonRefresherCustomEvent<never>) {
     this.trips.refresh();
-    event?.target.complete();
+    event?.target.complete().then();
   }
 }

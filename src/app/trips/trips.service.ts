@@ -71,7 +71,7 @@ export class TripsService {
 
   // Initial query sets options and defines the Observable
   // passing opts will override the defaults
-  init(path: string, field: string, opts?: any) {
+  init(path: string, field: string, opts?: { reverse: boolean, prepend: boolean, searchValue?: string }) {
     this.query = {
       path: path,
       field: field,
