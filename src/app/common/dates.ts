@@ -2,7 +2,7 @@ import {FormGroup, ValidatorFn} from '@angular/forms';
 
 export class Dates {
   static dateLessThanValidator(from: string, to: string): ValidatorFn {
-    return (group: FormGroup): { [key: string]: any } => {
+    return (group: FormGroup) => {
       const f = group.controls[from];
       const t = group.controls[to];
       if (f.value !== null && t.value !== null && f.value > t.value) {

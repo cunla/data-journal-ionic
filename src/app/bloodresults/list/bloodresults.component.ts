@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
-import {ModalController} from '@ionic/angular';
+import {ModalController, RefresherCustomEvent, SegmentCustomEvent} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
 import {AddBioresultComponent} from "../add/add-bioresult.component";
@@ -9,11 +9,11 @@ import {DateTime} from "luxon";
 
 @Component({
   selector: 'app-bloodresults',
-  templateUrl: './bloodresults.page.html',
-  styleUrls: ['./bloodresults.page.scss'],
+  templateUrl: './bloodresults.component.html',
+  styleUrls: ['./bloodresults.component.scss'],
 })
-export class BloodresultsPage implements OnInit {
-  data: Map<any, Array<BioResult>> = new Map<string, Array<BioResult>>();
+export class BloodresultsComponent implements OnInit {
+  data: Map<string, Array<BioResult>> = new Map<string, Array<BioResult>>();
   groupby = 'date';
   newResult = EMPTY_RESULT;
   headers: string[] = [];
@@ -38,7 +38,7 @@ export class BloodresultsPage implements OnInit {
     this.doRefresh(null);
   }
 
-  graphOrList(header: string, $event: any) {
+  graphOrList(header: string, $event: SegmentCustomEvent) {
     this.graphOrListMap[header] = $event?.detail?.value || 'list';
   }
 
@@ -75,7 +75,7 @@ export class BloodresultsPage implements OnInit {
     return await modal.present();
   }
 
-  doRefresh(event: any) {
+  doRefresh(event: RefresherCustomEvent) {
     this.bioService.refresh();
     this.bioService.data.subscribe((allResults) => {
       allResults = allResults.sort((a, b) => {
@@ -85,7 +85,7 @@ export class BloodresultsPage implements OnInit {
       this.headers = [];
       allResults.forEach((res: BioResult) => {
         res.metadata = this.bioMetadataService.getTestMetaData(res.type);
-        const group = (this.groupby === 'date') ? BloodresultsPage.transform(res.date) : res.type;
+        const group = (this.groupby === 'date') ? BloodresultsComponent.transform(res.date) : res.type;
         if (!this.data.has(group)) {
           this.data.set(group, []);
           this.headers.push(group);

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export class AutoCompleteOptions {
   public animated:boolean = false;
   public color:string|null = null;

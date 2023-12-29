@@ -1,25 +1,25 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LoginPage} from './login/login.page';
-import {ResetPasswordPage} from './reset-password/reset-password.page';
+import {LoginComponent} from './login/login-compo.component';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
 import {AuthGuard} from './auth.guard';
-import {SignupPage} from './signup/signup.page';
+import {SignupComponent} from './signup/signup.component';
 
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginPage,
+    component: LoginComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'reset-password',
-    component: ResetPasswordPage,
+    component: ResetPasswordComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'signup',
-    component: SignupPage,
+    component: SignupComponent,
     canActivate: [AuthGuard],
   }
 ];

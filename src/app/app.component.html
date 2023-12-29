@@ -9,7 +9,7 @@
           <ion-note>{{authService.userEmail}}</ion-note>
 
           <ion-menu-toggle *ngFor="let p of appPages; let i = index" auto-hide="false">
-            <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex == i" [routerLink]="[p.url]"
+            <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex === i" [routerLink]="[p.url]"
                       detail="false"
                       lines="none" routerDirection="root">
               <ion-icon *ngIf="p.icon" [name]="p.icon + '-outline'" slot="start"></ion-icon>

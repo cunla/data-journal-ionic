@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, NgZone, Output, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
 
 declare let google;
 
@@ -47,11 +47,11 @@ export interface LocationInterface {
 export class GooglePlacesAutocompleteComponent implements OnInit {
   @Output() callback: EventEmitter<LocationInterface> = new EventEmitter();
   @Input() placeholder: string = 'Search for place';
-  @Input('value') initialValue: string = '';
+  @Input() initialValue: string = '';
   autocomplete: { input: string; };
-  autocompleteItems: any[];
-  private googlePlaces: any;
-  private geocoder: any;
+  autocompleteItems: google.maps.places.AutocompletePrediction[];
+  private googlePlaces: google.maps.places.AutocompleteService;
+  private geocoder: google.maps.Geocoder;
 
   constructor(private el: ElementRef, public zone: NgZone,) {
     this.geocoder = new google.maps.Geocoder();

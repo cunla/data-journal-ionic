@@ -6,7 +6,8 @@
 <ion-content>
   <ion-list>
 
-    <img class="center" src="/assets/icon/favicon.png"/>
+    <img class="center" src="/assets/icon/favicon.png"
+         alt="logo"/>
     <ion-item>
       <ion-input label="email" label-placement="floating"
                  [(ngModel)]="userEmail"
@@ -51,7 +52,7 @@
     <!-- Information about current user -->
     <ion-item *ngIf="authService.isLoggedIn">
       <ion-label>
-        Logged in as {{authService.userEmail}}
+        Logged in as {{ authService.userEmail }}
       </ion-label>
       <ion-button (click)="authService.doLogout()">
         Logout

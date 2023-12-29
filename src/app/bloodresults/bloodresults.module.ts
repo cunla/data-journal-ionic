@@ -6,7 +6,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {BloodresultsPageRoutingModule} from './bloodresults-routing.module';
 
-import {BloodresultsPage} from './list/bloodresults.page';
+import {BloodresultsComponent} from './list/bloodresults.component';
 import {ToolsModule} from '../common/tools.module';
 import {EditBioresultComponent} from './edit/edit-bioresult.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -32,7 +32,7 @@ import {AutoCompleteModule} from "../autocomplete/autocomplete.module";
     BioresultItemModule,
   ],
   declarations: [
-    BloodresultsPage,
+    BloodresultsComponent,
     EditBioresultComponent,
     ResultChartComponent,
     AddBioresultComponent,

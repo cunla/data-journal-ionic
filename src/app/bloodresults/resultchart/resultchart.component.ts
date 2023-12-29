@@ -76,10 +76,10 @@ export class ResultChartComponent implements OnInit {
     });
     // Set min & max for Y axis
     this.metadata = this.bioMetadataService.getTestMetaData(this.title);
-    // @ts-ignore
-    this.chartOptions.yAxis.min = Math.floor(Math.min(this.metadata?.low * 0.9, min));
-    // @ts-ignore
-    this.chartOptions.yAxis.max = Math.ceil(Math.max(this.metadata?.high * 1.1, max));
+    // @ts-expect-error: Highcharts type definitions are incomplete
+    const yaxisOptions: Highcharts.YAxisOptions = this.chartOptions.yAxis;
+    yaxisOptions.min = Math.floor(Math.min(this.metadata?.low * 0.9, min));
+    yaxisOptions.max = Math.ceil(Math.max(this.metadata?.high * 1.1, max));
   }
 
 }

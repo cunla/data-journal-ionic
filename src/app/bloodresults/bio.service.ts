@@ -3,14 +3,16 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
+import {BioResultMeta} from "./bio-metadata.service";
+import firebase from 'firebase/compat';
 
 
 export interface BioResult {
-  id: any;
+  id: string;
   date: Date;
   type: string;
   value: number;
-  metadata: any;
+  metadata: BioResultMeta;
 }
 
 export const EMPTY_RESULT: BioResult = {
@@ -89,10 +91,10 @@ export class BioService {
   }
 
   // Maps the snapshot to usable format the updates source
-  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
+  private mapAndUpdate(col: AngularFirestoreCollection<firebase.firestore.DocumentData>) {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-      tap((arr: any) => {
+      tap((arr) => {
         const values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;

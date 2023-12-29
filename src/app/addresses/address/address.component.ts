@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AddressInterface, AddressService} from '../address.service';
 import {Dates} from '../../common/dates';
 import {AlertController} from '@ionic/angular';
@@ -8,7 +8,7 @@ import {AlertController} from '@ionic/angular';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent {
   @Input() address: AddressInterface;
   @Output() editClicked = new EventEmitter();
   daysDiff = Dates.daysDiffFunc;
@@ -18,9 +18,6 @@ export class AddressComponent implements OnInit {
     private addressService: AddressService) {
   }
 
-
-  ngOnInit() {
-  }
 
   async delete() {
     const alert = await this.alertController.create({
@@ -34,7 +31,7 @@ export class AddressComponent implements OnInit {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
+          handler: () => {
             console.log('Confirm Cancel: blah');
           }
         }, {

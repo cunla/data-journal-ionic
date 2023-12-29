@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ADDRESS_HISTORY_PATH, AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
@@ -12,7 +12,7 @@ import {DateTime} from "luxon";
   templateUrl: './address-list.component.html',
   styleUrls: ['./address-list.component.scss']
 })
-export class AddressListComponent implements OnInit {
+export class AddressListComponent {
   newAddress: AddressInterface = EMPTY_ADDRESS;
 
   constructor(public addressService: AddressService,
@@ -31,9 +31,6 @@ export class AddressListComponent implements OnInit {
       componentProps: {address,}
     });
     return await modal.present();
-  }
-
-  ngOnInit() {
   }
 
   searchByName(event) {

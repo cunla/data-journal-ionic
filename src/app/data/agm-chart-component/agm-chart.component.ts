@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from '../../addresses/address.service';
 
@@ -22,14 +22,15 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
   templateUrl: './agm-chart.component.html',
   styleUrls: ['./agm-chart.component.scss'],
 })
-export class AgmChartComponent implements OnInit {
+export class AgmChartComponent {
   cities = new Set<Point>();
   trips: google.maps.LatLngLiteral[][] = [];
   currentAddress: Point;
 
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {
-    this.addressService.data.subscribe(addresses => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.addressService.data.subscribe((addresses) => {
       this.currentAddress = AgmChartComponent.itemToPoint(
         this.addressService.getAddressOnDate(new Date())) || DEFAULT_ADDRESS;
 
@@ -66,18 +67,15 @@ export class AgmChartComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
   private addTripIfRelevant(origin: Point, target: Point): void {
     if (!origin || origin.id === target.id) {
       return;
     }
-    const t = {
-      name: `${origin.id} - ${target.id}`,
-      origin,
-      target,
-    };
+    // const t = {
+    //   name: `${origin.id} - ${target.id}`,
+    //   origin,
+    //   target,
+    // };
     this.trips.push(
       [{lat: origin.lat, lng: origin.lon},
         {lat: target.lat, lng: target.lon},]);

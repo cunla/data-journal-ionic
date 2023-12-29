@@ -1,20 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {AlertController} from '@ionic/angular';
 
 @Component({
   selector: 'app-reset-password',
-  templateUrl: './reset-password.page.html',
-  styleUrls: ['./reset-password.page.scss'],
+  templateUrl: './reset-password.component.html',
+  styleUrls: ['./reset-password.component.scss'],
 })
-export class ResetPasswordPage implements OnInit {
+export class ResetPasswordComponent {
   userEmail: string;
 
   constructor(private authService: AuthService,
               private alertController: AlertController) {
-  }
-
-  ngOnInit() {
   }
 
   resetPassword(email: string) {

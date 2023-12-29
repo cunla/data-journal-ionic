@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BioService} from "../bio.service";
 import {ModalController} from "@ionic/angular";
 import {StateProvider} from "../../common/state.provider";
@@ -8,7 +8,7 @@ import {StateProvider} from "../../common/state.provider";
   templateUrl: './bioresult-item.component.html',
   styleUrls: ['./bioresult-item.component.scss'],
 })
-export class BioresultItemComponent implements OnInit {
+export class BioresultItemComponent {
   @Input() label: string;
   @Input() low: number;
   @Input() high: number;
@@ -20,9 +20,6 @@ export class BioresultItemComponent implements OnInit {
   constructor(private modalController: ModalController,
               private state: StateProvider,
               private bioService: BioService) {
-  }
-
-  ngOnInit() {
   }
 
   itemBadgeColor() {

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{trip?.id ? 'Save' : 'Add new'}} trip
+      {{ trip?.id ? 'Save' : 'Add new' }} trip
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
@@ -12,8 +12,8 @@
   <form (ngSubmit)="onSubmit(tripForm.value)"
         [formGroup]="tripForm" novalidate>
     <app-google-places-autocomplete (callback)="detail($event)"
-                                [value]="trip.locationName"
-                                placeholder="Enter trip place">
+                                    [initialValue]="trip.locationName"
+                                    placeholder="Enter trip place">
     </app-google-places-autocomplete>
 
     <ion-item>
@@ -25,7 +25,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Start date</ion-label>
-      <ion-text slot="end">{{ tripForm.get('start').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-text slot="end">{{ tripForm.get('start').value | date:'YYYY-MM-dd' }}</ion-text>
       <ion-button fill="clear" id="open-date-input-2" slot="end">
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
@@ -59,7 +59,7 @@
                 color="primary"
                 expand="full"
                 fill="outline" type="submit">
-      {{trip?.id ? 'Save' : 'Add'}}
+      {{ trip?.id ? 'Save' : 'Add' }}
     </ion-button>
     <ion-card>
       <ion-card-content>

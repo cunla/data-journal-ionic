@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      {{address?.id ? 'Save' : 'Add new'}} address
+      {{ address?.id ? 'Save' : 'Add new' }} address
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Close</ion-button>
@@ -12,13 +12,13 @@
   <form (ngSubmit)="onSubmit(addressForm.value)"
         [formGroup]="addressForm" novalidate>
     <app-google-places-autocomplete (callback)="detail($event)"
-                                [value]="address.locationName"
-                                placeholder="Enter address">
+                                    [initialValue]="address.locationName"
+                                    placeholder="Enter address">
     </app-google-places-autocomplete>
 
     <ion-item>
       <ion-label>Start date</ion-label>
-      <ion-text slot="end">{{ addressForm.get('start').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-text slot="end">{{ addressForm.get('start').value | date:'YYYY-MM-dd' }}</ion-text>
       <ion-button fill="clear" id="open-date-input-1" slot="end">
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
@@ -35,7 +35,7 @@
     </ion-item>
     <ion-item>
       <ion-label>End date</ion-label>
-      <ion-text slot="end">{{ addressForm.get('end').value | date:'YYYY-MM-dd'}}</ion-text>
+      <ion-text slot="end">{{ addressForm.get('end').value | date:'YYYY-MM-dd' }}</ion-text>
       <ion-button fill="clear" id="open-date-input-2" slot="end">
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
@@ -54,7 +54,7 @@
                 color="primary"
                 expand="full"
                 fill="outline" type="submit">
-      {{address?.id ? 'Save' : 'Add'}}
+      {{ address?.id ? 'Save' : 'Add' }}
     </ion-button>
 
   </form>

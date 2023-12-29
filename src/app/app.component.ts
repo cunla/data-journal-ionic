@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 import {Platform} from '@ionic/angular';
 import {AuthService} from './auth/auth.service';
@@ -10,7 +10,7 @@ import {Observable} from 'rxjs';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   public selectedIndex = 0;
   public appPages = [
     {
@@ -63,9 +63,6 @@ export class AppComponent implements OnInit {
 
   set userLastUrl(lastUrl: string) {
     localStorage.setItem('userLastUrl', lastUrl);
-  }
-
-  ngOnInit() {
   }
 
   logout() {

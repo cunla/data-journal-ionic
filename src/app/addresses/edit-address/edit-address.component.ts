@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AddressInterface, AddressService} from '../address.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
 import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
@@ -16,7 +15,7 @@ import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/goog
 export class EditAddressComponent implements OnInit {
   @Input() address: AddressInterface;
   addressForm: FormGroup;
-  filteredOptions: Observable<any[]>;
+  // filteredOptions: Observable<any[]>;
 
   // _filter = CitiesService.filterCities;
   location: LocationInterface = EMPTY_LOCATION;
@@ -47,7 +46,7 @@ export class EditAddressComponent implements OnInit {
     if (this.address.id === null || this.address.id === undefined) {
       console.log('Saving address', value);
       this.addressService.create(value).then(
-        res => {
+        () => {
           this.addressService.refresh();
           this.addressForm.reset();
         }

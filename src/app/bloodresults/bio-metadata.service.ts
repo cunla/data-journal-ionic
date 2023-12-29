@@ -44,10 +44,11 @@ export class BioMetadataService implements AutoCompleteService {
       });
   }
 
-  getResults(keyword: string): Observable<any[]> {
-    let observable: Observable<any>;
+  getResults(keyword: string): Observable<BioResultMeta[]> {
+    let observable: Observable<BioResultMeta[]>;
 
     if (this.bloodtestData.length === 0) {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       observable = this.http.get('/assets/bloodtest-data.json');
     } else {
       observable = of(this.bloodtestData);
@@ -55,7 +56,7 @@ export class BioMetadataService implements AutoCompleteService {
 
     return observable.pipe(
       map(
-        (result: any) => {
+        (result: BioResultMeta[]) => {
           return result.filter(
             (item) => {
               return item.test.toLowerCase().indexOf(keyword.toLowerCase()) >= 0;
@@ -70,7 +71,7 @@ export class BioMetadataService implements AutoCompleteService {
     return this.iconMap.get(icon) || 'eyedrop-outline';
   }
 
-  getTestMetaData(testName: string) {
+  getTestMetaData(testName: string): BioResultMeta {
     testName = testName.toLowerCase();
     const res = this.bloodtestDataMap.get(testName);
     if (res) {

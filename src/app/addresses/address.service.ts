@@ -1,12 +1,11 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
-import {TripInterface} from '../trips/trips.service';
 
 export const ADDRESS_HISTORY_PATH = 'address-history';
 
@@ -66,7 +65,7 @@ export class AddressService {
     this.init(ADDRESS_HISTORY_PATH, 'start', {});
   }
 
-  init(path: string, field: string, opts?: any) {
+  init(path: string, field: string, opts?: { reverse?: boolean, prepend?: boolean, searchValue?: string, }) {
     this.query = {
       path,
       field,
@@ -106,10 +105,9 @@ export class AddressService {
       this.mapAndUpdate(first);
     }
     this.data = this._data.asObservable().pipe(
-      scan((acc: any[], values: any[]) => {
-        const val = values.filter((item: TripInterface) => {
-          return containsCaseInsensitive(item.locationName, this.query.searchValue)
-            || containsCaseInsensitive(item.purpose, this.query.searchValue);
+      scan((acc: AddressInterface[], values: AddressInterface[]) => {
+        const val = values.filter((item: AddressInterface) => {
+          return containsCaseInsensitive(item.locationName, this.query.searchValue);
         });
         return this.query.prepend ? val.concat(acc) : acc.concat(val);
       }));
@@ -134,11 +132,12 @@ export class AddressService {
     return this.userDoc().collection(this.query.path).add(value);
   }
 
-  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
+  private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {
     if (this.addresses && this.addresses.length > 0) {
       this._data.next(this.addresses);
     } else {
       return col.snapshotChanges().pipe(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tap((arr: any) => {
           let values = arr.map(snap => {
             const data = snap.payload.doc.data();

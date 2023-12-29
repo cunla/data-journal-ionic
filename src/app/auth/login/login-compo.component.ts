@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  templateUrl: './login-compo.component.html',
+  styleUrls: ['./login-compo.component.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginComponent {
   userEmail: string;
   userPassword: string;
 
@@ -15,11 +15,9 @@ export class LoginPage implements OnInit {
               private router: Router,) {
   }
 
-  ngOnInit() {
-  }
 
   login(provider: string) {
-    let loginPromise: Promise<any>;
+    let loginPromise: Promise<unknown>;
     switch (provider) {
       case 'facebook':
         loginPromise = this.authService.doFacebookLogin();

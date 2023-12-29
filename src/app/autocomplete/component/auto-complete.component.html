@@ -1,27 +1,28 @@
+<!-- eslint-disable -->
 <ng-template #defaultSelection
              let-attrs="attrs">
-    <ion-chip class="{{ attrs.removeButtonClasses }}"
-              [color]="attrs.removeButtonColor"
-              [outline]="true">
-        <ion-icon *ngIf="frontIcon"
-                  [name]="frontIcon"
-                  [slot]="'start'"
-                  color="primary"></ion-icon>
+  <ion-chip class="{{ attrs.removeButtonClasses }}"
+            [color]="attrs.removeButtonColor"
+            [outline]="true">
+    <ion-icon *ngIf="frontIcon"
+              [name]="frontIcon"
+              [slot]="'start'"
+              color="primary"></ion-icon>
 
-        <ion-label>{{ attrs.label }}</ion-label>
+    <ion-label>{{ attrs.label }}</ion-label>
 
-        <ion-icon *ngIf="attrs.removeButtonIcon"
-                  [name]="attrs.removeButtonIcon"
-                  [slot]="attrs.removeButtonSlot"></ion-icon>
-    </ion-chip>
+    <ion-icon *ngIf="attrs.removeButtonIcon"
+              [name]="attrs.removeButtonIcon"
+              [slot]="attrs.removeButtonSlot"></ion-icon>
+  </ion-chip>
 </ng-template>
 
 <div *ngIf="multi">
-    <div *ngFor="let item of selected"
-         class="selected-items"
-         (click)="removeItem(item)">
-        <ng-template [ngTemplateOutlet]="selectionTemplate || defaultSelection"
-                     [ngTemplateOutletContext]="{
+  <div *ngFor="let item of selected"
+       class="selected-items"
+       (click)="removeItem(item)">
+    <ng-template [ngTemplateOutlet]="selectionTemplate || defaultSelection"
+                 [ngTemplateOutletContext]="{
                             attrs: {
                               data:                item,
                               label:               getLabel(item),
@@ -31,11 +32,12 @@
                               removeButtonSlot:    removeButtonSlot
                             }
                          }"></ng-template>
-    </div>
+  </div>
 </div>
 
 <ion-label *ngIf="label.length !== 0"
-           [position]="labelPosition">{{ label }}</ion-label>
+           [position]="labelPosition">{{ label }}
+</ion-label>
 
 <ion-input #inputElem
            [autocomplete]="autocomplete"
@@ -98,13 +100,13 @@
 
 <ng-template #defaultTemplate
              let-attrs="attrs">
-    <span [innerHTML]='attrs.label | boldprefix:attrs.keyword'></span>
+  <span [innerHTML]='attrs.label | boldprefix:attrs.keyword'></span>
 </ng-template>
 
 <ng-template #defaultEmptyTemplate
              let-attrs="attrs"
              class="ion-text-center">
-    {{ autocompleteOptions.noItems }}
+  {{ autocompleteOptions.noItems }}
 </ng-template>
 
 <ng-template [ngTemplateOutlet]="listTemplate || defaultList"
@@ -121,17 +123,18 @@
 
 <ng-template #defaultList
              let-attrs="attrs">
-    <ul *ngIf="!(disabled || (attrs.maxSelected !== null && attrs.selected.length >= attrs.maxSelected)) && attrs.data.length > 0 && attrs.showSuggestions"
-        #itemList
-        [ngStyle]="listStyles()">
-        <li *ngFor="let suggestion of attrs.data| slice:0 : attrs.maxResults; let index = index"
-            [ngClass]="{ 'focus': focusedOption === index }"
-            [ngStyle]="styles.listItem"
-            (mouseenter)="focusedOption = index"
-            (click)="handleSelectTap($event, suggestion)"
-            (tap)="handleSelectTap($event, suggestion)">
-            <ng-template [ngTemplateOutlet]="template || defaultTemplate"
-                         [ngTemplateOutletContext]="{
+  <ul
+    *ngIf="!(disabled || (attrs.maxSelected !== null && attrs.selected.length >= attrs.maxSelected)) && attrs.data.length > 0 && attrs.showSuggestions"
+    #itemList
+    [ngStyle]="listStyles()">
+    <li *ngFor="let suggestion of attrs.data| slice:0 : attrs.maxResults; let index = index"
+        [ngClass]="{ 'focus': focusedOption === index }"
+        [ngStyle]="styles.listItem"
+        (mouseenter)="focusedOption = index"
+        (click)="handleSelectTap($event, suggestion)"
+        (tap)="handleSelectTap($event, suggestion)">
+      <ng-template [ngTemplateOutlet]="template || defaultTemplate"
+                   [ngTemplateOutletContext]="{
                             attrs:{
                               data:               suggestion,
                               label:              getLabel(suggestion),
@@ -141,18 +144,18 @@
                               formValueAttribute: getFormValue(suggestion)
                             }
                          }"></ng-template>
-        </li>
-    </ul>
+    </li>
+  </ul>
 
-    <ul *ngIf="!isLoading && suggestions.length === 0 && showSuggestions"
-        [ngStyle]="listStyles()">
-        <li [ngStyle]="styles.listItem">
-            <ng-template [ngTemplateOutlet]="emptyTemplate || defaultEmptyTemplate"
-                         [ngTemplateOutletContext]="{
+  <ul *ngIf="!isLoading && suggestions.length === 0 && showSuggestions"
+      [ngStyle]="listStyles()">
+    <li [ngStyle]="styles.listItem">
+      <ng-template [ngTemplateOutlet]="emptyTemplate || defaultEmptyTemplate"
+                   [ngTemplateOutletContext]="{
                         attrs:{
                           keyword: keyword
                         }
                      }"></ng-template>
-        </li>
-    </ul>
+    </li>
+  </ul>
 </ng-template>

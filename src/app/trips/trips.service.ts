@@ -1,9 +1,7 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
-
-
 // import * as firebase from 'firebase/compat/app';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
@@ -122,7 +120,7 @@ export class TripsService {
     this.mapAndUpdate(first);
     // Create the observable array for consumption in components
     this.data = this._data.asObservable()
-      .pipe(scan((acc: any[], values: any[]) => {
+      .pipe(scan((acc: TripInterface[], values: TripInterface[]) => {
         const val = values.filter((item: TripInterface) => {
           return containsCaseInsensitive(item.locationName, this.query.searchValue)
             || containsCaseInsensitive(item.purpose, this.query.searchValue);
@@ -147,7 +145,7 @@ export class TripsService {
   }
 
   // Maps the snapshot to usable format the updates source
-  private mapAndUpdate(col: AngularFirestoreCollection<any>) {
+  private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {
     if (this._done.value || this._loading.value) {
       return;
     }
@@ -155,7 +153,7 @@ export class TripsService {
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-      tap((arr: any) => {
+      tap((arr) => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;

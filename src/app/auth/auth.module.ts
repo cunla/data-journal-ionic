@@ -5,15 +5,15 @@ import {FormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 
 
-import {LoginPage} from './login/login.page';
+import {LoginComponent} from './login/login-compo.component';
 import {AuthRoutingModule} from './auth-routing.module';
 import {AuthService} from './auth.service';
 import {AuthGuard} from './auth.guard';
 import {AngularFireModule} from '@angular/fire/compat';
 import {AngularFireAuthModule} from '@angular/fire/compat/auth';
 import {environment} from '../../environments/environment';
-import {ResetPasswordPage} from './reset-password/reset-password.page';
-import {SignupPage} from './signup/signup.page';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {SignupComponent} from './signup/signup.component';
 
 @NgModule({
   imports: [
@@ -25,9 +25,9 @@ import {SignupPage} from './signup/signup.page';
     AuthRoutingModule,
   ],
   declarations: [
-    LoginPage,
-    ResetPasswordPage,
-    SignupPage,
+    LoginComponent,
+    ResetPasswordComponent,
+    SignupComponent,
   ],
   providers: [AuthService, AuthGuard],
 })

@@ -43,7 +43,7 @@ export class AddBioresultComponent implements OnInit {
     for (const val of value.values) {
       p.push(this.bioService.create(value.date, val.type, val.value));
     }
-    Promise.all(p).then((res) => {
+    Promise.all(p).then(() => {
       loading.dismiss();
       this.dismissModal();
     });

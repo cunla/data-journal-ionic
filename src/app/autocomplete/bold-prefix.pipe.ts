@@ -1,4 +1,5 @@
-import {Injectable, PipeTransform, Pipe} from '@angular/core';
+/* eslint-disable */
+import {Injectable, Pipe, PipeTransform} from '@angular/core';
 
 /**
  * Bolds the beginning of the matching string in the item
@@ -8,23 +9,23 @@ import {Injectable, PipeTransform, Pipe} from '@angular/core';
 })
 @Injectable()
 export class BoldPrefix implements PipeTransform {
-  transform(value:string, keyword:string):any {
+  transform(value: string, keyword: string): any {
     if (!keyword) {
       return value;
     }
-    
+
     const escaped_keyword = keyword.replace(
-      /[.*+?^${}()|[\]\\]/g, 
+      /[.*+?^${}()|[\]\\]/g,
       '\\$&'
     );
-    
+
     return value.replace(
       new RegExp(
-        escaped_keyword, 
+        escaped_keyword,
         'gi'
-      ), 
-      function(str) { 
-        return str.bold(); 
+      ),
+      function (str) {
+        return `<b>${str}</b>`;
       }
     );
   }
