@@ -78,21 +78,6 @@ export class AddressService {
     this.refresh();
   }
 
-  getAddressOnDate(date: Date) {
-    let ind = 0;
-    if (!this.addresses) {
-      return null;
-    }
-    while (ind < this.addresses.length) {
-      if (this.addresses[ind].start <= date &&
-        (!this.addresses[ind].end || this.addresses[ind].end >= date)) {
-        return this.addresses[ind];
-      }
-      ++ind;
-    }
-    return null;
-  }
-
   refresh() {
     this.data = null;
     this._data = new BehaviorSubject([]);
@@ -157,8 +142,7 @@ export class AddressService {
   }
 
   private queryFn(ref) {
-    return ref
-      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
+    return ref.orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
   }
 
   private userDoc() {

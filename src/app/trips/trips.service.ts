@@ -49,6 +49,7 @@ export const EMPTY_TRIP: TripInterface = {
 })
 export class TripsService {
   // Observable data
+  private trips: Array<TripInterface> = null;
   data: Observable<TripInterface[]>;
   // Source data
   private _done = new BehaviorSubject(false);
@@ -153,7 +154,8 @@ export class TripsService {
     this._loading.next(true);
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
-      tap((arr) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      tap((arr: any) => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;
@@ -166,6 +168,7 @@ export class TripsService {
         // If prepending, reverse the batch order
         values = this.query.prepend ? values.reverse() : values;
 
+        this.trips = values;
         // update source with new values, done loading
         this._data.next(values);
         this._loading.next(false);
@@ -183,5 +186,12 @@ export class TripsService {
     return this.db
       .collection('users')
       .doc(this.userId);
+  }
+
+  public getTrips(): Array<TripInterface> {
+    if (!this.trips) {
+      this.refresh();
+    }
+    return this.trips;
   }
 }

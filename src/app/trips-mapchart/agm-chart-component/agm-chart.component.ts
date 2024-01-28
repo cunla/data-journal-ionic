@@ -1,18 +1,11 @@
 import {Component} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
-import {AddressInterface, AddressService} from '../../addresses/address.service';
-
+import {AddressInterface, AddressService} from "../../addresses/address.service";
 
 export interface Point {
   lon: number;
   id: string;
   lat: number
-}
-
-export interface Path {
-  name: string;
-  origin: Point;
-  target: Point;
 }
 
 const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
@@ -31,14 +24,13 @@ export class AgmChartComponent {
               private addressService: AddressService,) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.addressService.data.subscribe((addresses) => {
-      this.currentAddress = AgmChartComponent.itemToPoint(
-        this.addressService.getAddressOnDate(new Date())) || DEFAULT_ADDRESS;
+      this.currentAddress = this.getOriginPointOnDate([], addresses, new Date()) || DEFAULT_ADDRESS;
 
       this.tripsService.data.subscribe(trips => {
         const sortedTrips = trips.sort(AgmChartComponent.sortByDates);
         // tslint:disable-next-line:forin
         for (const ind in sortedTrips) {
-          const originCity = AgmChartComponent.itemToPoint(this.addressService.getAddressOnDate(sortedTrips[ind].start));
+          const originCity = this.getOriginPointOnDate(trips, addresses, sortedTrips[ind].start);
           const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
           if (targetCity && targetCity.lat && targetCity.lon) {
             this.cities.add(targetCity);
@@ -47,14 +39,6 @@ export class AgmChartComponent {
         }
       });
     });
-  }
-
-  private static itemToPoint(item: TripInterface | AddressInterface): Point {
-    return item ? {
-      id: item.city,
-      lon: +item.lng,
-      lat: +item.lat,
-    } : null;
   }
 
   private static sortByDates(a: TripInterface, b: TripInterface) {
@@ -81,5 +65,35 @@ export class AgmChartComponent {
         {lat: target.lat, lng: target.lon},]);
   }
 
+  private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], date: Date): Point {
+    let ind = 0;
+    if (trips.length > 0) {
+      ind = 0;
+      while (ind < trips.length) {
+        if (trips[ind].start < date && date <= trips[ind].end) {
+          return AgmChartComponent.itemToPoint(trips[ind]);
+        }
+        ++ind;
+      }
+    }
+    ind = 0;
+    while (ind < addresses.length) {
+      if (addresses[ind].start <= date &&
+        (!addresses[ind].end || addresses[ind].end >= date)) {
+        return AgmChartComponent.itemToPoint(addresses[ind]);
+      }
+      ++ind;
+    }
+    return null;
+  }
+
+
+  private static itemToPoint(item: TripInterface | AddressInterface): Point {
+    return item ? {
+      id: item.city,
+      lon: +item.lng,
+      lat: +item.lat,
+    } : null;
+  }
 
 }

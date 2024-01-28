@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'map',
-    loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+    loadChildren: () => import('./trips-mapchart/data.module').then(m => m.DataModule)
   },
   {
     path: 'bloodresults',
