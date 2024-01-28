@@ -68,12 +68,18 @@ export class AgmChartComponent {
   private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], date: Date): Point {
     let ind = 0;
     if (trips.length > 0) {
-      ind = 0;
-      while (ind < trips.length) {
-        if (trips[ind].start < date && date <= trips[ind].end) {
-          return AgmChartComponent.itemToPoint(trips[ind]);
+      let low = 0, high = trips.length - 1;
+      while (low < high) {
+        const mid = Math.floor((low + high) / 2);
+        if (date < trips[mid].start) {
+          high = mid - 1;
+        } else if (trips[mid].end < date) {
+          low = mid + 1;
+        } else if (trips[mid].start < date && date <= trips[mid].end) {
+          return AgmChartComponent.itemToPoint(trips[mid]);
+        } else {
+          break;
         }
-        ++ind;
       }
     }
     ind = 0;
