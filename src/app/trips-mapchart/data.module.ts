@@ -5,6 +5,7 @@ import {ToolsModule} from '../common/tools.module';
 import {IonicModule} from '@ionic/angular';
 import {AgmChartComponent} from './agm-chart-component/agm-chart.component';
 import {GoogleMapsModule} from "@angular/google-maps";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   {path: '', redirectTo: 'view', pathMatch: 'full'},
@@ -22,6 +23,7 @@ const routes: Routes = [
     ToolsModule,
     IonicModule,
     GoogleMapsModule,
+    FormsModule,
   ],
   providers: [],
 })

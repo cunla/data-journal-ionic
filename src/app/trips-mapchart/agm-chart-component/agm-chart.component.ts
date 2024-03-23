@@ -5,10 +5,18 @@ import {AddressInterface, AddressService} from "../../addresses/address.service"
 export interface Point {
   lon: number;
   id: string;
-  lat: number
+  year: number;
+  lat: number;
+  options?: any;
 }
 
-const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
+const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42, year: new Date().getFullYear()};
+
+export interface TripLine {
+  polyline: google.maps.LatLngLiteral[];
+  year: number;
+  options?: any;
+}
 
 @Component({
   selector: 'app-agm-chart',
@@ -17,7 +25,9 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42};
 })
 export class AgmChartComponent {
   cities = new Set<Point>();
-  trips: google.maps.LatLngLiteral[][] = [];
+  tripLines: TripLine[] = [];
+  years: number[] = [];
+  selectedYear: number | null = null;
   currentAddress: Point;
 
   constructor(private tripsService: TripsService,
@@ -27,13 +37,19 @@ export class AgmChartComponent {
       this.currentAddress = this.getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
 
       this.tripsService.data.subscribe(trips => {
+        trips.forEach(trip => {
+          if (this.years.length == 0 || this.years[this.years.length - 1] != trip.start.getFullYear()) {
+            this.years.push(trip.start.getFullYear());
+          }
+        })
         const sortedTrips: TripInterface[] = trips.sort(AgmChartComponent.sortByDates);
         for (let ind = 0; ind < sortedTrips.length; ++ind) {
           const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
           const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
           if (targetCity && targetCity.lat && targetCity.lon) {
+            this.addCityOptions(targetCity);
             this.cities.add(targetCity);
-            this.addTripIfRelevant(originCity, targetCity);
+            this.addTripIfRelevant(sortedTrips[ind].start.getFullYear(), originCity, targetCity);
           }
         }
       });
@@ -50,7 +66,7 @@ export class AgmChartComponent {
     }
   }
 
-  private addTripIfRelevant(origin: Point, target: Point): void {
+  private addTripIfRelevant(year: number, origin: Point, target: Point): void {
     if (!origin || origin.id === target.id) {
       return;
     }
@@ -59,9 +75,14 @@ export class AgmChartComponent {
     //   origin,
     //   target,
     // };
-    this.trips.push(
-      [{lat: origin.lat, lng: origin.lon},
-        {lat: target.lat, lng: target.lon},]);
+    const t: TripLine = {
+      year: year,
+      polyline: [
+        {lat: origin.lat, lng: origin.lon},
+        {lat: target.lat, lng: target.lon}]
+    };
+    this.addPolyLineOptions(t);
+    this.tripLines.push(t);
   }
 
   private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], tripInd: number): Point {
@@ -101,7 +122,32 @@ export class AgmChartComponent {
       id: item.city,
       lon: +item.lng,
       lat: +item.lat,
+      year: item.start.getFullYear(),
     } : null;
   }
 
+  addPolyLineOptions(item: TripLine) {
+    if (this.selectedYear === null || this.selectedYear === item.year) {
+      item.options = {geodesic: true, strokeColor: 'red', strokeWeight: 1, strokeOpacity: 1};
+    } else {
+      item.options = {geodesic: true, strokeColor: 'red', strokeWeight: 0.3, strokeOpacity: 1};
+    }
+  }
+
+  addCityOptions(item: Point) {
+    if (this.selectedYear === null || this.selectedYear === item.year) {
+      item.options = {title: item.year.toString()};
+    } else {
+      item.options = {title: item.year.toString(), opacity: 0.2};
+    }
+  }
+
+  updateOptions() {
+    this.tripLines.forEach((trip) => {
+      this.addPolyLineOptions(trip);
+    });
+    this.cities.forEach((city) => {
+      this.addCityOptions(city);
+    });
+  }
 }

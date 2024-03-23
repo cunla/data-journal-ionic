@@ -7,13 +7,21 @@
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
+  <ion-item>
+    <ion-select interface="popover" label="Show only year" [(ngModel)]="selectedYear" (ionChange)="updateOptions()">
+      <ion-select-option [value]="null">All</ion-select-option>
+      <ion-select-option *ngFor="let year of years" [value]="year">{{ year }}</ion-select-option>
+    </ion-select>
+  </ion-item>
   <google-map height="100%" width="100%"
               [center]="{lat: currentAddress?.lat, lng: currentAddress?.lon}"
               [options]="{minZoom:2,maxZoom:4,zoomControl:false,streetViewControl:false,}">
     <map-marker *ngFor="let item of cities"
-                [position]="{lat: item.lat, lng: item.lon}"></map-marker>
-    <map-polyline *ngFor="let item of trips"
-                  [options]="{geodesic:true,strokeColor:'red',strokeWeight:1}"
-                  [path]="item"></map-polyline>
+                [position]="{lat: item.lat, lng: item.lon}"
+                [options]="item.options"
+    ></map-marker>
+    <map-polyline *ngFor="let item of tripLines"
+                  [options]="item.options"
+                  [path]="item.polyline"></map-polyline>
   </google-map>
 </ion-content>
