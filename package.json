@@ -33,7 +33,7 @@
     "highcharts": "^11.4.0",
     "highcharts-angular": "^4.0.0",
     "luxon": "3.4.4",
-    "proj4": "^2.10.0",
+    "proj4": "^2.11.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"

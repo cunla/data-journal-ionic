@@ -24,13 +24,12 @@ export class AgmChartComponent {
               private addressService: AddressService,) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.addressService.data.subscribe((addresses) => {
-      this.currentAddress = this.getOriginPointOnDate([], addresses, new Date()) || DEFAULT_ADDRESS;
+      this.currentAddress = this.getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
 
       this.tripsService.data.subscribe(trips => {
-        const sortedTrips = trips.sort(AgmChartComponent.sortByDates);
-        // tslint:disable-next-line:forin
-        for (const ind in sortedTrips) {
-          const originCity = this.getOriginPointOnDate(trips, addresses, sortedTrips[ind].start);
+        const sortedTrips: TripInterface[] = trips.sort(AgmChartComponent.sortByDates);
+        for (let ind = 0; ind < sortedTrips.length; ++ind) {
+          const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
           const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
           if (targetCity && targetCity.lat && targetCity.lon) {
             this.cities.add(targetCity);
@@ -65,24 +64,27 @@ export class AgmChartComponent {
         {lat: target.lat, lng: target.lon},]);
   }
 
-  private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], date: Date): Point {
-    let ind = 0;
+  private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], tripInd: number): Point {
+    const date = tripInd == -1 ? new Date() : trips[tripInd].start;
     if (trips.length > 0) {
       let low = 0, high = trips.length - 1;
-      while (low < high) {
-        const mid = Math.floor((low + high) / 2);
-        if (date < trips[mid].start) {
+      let mid = Math.floor((low + high) / 2);
+      while (low <= high) {
+        mid = Math.floor((low + high) / 2);
+        if (mid == tripInd && tripInd > 0 && trips[tripInd - 1].start <= date && date <= trips[tripInd - 1].end) {
+          return AgmChartComponent.itemToPoint(trips[tripInd - 1]);
+        } else if (date < trips[mid].start) {
           high = mid - 1;
         } else if (trips[mid].end < date) {
           low = mid + 1;
-        } else if (trips[mid].start < date && date <= trips[mid].end) {
+        } else if (mid != tripInd && trips[mid].start <= date && date <= trips[mid].end) {
           return AgmChartComponent.itemToPoint(trips[mid]);
         } else {
           break;
         }
       }
     }
-    ind = 0;
+    let ind = 0;
     while (ind < addresses.length) {
       if (addresses[ind].start <= date &&
         (!addresses[ind].end || addresses[ind].end >= date)) {
