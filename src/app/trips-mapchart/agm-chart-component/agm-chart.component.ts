@@ -27,7 +27,7 @@ export class AgmChartComponent {
   cities = new Set<Point>();
   tripLines: TripLine[] = [];
   years: number[] = [];
-  selectedYear: number | null = null;
+  selectedYear: number = -1;
   currentAddress: Point;
 
   constructor(private tripsService: TripsService,
@@ -38,10 +38,11 @@ export class AgmChartComponent {
 
       this.tripsService.data.subscribe(trips => {
         trips.forEach(trip => {
-          if (this.years.length == 0 || this.years[this.years.length - 1] != trip.start.getFullYear()) {
+          if (!this.years.includes(trip.start.getFullYear())) {
             this.years.push(trip.start.getFullYear());
+            this.years.sort((a, b) => b - a);
           }
-        })
+        });
         const sortedTrips: TripInterface[] = trips.sort(AgmChartComponent.sortByDates);
         for (let ind = 0; ind < sortedTrips.length; ++ind) {
           const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
@@ -127,7 +128,7 @@ export class AgmChartComponent {
   }
 
   addPolyLineOptions(item: TripLine) {
-    if (this.selectedYear === null || this.selectedYear === item.year) {
+    if (this.selectedYear === -1 || this.selectedYear === item.year) {
       item.options = {geodesic: true, strokeColor: 'red', strokeWeight: 1, strokeOpacity: 1};
     } else {
       item.options = {geodesic: true, strokeColor: 'red', strokeWeight: 0.3, strokeOpacity: 1};
@@ -135,7 +136,7 @@ export class AgmChartComponent {
   }
 
   addCityOptions(item: Point) {
-    if (this.selectedYear === null || this.selectedYear === item.year) {
+    if (this.selectedYear === -1 || this.selectedYear === item.year) {
       item.options = {title: item.year.toString()};
     } else {
       item.options = {title: item.year.toString(), opacity: 0.2};
