@@ -3,9 +3,10 @@ import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login-compo.component.html',
-  styleUrls: ['./login-compo.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login-compo.component.html',
+    styleUrls: ['./login-compo.component.scss'],
+    standalone: false
 })
 export class LoginComponent {
   userEmail: string;

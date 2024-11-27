@@ -9,9 +9,10 @@ import {DateTime} from "luxon";
 import {IonRefresherCustomEvent} from "@ionic/core/dist/types/components";
 
 @Component({
-  selector: 'app-trips',
-  templateUrl: './trips-list.component.html',
-  styleUrls: ['./trips-list.component.scss']
+    selector: 'app-trips',
+    templateUrl: './trips-list.component.html',
+    styleUrls: ['./trips-list.component.scss'],
+    standalone: false
 })
 export class TripsListComponent implements OnInit {
   newTrip: TripInterface = EMPTY_TRIP;

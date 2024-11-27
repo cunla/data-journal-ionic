@@ -8,9 +8,10 @@ import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 
 @Component({
-  selector: 'app-trips',
-  templateUrl: './address-list.component.html',
-  styleUrls: ['./address-list.component.scss']
+    selector: 'app-trips',
+    templateUrl: './address-list.component.html',
+    styleUrls: ['./address-list.component.scss'],
+    standalone: false
 })
 export class AddressListComponent {
   newAddress: AddressInterface = EMPTY_ADDRESS;

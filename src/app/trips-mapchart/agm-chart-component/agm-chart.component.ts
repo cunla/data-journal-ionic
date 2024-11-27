@@ -19,9 +19,10 @@ export interface TripLine {
 }
 
 @Component({
-  selector: 'app-agm-chart',
-  templateUrl: './agm-chart.component.html',
-  styleUrls: ['./agm-chart.component.scss'],
+    selector: 'app-agm-chart',
+    templateUrl: './agm-chart.component.html',
+    styleUrls: ['./agm-chart.component.scss'],
+    standalone: false
 })
 export class AgmChartComponent {
   cities = new Set<Point>();

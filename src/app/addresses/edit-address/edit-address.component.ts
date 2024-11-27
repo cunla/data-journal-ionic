@@ -8,9 +8,10 @@ import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
 
 @Component({
-  selector: 'app-edit-address',
-  templateUrl: './edit-address.component.html',
-  styleUrls: ['./edit-address.component.scss']
+    selector: 'app-edit-address',
+    templateUrl: './edit-address.component.html',
+    styleUrls: ['./edit-address.component.scss'],
+    standalone: false
 })
 export class EditAddressComponent implements OnInit {
   @Input() address: AddressInterface;

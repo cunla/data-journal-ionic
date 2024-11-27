@@ -4,9 +4,10 @@ import {ModalController} from "@ionic/angular";
 import {StateProvider} from "../../common/state.provider";
 
 @Component({
-  selector: 'app-bioresult-item',
-  templateUrl: './bioresult-item.component.html',
-  styleUrls: ['./bioresult-item.component.scss'],
+    selector: 'app-bioresult-item',
+    templateUrl: './bioresult-item.component.html',
+    styleUrls: ['./bioresult-item.component.scss'],
+    standalone: false
 })
 export class BioresultItemComponent {
   @Input() label: string;

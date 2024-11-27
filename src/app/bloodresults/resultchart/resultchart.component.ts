@@ -5,9 +5,10 @@ import {BioMetadataService, BioResultMeta} from '../bio-metadata.service';
 
 
 @Component({
-  selector: 'app-resultchart',
-  templateUrl: './resultchart.component.html',
-  styleUrls: ['./resultchart.component.scss'],
+    selector: 'app-resultchart',
+    templateUrl: './resultchart.component.html',
+    styleUrls: ['./resultchart.component.scss'],
+    standalone: false
 })
 export class ResultChartComponent implements OnInit {
   @Input() chartData: Array<BioResult>;

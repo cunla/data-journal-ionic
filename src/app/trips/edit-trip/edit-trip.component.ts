@@ -9,9 +9,10 @@ import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/goog
 
 
 @Component({
-  selector: 'app-edit-trip',
-  templateUrl: './edit-trip.component.html',
-  styleUrls: ['./edit-trip.component.scss']
+    selector: 'app-edit-trip',
+    templateUrl: './edit-trip.component.html',
+    styleUrls: ['./edit-trip.component.scss'],
+    standalone: false
 })
 export class EditTripComponent implements OnInit {
   @Input() trip: TripInterface;

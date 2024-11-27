@@ -4,9 +4,10 @@ import {Dates} from '../../common/dates';
 import {AlertController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-trip',
-  templateUrl: './trip.component.html',
-  styleUrls: ['./trip.component.scss']
+    selector: 'app-trip',
+    templateUrl: './trip.component.html',
+    styleUrls: ['./trip.component.scss'],
+    standalone: false
 })
 export class TripComponent {
   @Input() trip: TripInterface;

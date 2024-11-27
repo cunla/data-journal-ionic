@@ -4,9 +4,10 @@ import {Dates} from '../../common/dates';
 import {AlertController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-address',
-  templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+    selector: 'app-address',
+    templateUrl: './address.component.html',
+    styleUrls: ['./address.component.scss'],
+    standalone: false
 })
 export class AddressComponent {
   @Input() address: AddressInterface;

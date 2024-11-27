@@ -22,18 +22,19 @@ import {AutoCompleteService} from '../auto-complete.service';
 import {AutoCompleteStyles} from '../auto-complete-styles.model';
 
 @Component({
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: AutoCompleteComponent,
-      multi: true
-    }
-  ],
-  selector: 'ion-auto-complete',
-  styleUrls: [
-    './auto-complete.component.scss'
-  ],
-  templateUrl: 'auto-complete.component.html'
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: AutoCompleteComponent,
+            multi: true
+        }
+    ],
+    selector: 'ion-auto-complete',
+    styleUrls: [
+        './auto-complete.component.scss'
+    ],
+    templateUrl: 'auto-complete.component.html',
+    standalone: false
 })
 export class AutoCompleteComponent implements AfterViewChecked, ControlValueAccessor, DoCheck {
   public autocompleteOptions: AutoCompleteOptions = new AutoCompleteOptions();

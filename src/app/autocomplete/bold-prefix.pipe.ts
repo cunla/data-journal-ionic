@@ -5,7 +5,8 @@ import {Injectable, Pipe, PipeTransform} from '@angular/core';
  * Bolds the beginning of the matching string in the item
  */
 @Pipe({
-  name: 'boldprefix'
+    name: 'boldprefix',
+    standalone: false
 })
 @Injectable()
 export class BoldPrefix implements PipeTransform {

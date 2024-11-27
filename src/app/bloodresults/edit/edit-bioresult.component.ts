@@ -7,9 +7,10 @@ import {BioMetadataService} from '../bio-metadata.service';
 import {DateTime} from "luxon";
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit-bioresult.component.html',
-  styleUrls: ['./edit-bioresult.component.scss'],
+    selector: 'app-edit',
+    templateUrl: './edit-bioresult.component.html',
+    styleUrls: ['./edit-bioresult.component.scss'],
+    standalone: false
 })
 export class EditBioresultComponent implements OnInit {
   @Input() bioresult: BioResult;

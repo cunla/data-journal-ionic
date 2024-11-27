@@ -8,9 +8,10 @@ import {BioMetadataService} from "../bio-metadata.service";
 import {DateTime} from "luxon";
 
 @Component({
-  selector: 'app-bloodresults',
-  templateUrl: './bloodresults.component.html',
-  styleUrls: ['./bloodresults.component.scss'],
+    selector: 'app-bloodresults',
+    templateUrl: './bloodresults.component.html',
+    styleUrls: ['./bloodresults.component.scss'],
+    standalone: false
 })
 export class BloodresultsComponent implements OnInit {
   data: Map<string, Array<BioResult>> = new Map<string, Array<BioResult>>();

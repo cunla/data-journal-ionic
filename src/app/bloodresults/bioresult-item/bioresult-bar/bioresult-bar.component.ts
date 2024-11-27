@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-bioresultbar',
-  templateUrl: './bioresult-bar.component.html',
-  styleUrls: ['./bioresult-bar.component.scss'],
+    selector: 'app-bioresultbar',
+    templateUrl: './bioresult-bar.component.html',
+    styleUrls: ['./bioresult-bar.component.scss'],
+    standalone: false
 })
 export class BioresultBarComponent implements OnInit {
 
