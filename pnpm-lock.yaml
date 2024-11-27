@@ -62,6 +62,9 @@ importers:
       highcharts-angular:
         specifier: ^4.0.1
         version: 4.0.1(@angular/common@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(highcharts@11.4.8)
+      ionicons:
+        specifier: ^7.4.0
+        version: 7.4.0
       luxon:
         specifier: 3.5.0
         version: 3.5.0
@@ -3711,8 +3714,8 @@ packages:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
     engines: {node: '>= 0.4'}
 
-  ionicons@7.3.1:
-    resolution: {integrity: sha512-1boG4EQTBBpQ4/0PU60Yi78Iw/k8iNtKu9c0NmsbzHGnWAcwpiovG9Wi/rk5UlF+DC+CR4XDCxKo91YqvAxkww==}
+  ionicons@7.4.0:
+    resolution: {integrity: sha512-ZK94MMqgzMCPPMhmk8Ouu6goyVHFIlw/ACP6oe3FrikcI0N7CX0xcwVaEbUc0G/v3W0shI93vo+9ve/KpvcNhQ==}
 
   ip-address@9.0.5:
     resolution: {integrity: sha512-zHtQzGojZXTwZTHQqra+ETKd4Sn3vgi7uBmlPoXVWZqYvuKmtI0l/VZTjqGmJY9x88GGOaZ9+G9ES8hC4T4X8g==}
@@ -7487,7 +7490,7 @@ snapshots:
       '@angular/forms': 19.0.1(@angular/common@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@19.0.1(@angular/animations@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1)
       '@angular/router': 19.0.1(@angular/common@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@19.0.1(@angular/animations@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.0.1(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.0.1(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1)
       '@ionic/core': 8.4.1
-      ionicons: 7.3.1
+      ionicons: 7.4.0
       jsonc-parser: 3.3.1
       rxjs: 7.8.1
       tslib: 2.8.1
@@ -7496,7 +7499,7 @@ snapshots:
   '@ionic/core@8.4.1':
     dependencies:
       '@stencil/core': 4.20.0
-      ionicons: 7.3.1
+      ionicons: 7.4.0
       tslib: 2.8.1
 
   '@ionic/storage@4.0.0':
@@ -9820,7 +9823,7 @@ snapshots:
       hasown: 2.0.2
       side-channel: 1.0.6
 
-  ionicons@7.3.1:
+  ionicons@7.4.0:
     dependencies:
       '@stencil/core': 4.20.0
 
