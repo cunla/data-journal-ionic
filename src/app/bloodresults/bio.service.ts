@@ -1,10 +1,9 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {BioResultMeta} from "./bio-metadata.service";
-import firebase from 'firebase/compat';
 
 
 export interface BioResult {
@@ -91,7 +90,7 @@ export class BioService {
   }
 
   // Maps the snapshot to usable format the updates source
-  private mapAndUpdate(col: AngularFirestoreCollection<firebase.firestore.DocumentData>) {
+  private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {
     // Map snapshot with doc ref (needed for cursor)
     return col.snapshotChanges().pipe(
       tap((arr) => {

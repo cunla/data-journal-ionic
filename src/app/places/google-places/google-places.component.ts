@@ -31,18 +31,20 @@ export interface LocationInterface {
     template: `
     <ion-toolbar>
       <ion-searchbar [(ngModel)]="autocomplete.input"
-                     (ionInput)="UpdateSearchResults()"
-                     [placeholder]="placeholder"
-                     (ionClear)="ClearAutocomplete()">
+        (ionInput)="UpdateSearchResults()"
+        [placeholder]="placeholder"
+        (ionClear)="ClearAutocomplete()">
       </ion-searchbar>
       <ion-list [hidden]="autocompleteItems.length === 0">
-        <ion-item *ngFor="let item of autocompleteItems" tappable
-                  (click)="selectedItem(item)">
-          {{ item.description }}
-        </ion-item>
+        @for (item of autocompleteItems; track item) {
+          <ion-item tappable
+            (click)="selectedItem(item)">
+            {{ item.description }}
+          </ion-item>
+        }
       </ion-list>
     </ion-toolbar>
-  `,
+    `,
     standalone: false
 })
 export class GooglePlacesAutocompleteComponent implements OnInit {

@@ -9,7 +9,9 @@ import {BloodresultsModule} from './bloodresults/bloodresults.module';
 import {GoogleMapsModule} from "@angular/google-maps";
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire/compat';
-import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
+import {AngularFireAnalyticsModule} from '@angular/fire/compat/analytics';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {provideHighcharts} from 'highcharts-angular';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
     GoogleMapsModule,
   ],
   providers: [
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    provideHttpClient(withInterceptorsFromDi()),
+    provideHighcharts(),
   ],
   bootstrap: [AppComponent]
 })

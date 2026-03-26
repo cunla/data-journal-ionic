@@ -9,9 +9,8 @@ import {BloodresultsPageRoutingModule} from './bloodresults-routing.module';
 import {BloodresultsComponent} from './list/bloodresults.component';
 import {ToolsModule} from '../common/tools.module';
 import {EditBioresultComponent} from './edit/edit-bioresult.component';
-import {HttpClientModule} from '@angular/common/http';
 import {ResultChartComponent} from './resultchart/resultchart.component';
-import {HighchartsChartModule} from 'highcharts-angular';
+import {HighchartsChartComponent} from 'highcharts-angular';
 import {BioService} from './bio.service';
 import {BioMetadataService} from './bio-metadata.service';
 import {AddBioresultComponent} from './add/add-bioresult.component';
@@ -20,14 +19,13 @@ import {AutoCompleteModule} from "../autocomplete/autocomplete.module";
 
 @NgModule({
   imports: [
-    HttpClientModule,
     ToolsModule,
     CommonModule,
     FormsModule,
     IonicModule,
     BloodresultsPageRoutingModule,
     ReactiveFormsModule,
-    HighchartsChartModule,
+    HighchartsChartComponent,
     AutoCompleteModule,
     BioresultItemModule,
   ],

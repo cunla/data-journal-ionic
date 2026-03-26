@@ -13,8 +13,8 @@
   <!--
   <ion-toolbar>
     <ion-searchbar id="addressSearchBar"
-                   debounce="500"
-                   placeholder="Filter addresses">
+      debounce="500"
+      placeholder="Filter addresses">
     </ion-searchbar>
   </ion-toolbar>
   -->
@@ -28,9 +28,10 @@
   </ion-fab>
   <ion-list>
 
-    <app-address (editClicked)="presentModal(item)"
-                 *ngFor="let item of addressService.data | async"
-                 [address]="item">
-    </app-address>
+    @for (item of addressService.data | async; track item) {
+      <app-address (editClicked)="presentModal(item)"
+        [address]="item">
+      </app-address>
+    }
   </ion-list>
 </ion-content>

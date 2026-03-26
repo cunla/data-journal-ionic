@@ -1,22 +1,30 @@
 <ion-app>
   <ion-split-pane contentId="main-content">
     <ion-menu [hidden]="!authService.isLoggedIn"
-              contentId="main-content"
-              type="overlay">
+      contentId="main-content"
+      type="overlay">
       <ion-content>
         <ion-list id="inbox-list">
           <ion-list-header>Data journal</ion-list-header>
           <ion-note>{{authService.userEmail}}</ion-note>
 
-          <ion-menu-toggle *ngFor="let p of appPages; let i = index" auto-hide="false">
-            <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex === i" [routerLink]="[p.url]"
-                      detail="false"
-                      lines="none" routerDirection="root">
-              <ion-icon *ngIf="p.icon" [name]="p.icon + '-outline'" slot="start"></ion-icon>
-              <ion-icon *ngIf="p.iconSource" [src]="p.iconSource" slot="start"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+          @for (p of appPages; track p; let i = $index) {
+            <ion-menu-toggle auto-hide="false">
+              <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex === i" [routerLink]="[p.url]"
+                detail="false"
+                lines="none" routerDirection="root">
+                @if (p.icon) {
+                  <ion-icon [name]="p.icon + '-outline'" slot="start"></ion-icon>
+                }
+                <!--
+                @if (p.iconSource) {
+                  <ion-icon [src]="p.iconSource" slot="start"></ion-icon>
+                }
+                -->
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          }
 
         </ion-list>
         <ion-menu-toggle auto-hide="false">
