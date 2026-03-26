@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import * as Highcharts from 'highcharts';
-import {BioResult} from '../bio.service';
+import type {BioResult} from '../bio.service';
 import {BioMetadataService, BioResultMeta} from '../bio-metadata.service';
 
 
@@ -13,7 +13,6 @@ import {BioMetadataService, BioResultMeta} from '../bio-metadata.service';
 export class ResultChartComponent implements OnInit {
   @Input() chartData: Array<BioResult>;
   @Input() title: string = '';
-  Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
       height: '30%',

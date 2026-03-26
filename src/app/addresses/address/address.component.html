@@ -5,18 +5,22 @@
       ({{daysDiff(address.start, address.end)}} days)
     </ion-card-subtitle>
     <ion-card-title>
-      <ion-icon *ngIf="address.countryCode"
-                [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
+      @if (address.countryCode) {
+        <ion-icon
+        [src]="'/assets/flags/'+address.countryCode.toLowerCase()+'.svg'"></ion-icon>
+      }
       {{address.locationName}}
     </ion-card-title>
 
   </ion-card-header>
   <ion-card-content>
     <google-map width="100%"
-                [center]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"
-                [options]="{minZoom:5,maxZoom:8,zoomControl:false,streetViewControl:false,}">
-      <map-marker *ngIf="address.lat && address.lng"
-                  [position]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"></map-marker>
+      [center]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"
+      [options]="{minZoom:5,maxZoom:8,zoomControl:false,streetViewControl:false,}">
+      @if (address.lat && address.lng) {
+        <map-marker
+        [position]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"></map-marker>
+      }
     </google-map>
   </ion-card-content>
   <ion-footer>

@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
 import {StateProvider} from './state.provider';
 
 
@@ -8,7 +7,6 @@ import {StateProvider} from './state.provider';
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule,
   ],
   providers: [
     StateProvider,

@@ -10,17 +10,17 @@
 </ion-header>
 <ion-content>
   <form (ngSubmit)="onSubmit(tripForm.value)"
-        [formGroup]="tripForm" novalidate>
+    [formGroup]="tripForm" novalidate>
     <app-google-places-autocomplete (callback)="detail($event)"
-                                    [initialValue]="trip.locationName"
-                                    placeholder="Enter trip place">
+      [initialValue]="trip.locationName"
+      placeholder="Enter trip place">
     </app-google-places-autocomplete>
 
     <ion-item>
       <ion-textarea label="Purpose of trip"
-                    labelPlacement="floating"
-                    auto-grow=true
-                    formControlName="purpose">
+        labelPlacement="floating"
+        auto-grow=true
+        formControlName="purpose">
       </ion-textarea>
     </ion-item>
     <ion-item>
@@ -30,12 +30,12 @@
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
       <ion-popover trigger="open-date-input-2"
-                   [dismissOnSelect]="false"
-                   show-backdrop="false">
+        [dismissOnSelect]="false"
+        show-backdrop="false">
         <ng-template>
           <ion-datetime presentation="date"
-                        [showDefaultButtons]="true"
-                        formControlName="start"></ion-datetime>
+            [showDefaultButtons]="true"
+          formControlName="start"></ion-datetime>
         </ng-template>
       </ion-popover>
     </ion-item>
@@ -46,28 +46,30 @@
         <ion-icon icon="calendar"></ion-icon>
       </ion-button>
       <ion-popover trigger="open-date-input-1"
-                   [dismissOnSelect]="false"
-                   show-backdrop="false">
+        [dismissOnSelect]="false"
+        show-backdrop="false">
         <ng-template>
           <ion-datetime presentation="date"
-                        [showDefaultButtons]="true"
-                        formControlName="end"></ion-datetime>
+            [showDefaultButtons]="true"
+          formControlName="end"></ion-datetime>
         </ng-template>
       </ion-popover>
     </ion-item>
     <ion-button [disabled]="tripForm.invalid || !location.locationName"
-                color="primary"
-                expand="full"
-                fill="outline" type="submit">
+      color="primary"
+      expand="full"
+      fill="outline" type="submit">
       {{ trip?.id ? 'Save' : 'Add' }}
     </ion-button>
     <ion-card>
       <ion-card-content>
         <google-map width="100%"
-                    [center]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"
-                    [options]="{maxZoom:8,minZoom:5}">
-          <map-marker *ngIf="trip.lat && trip.lng"
-                      [position]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"></map-marker>
+          [center]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"
+          [options]="{maxZoom:8,minZoom:5}">
+          @if (trip.lat && trip.lng) {
+            <map-marker
+            [position]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"></map-marker>
+          }
         </google-map>
       </ion-card-content>
     </ion-card>

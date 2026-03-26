@@ -7,19 +7,19 @@
   <ion-list>
 
     <img class="center" src="/assets/icon/favicon.png"
-         alt="logo"/>
+      alt="logo"/>
     <ion-item>
       <ion-input label="email" label-placement="floating"
-                 [(ngModel)]="userEmail"
-                 [autofocus]="true" inputmode="email"
-                 [required]="true"></ion-input>
+        [(ngModel)]="userEmail"
+        [autofocus]="true" inputmode="email"
+      [required]="true"></ion-input>
     </ion-item>
     <ion-item>
       <ion-input label="Password"
-                 label-placement="floating"
-                 [(ngModel)]="userPassword"
-                 [required]="true"
-                 type="password"></ion-input>
+        label-placement="floating"
+        [(ngModel)]="userPassword"
+        [required]="true"
+      type="password"></ion-input>
     </ion-item>
     <ion-button (click)="login('email')" color="dark" expand="full">
       Email Login
@@ -29,36 +29,38 @@
       <ion-button (click)="login('google')" color="danger" expand="full">
         Google Login
       </ion-button>
-    <!--
+      <!--
       <ion-button (click)="login('facebook')" color="primary" expand="full">
         Facebook Login
       </ion-button>
-    -->
+      -->
     </ion-item-group>
 
 
     <ion-item-divider></ion-item-divider>
     <ion-item-group>
       <ion-button color="dark"
-                  expand="full"
-                  routerLink="/auth/signup">
+        expand="full"
+        routerLink="/auth/signup">
         Register new user
       </ion-button>
       <ion-button color="dark"
-                  expand="full"
-                  routerLink="/auth/reset-password">
+        expand="full"
+        routerLink="/auth/reset-password">
         Reset password
       </ion-button>
     </ion-item-group>
 
     <!-- Information about current user -->
-    <ion-item *ngIf="authService.isLoggedIn">
-      <ion-label>
-        Logged in as {{ authService.userEmail }}
-      </ion-label>
-      <ion-button (click)="authService.doLogout()">
-        Logout
-      </ion-button>
-    </ion-item>
+    @if (authService.isLoggedIn) {
+      <ion-item>
+        <ion-label>
+          Logged in as {{ authService.userEmail }}
+        </ion-label>
+        <ion-button (click)="authService.doLogout()">
+          Logout
+        </ion-button>
+      </ion-item>
+    }
   </ion-list>
 </ion-content>

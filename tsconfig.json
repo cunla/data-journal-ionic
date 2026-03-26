@@ -7,11 +7,12 @@
     "esModuleInterop": true,
     "declaration": false,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
+    "skipLibCheck": true,
     "typeRoots": [
       "node_modules/@types"
     ],

@@ -27,9 +27,10 @@
 
   <ion-list>
 
-    <app-trip (editClicked)="presentModal(item)"
-              *ngFor="let item of trips.data | async"
-              [trip]="item">
-    </app-trip>
+    @for (item of trips.data | async; track item) {
+      <app-trip (editClicked)="presentModal(item)"
+        [trip]="item">
+      </app-trip>
+    }
   </ion-list>
 </ion-content>

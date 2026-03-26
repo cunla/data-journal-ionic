@@ -4,12 +4,9 @@ import {FormsModule} from '@angular/forms';
 
 import {IonicModule} from '@ionic/angular';
 import {GooglePlacesAutocompleteComponent} from "./google-places/google-places.component";
-import {HttpClientModule} from "@angular/common/http";
-
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     IonicModule,
     FormsModule,
   ],
