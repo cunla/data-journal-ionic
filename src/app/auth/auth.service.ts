@@ -1,18 +1,30 @@
-import {Injectable} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/compat/auth';
-import {BehaviorSubject, Observable} from 'rxjs';
-import firebase from "firebase/compat/app";
+import { inject, Injectable } from '@angular/core';
+import {
+  Auth,
+  AuthProvider,
+  createUserWithEmailAndPassword,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  TwitterAuthProvider,
+} from '@angular/fire/auth';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-  user: firebase.User;
+  private auth = inject(Auth);
+  user: any;
   isLoginSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
 
-  constructor(public afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(user => {
+  constructor() {
+    onAuthStateChanged(this.auth, user => {
       if (user) {
         this.user = user;
-        localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('user', JSON.stringify(user));
         this.isLoginSubject.next(true);
       } else {
         localStorage.setItem('user', null);
@@ -41,40 +53,38 @@ export class AuthService {
   }
 
   doFacebookLogin() {
-    return this.loginWithProvider(new firebase.auth.FacebookAuthProvider());
+    return this.loginWithProvider(new FacebookAuthProvider());
   }
 
   doTwitterLogin() {
-    return this.loginWithProvider(new firebase.auth.TwitterAuthProvider());
+    return this.loginWithProvider(new TwitterAuthProvider());
   }
 
   doGoogleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const provider = new GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
     return this.loginWithProvider(provider);
   }
 
   doRegister(email: string, password: string) {
-    return firebase.auth().createUserWithEmailAndPassword(email, password);
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
   doEmailLogin(email: string, password: string) {
-    return firebase.auth().signInWithEmailAndPassword(email, password);
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   doLogout() {
     localStorage.setItem('user', null);
-    return this.afAuth.signOut();
+    return signOut(this.auth);
   }
 
   async resetPassword(email: string) {
-    return this.afAuth.sendPasswordResetEmail(email);
+    return sendPasswordResetEmail(this.auth, email);
   }
 
-  private loginWithProvider(provider) {
-    return this.afAuth.signInWithPopup(provider);
+  private loginWithProvider(provider: AuthProvider) {
+    return signInWithPopup(this.auth, provider);
   }
-
-
 }

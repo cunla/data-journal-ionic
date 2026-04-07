@@ -12,6 +12,8 @@ import {AngularFireModule} from '@angular/fire/compat';
 import {AngularFireAnalyticsModule} from '@angular/fire/compat/analytics';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHighcharts} from 'highcharts-angular';
+import {provideAuth, getAuth} from '@angular/fire/auth';
+import {provideFirebaseApp, getApp} from '@angular/fire/app';
 
 
 @NgModule({
@@ -30,6 +32,8 @@ import {provideHighcharts} from 'highcharts-angular';
     {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     provideHttpClient(withInterceptorsFromDi()),
     provideHighcharts(),
+    provideFirebaseApp(() => getApp()),
+    provideAuth(() => getAuth()),
   ],
   bootstrap: [AppComponent]
 })
