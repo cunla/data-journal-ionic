@@ -57,19 +57,26 @@ export class GooglePlacesAutocompleteComponent implements OnInit {
   private geocoder: google.maps.Geocoder;
 
   constructor(private el: ElementRef, public zone: NgZone,) {
-    this.geocoder = new google.maps.Geocoder();
-    this.googlePlaces = new google.maps.places.AutocompleteService();
     this.autocomplete = {input: ''};
     this.autocompleteItems = [];
+    this.initGoogleServices();
   }
 
+  private async initGoogleServices() {
+    await Promise.all([
+      (google.maps as any).importLibrary('places'),
+      (google.maps as any).importLibrary('geocoding'),
+    ]);
+    this.googlePlaces = new google.maps.places.AutocompleteService();
+    this.geocoder = new google.maps.Geocoder();
+  }
 
   ngOnInit() {
     this.autocomplete = {input: this.initialValue};
   }
 
   UpdateSearchResults() {
-    if (this.autocomplete.input == '') {
+    if (this.autocomplete.input == '' || !this.googlePlaces) {
       this.autocompleteItems = [];
       return;
     }
@@ -81,6 +88,7 @@ export class GooglePlacesAutocompleteComponent implements OnInit {
   }
 
   selectedItem(item) {
+    if (!this.geocoder) return;
     this.geocoder.geocode({placeId: item.place_id},
       (results, status) => {
         console.log(status);
