@@ -1,13 +1,15 @@
 import {Component} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from "../../addresses/address.service";
+import {environment} from '../../../environments/environment';
 
 export interface Point {
   lon: number;
   id: string;
   year: number;
   lat: number;
-  options?: any;
+  title?: string;
+  content?: HTMLElement;
 }
 
 const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42, year: new Date().getFullYear()};
@@ -30,6 +32,10 @@ export class AgmChartComponent {
   years: number[] = [];
   selectedYear: number = -1;
   currentAddress: Point;
+  readonly mapOptions = {
+    minZoom: 2, maxZoom: 4, zoomControl: false, streetViewControl: false,
+    mapId: environment.mapsMapId,
+  };
 
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {
@@ -137,19 +143,19 @@ export class AgmChartComponent {
   }
 
   addCityOptions(item: Point) {
-    if (this.selectedYear === -1 || this.selectedYear === item.year) {
-      item.options = {title: item.year.toString()};
-    } else {
-      item.options = {title: item.year.toString(), opacity: 0.2};
-    }
+    const active = this.selectedYear === -1 || this.selectedYear === item.year;
+    item.title = item.year.toString();
+    item.content = this.createMarkerContent(active ? 1 : 0.2);
+  }
+
+  private createMarkerContent(opacity: number): HTMLElement {
+    const div = document.createElement('div');
+    div.style.cssText = `width:12px;height:12px;border-radius:50%;background:#db4437;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,.3);opacity:${opacity}`;
+    return div;
   }
 
   updateOptions() {
-    this.tripLines.forEach((trip) => {
-      this.addPolyLineOptions(trip);
-    });
-    this.cities.forEach((city) => {
-      this.addCityOptions(city);
-    });
+    this.tripLines.forEach(trip => this.addPolyLineOptions(trip));
+    this.cities.forEach(city => this.addCityOptions(city));
   }
 }

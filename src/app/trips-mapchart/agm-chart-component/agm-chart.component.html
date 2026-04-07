@@ -17,12 +17,13 @@
   </ion-item>
   <google-map height="100%" width="100%"
     [center]="{lat: currentAddress?.lat, lng: currentAddress?.lon}"
-    [options]="{minZoom:2,maxZoom:4,zoomControl:false,streetViewControl:false,}">
+    [options]="mapOptions">
     @for (item of cities; track item) {
-      <map-marker
+      <map-advanced-marker
         [position]="{lat: item.lat, lng: item.lon}"
-        [options]="item.options"
-      ></map-marker>
+        [title]="item.title || ''"
+        [content]="item.content"
+      ></map-advanced-marker>
     }
     @for (item of tripLines; track item) {
       <map-polyline
