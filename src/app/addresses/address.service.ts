@@ -1,5 +1,5 @@
 import {scan, take, tap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
+import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
@@ -59,7 +59,8 @@ export class AddressService {
   private readonly userId: string;
 
   constructor(public db: AngularFirestore,
-              public afAuth: AngularFireAuth) {
+              public afAuth: AngularFireAuth,
+              private envInjector: EnvironmentInjector) {
     const user = JSON.parse(localStorage.getItem('user'));
     this.userId = user.uid;
     this.init(ADDRESS_HISTORY_PATH, 'start', {});
@@ -79,42 +80,52 @@ export class AddressService {
   }
 
   refresh() {
-    this.data = null;
-    this._data = new BehaviorSubject([]);
-    if (this.addresses && this.addresses.length > 0) {
-      this.mapAndUpdate(null);
-    } else {
-      const first = this.userDoc().collection(this.query.path, ref => {
-        return this.queryFn(ref);
-      });
-      this.mapAndUpdate(first);
-    }
-    this.data = this._data.asObservable().pipe(
-      scan((acc: AddressInterface[], values: AddressInterface[]) => {
-        const val = values.filter((item: AddressInterface) => {
-          return containsCaseInsensitive(item.locationName, this.query.searchValue);
+    runInInjectionContext(this.envInjector, () => {
+      this.data = null;
+      this._data = new BehaviorSubject([]);
+      if (this.addresses && this.addresses.length > 0) {
+        this.mapAndUpdate(null);
+      } else {
+        const first = this.userDoc().collection(this.query.path, ref => {
+          return this.queryFn(ref);
         });
-        return this.query.prepend ? val.concat(acc) : acc.concat(val);
-      }));
+        this.mapAndUpdate(first);
+      }
+      this.data = this._data.asObservable().pipe(
+        scan((acc: AddressInterface[], values: AddressInterface[]) => {
+          const val = values.filter((item: AddressInterface) => {
+            return containsCaseInsensitive(item.locationName, this.query.searchValue);
+          });
+          return this.query.prepend ? val.concat(acc) : acc.concat(val);
+        }));
+    });
   }
 
   get(key) {
-    return this.userDoc().collection(this.query.path).doc(key).snapshotChanges();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).snapshotChanges()
+    );
   }
 
   update(key, value) {
     this.addresses = [];
-    return this.userDoc().collection(this.query.path).doc(key).set(value);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).set(value)
+    );
   }
 
   delete(key) {
     this.addresses = [];
-    return this.userDoc().collection(this.query.path).doc(key).delete();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).delete()
+    );
   }
 
   create(value) {
     this.addresses = [];
-    return this.userDoc().collection(this.query.path).add(value);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).add(value)
+    );
   }
 
   private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {

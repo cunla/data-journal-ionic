@@ -1,5 +1,5 @@
 import {scan, take, tap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
+import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 // import * as firebase from 'firebase/compat/app';
@@ -62,7 +62,8 @@ export class TripsService {
 
 
   constructor(public db: AngularFirestore,
-              public afAuth: AngularFireAuth) {
+              public afAuth: AngularFireAuth,
+              private envInjector: EnvironmentInjector) {
     const user = JSON.parse(localStorage.getItem('user'));
     this.userId = user.uid;
     this.init('trips', 'start', {reverse: true, prepend: false});
@@ -86,48 +87,60 @@ export class TripsService {
 
   // Retrieves additional data from firestore
   more() {
-    const cursor = this.getCursor();
-    const more = this.userDoc().collection(this.query.path, ref => {
-      return this.queryFn(ref).startAfter(cursor);
+    runInInjectionContext(this.envInjector, () => {
+      const cursor = this.getCursor();
+      const more = this.userDoc().collection(this.query.path, ref => {
+        return this.queryFn(ref).startAfter(cursor);
+      });
+      this.mapAndUpdate(more);
     });
-    this.mapAndUpdate(more);
   }
 
   get(key) {
-    return this.userDoc().collection(this.query.path).doc(key).snapshotChanges();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).snapshotChanges()
+    );
   }
 
   update(key, value) {
-    return this.userDoc().collection(this.query.path).doc(key).set(value);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).set(value)
+    );
   }
 
   delete(key) {
-    return this.userDoc().collection(this.query.path).doc(key).delete();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).doc(key).delete()
+    );
   }
 
   create(value) {
-    return this.userDoc().collection(this.query.path).add(value);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.query.path).add(value)
+    );
   }
 
   refresh() {
-    console.log('trips refresh ', this.query.path);
-    const first = this.userDoc().collection(this.query.path, ref => {
-      return this.queryFn(ref);
+    runInInjectionContext(this.envInjector, () => {
+      console.log('trips refresh ', this.query.path);
+      const first = this.userDoc().collection(this.query.path, ref => {
+        return this.queryFn(ref);
+      });
+      this.data = null;
+      this._done.next(false);
+      this._loading.next(false);
+      this._data = new BehaviorSubject([]);
+      this.mapAndUpdate(first);
+      // Create the observable array for consumption in components
+      this.data = this._data.asObservable()
+        .pipe(scan((acc: TripInterface[], values: TripInterface[]) => {
+          const val = values.filter((item: TripInterface) => {
+            return containsCaseInsensitive(item.locationName, this.query.searchValue)
+              || containsCaseInsensitive(item.purpose, this.query.searchValue);
+          });
+          return this.query.prepend ? val.concat(acc) : acc.concat(val);
+        }));
     });
-    this.data = null;
-    this._done.next(false);
-    this._loading.next(false);
-    this._data = new BehaviorSubject([]);
-    this.mapAndUpdate(first);
-    // Create the observable array for consumption in components
-    this.data = this._data.asObservable()
-      .pipe(scan((acc: TripInterface[], values: TripInterface[]) => {
-        const val = values.filter((item: TripInterface) => {
-          return containsCaseInsensitive(item.locationName, this.query.searchValue)
-            || containsCaseInsensitive(item.purpose, this.query.searchValue);
-        });
-        return this.query.prepend ? val.concat(acc) : acc.concat(val);
-      }));
   }
 
   private queryFn(ref) {

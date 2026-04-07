@@ -1,5 +1,5 @@
 import {scan, take, tap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
+import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
@@ -34,22 +34,29 @@ export class BioService {
 
 
   constructor(public db: AngularFirestore,
-              public afAuth: AngularFireAuth) {
+              public afAuth: AngularFireAuth,
+              private envInjector: EnvironmentInjector) {
     const user = JSON.parse(localStorage.getItem('user'));
     this.userId = user.uid;
     this.refresh();
   }
 
   get(key) {
-    return this.userDoc().collection(this.path).doc(key).snapshotChanges();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.path).doc(key).snapshotChanges()
+    );
   }
 
   update(key, value) {
-    return this.userDoc().collection(this.path).doc(key).set(value);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.path).doc(key).set(value)
+    );
   }
 
   delete(key) {
-    return this.userDoc().collection(this.path).doc(key).delete();
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.path).doc(key).delete()
+    );
   }
 
   create(date, type, value) {
@@ -59,21 +66,25 @@ export class BioService {
       value: value,
     };
     console.log('Saving value: ', record);
-    return this.userDoc().collection(this.path).add(record);
+    return runInInjectionContext(this.envInjector, () =>
+      this.userDoc().collection(this.path).add(record)
+    );
   }
 
   refresh() {
-    const first = this.userDoc().collection(this.path, ref => {
-      return this.queryFn(ref);
+    runInInjectionContext(this.envInjector, () => {
+      const first = this.userDoc().collection(this.path, ref => {
+        return this.queryFn(ref);
+      });
+      this.data = null;
+      this._data = new BehaviorSubject([]);
+      this.mapAndUpdate(first);
+      // Create the observable array for consumption in components
+      this.data = this._data.asObservable()
+        .pipe(scan((acc, values) => {
+          return values;
+        }));
     });
-    this.data = null;
-    this._data = new BehaviorSubject([]);
-    this.mapAndUpdate(first);
-    // Create the observable array for consumption in components
-    this.data = this._data.asObservable()
-      .pipe(scan((acc, values) => {
-        return values;
-      }));
   }
 
   private queryFn(ref) {
