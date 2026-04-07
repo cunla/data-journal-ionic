@@ -94,6 +94,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "allowedHosts": [
+              "serv.moransoftware.ca"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "app:build:production"
