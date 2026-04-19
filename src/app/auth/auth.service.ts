@@ -27,7 +27,7 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(user));
         this.isLoginSubject.next(true);
       } else {
-        localStorage.setItem('user', null);
+        localStorage.removeItem('user');
         this.isLoginSubject.next(false);
       }
     });
@@ -38,9 +38,9 @@ export class AuthService {
     return user !== null;
   }
 
-  get userId() {
+  get userId(): string | null {
     const user = JSON.parse(localStorage.getItem('user'));
-    return user.uid;
+    return user?.uid ?? null;
   }
 
   get userEmail() {
