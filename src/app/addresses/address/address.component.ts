@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AddressInterface, AddressService} from '../address.service';
 import {Dates} from '../../common/dates';
 import {AlertController} from '@ionic/angular';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-address',
@@ -13,6 +14,7 @@ export class AddressComponent {
   @Input() address: AddressInterface;
   @Output() editClicked = new EventEmitter();
   daysDiff = Dates.daysDiffFunc;
+  readonly mapOptions = {minZoom: 5, maxZoom: 8, zoomControl: false, streetViewControl: false, mapId: environment.mapsMapId};
 
   constructor(
     public alertController: AlertController,

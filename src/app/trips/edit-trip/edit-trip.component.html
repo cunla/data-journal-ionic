@@ -65,10 +65,11 @@
       <ion-card-content>
         <google-map width="100%"
           [center]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"
-          [options]="{maxZoom:8,minZoom:5}">
+          [options]="mapOptions">
           @if (trip.lat && trip.lng) {
-            <map-marker
-            [position]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"></map-marker>
+            <map-advanced-marker
+              [position]="{lat: trip.lat, lng: trip.lng}">
+            </map-advanced-marker>
           }
         </google-map>
       </ion-card-content>

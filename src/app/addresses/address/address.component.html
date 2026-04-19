@@ -16,10 +16,11 @@
   <ion-card-content>
     <google-map width="100%"
       [center]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"
-      [options]="{minZoom:5,maxZoom:8,zoomControl:false,streetViewControl:false,}">
+      [options]="mapOptions">
       @if (address.lat && address.lng) {
-        <map-marker
-        [position]="{lat: address.lat || 43.7, lng: address.lng || -79.42}"></map-marker>
+        <map-advanced-marker
+          [position]="{lat: address.lat, lng: address.lng}">
+        </map-advanced-marker>
       }
     </google-map>
   </ion-card-content>
