@@ -8,7 +8,6 @@ import {AuthModule} from './auth/auth.module';
 import {GoogleMapsModule} from "@angular/google-maps";
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire/compat';
-import {AngularFireAnalyticsModule} from '@angular/fire/compat/analytics';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {provideHighcharts} from 'highcharts-angular';
 import {provideAuth, getAuth} from '@angular/fire/auth';
@@ -19,7 +18,6 @@ import {provideFirebaseApp, getApp} from '@angular/fire/app';
   declarations: [AppComponent,],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAnalyticsModule,
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
