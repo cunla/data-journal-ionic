@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Observable} from 'rxjs';
+import {CanActivate, Router, UrlTree} from '@angular/router';
 import {AuthService} from './auth.service';
 
 @Injectable({
@@ -11,22 +10,11 @@ export class AuthGuard implements CanActivate {
               private router: Router) {
   }
 
-  canActivate(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    next: ActivatedRouteSnapshot,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(): boolean | UrlTree {
+    if (this.auth.isLoggedIn) {
+      return this.router.createUrlTree(['/trips']);
+    }
     return true;
-    // return new Promise((resolve, reject) => {
-    //
-    //   if (this.auth.isLoggedIn) {
-    //     this.router.navigateByUrl('/home').then();
-    //     resolve(false);
-    //   } else {
-    //     resolve(true);
-    //   }
-    // });
   }
 
 }
