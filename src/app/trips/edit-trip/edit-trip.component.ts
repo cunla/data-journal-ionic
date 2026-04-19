@@ -42,15 +42,17 @@ export class EditTripComponent implements OnInit {
     value.start = DateTime.fromISO(value.start).toJSDate();
     value.end = value.end ? DateTime.fromISO(value.end).toJSDate() : value.end;
     if (this.trip.id === null || this.trip.id === undefined) {
-      console.log('Saving trip', value);
       this.trips.create(value).then(
         () => {
           this.trips.refresh();
           this.tripForm.reset();
-        }
+        },
+        (err) => console.error('Failed to create trip', err),
       );
     } else {
-      this.trips.update(this.trip.id, value).then(this.trips.refresh);
+      this.trips.update(this.trip.id, value)
+        .then(this.trips.refresh)
+        .catch((err) => console.error('Failed to update trip', err));
     }
     this.dismissModal();
   }

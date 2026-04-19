@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {take} from 'rxjs/operators';
 import {EMPTY_TRIP, TripInterface, TripsService} from '../trips.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
@@ -49,7 +50,7 @@ export class TripsListComponent implements OnInit {
   }
 
   exportCsv() {
-    this.trips.data.subscribe(res => {
+    this.trips.data.pipe(take(1)).subscribe(res => {
       const tripsCsv = CsvTools.convertToCsv(res,
         ['start', 'end', 'locationName', 'purpose']);
       console.log(tripsCsv);
@@ -60,7 +61,7 @@ export class TripsListComponent implements OnInit {
 
   calculateDaysPerYear(year: number): Map<string, number> {
     const res = new Map<string, number>();
-    this.trips.data.subscribe((trips) => {
+    this.trips.data.pipe(take(1)).subscribe((trips) => {
       trips.forEach(trip => {
         if (!res.has(trip.country)) {
           res.set(trip.country, 0);
