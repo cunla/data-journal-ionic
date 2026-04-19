@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {take} from 'rxjs/operators';
 import {ADDRESS_HISTORY_PATH, AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
@@ -42,7 +43,7 @@ export class AddressListComponent {
   }
 
   exportCsv() {
-    this.addressService.data.subscribe(res => {
+    this.addressService.data.pipe(take(1)).subscribe(res => {
       const tripsCsv = CsvTools.convertToCsv(res,
         ['start', 'end', 'locationName', 'purpose']);
       console.log(tripsCsv);
@@ -53,7 +54,7 @@ export class AddressListComponent {
 
   calculateDaysPerYear(year: number): Map<string, number> {
     const res = new Map<string, number>();
-    this.addressService.data.subscribe((addresses) => {
+    this.addressService.data.pipe(take(1)).subscribe((addresses) => {
       addresses.forEach(address => {
         if (!res.has(address.country)) {
           res.set(address.country, 0);

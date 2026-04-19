@@ -1,24 +1,17 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import {CanActivate, Router, UrlTree} from '@angular/router';
 
 
 @Injectable()
 export class HomeGuard implements CanActivate {
-  private userId: string;
+  constructor(private router: Router) {}
 
-  constructor(private router: Router) {
+  canActivate(): boolean | UrlTree {
     const user = JSON.parse(localStorage.getItem('user'));
-    this.userId = user ? user.uid : null;
-  }
-
-  canActivate(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (this.userId !== null) {
-        resolve(true);
-      } else {
-        this.router.navigateByUrl('/auth/login').then();
-        resolve(false);
-      }
-    });
+    const userId: string | null = user?.uid ?? null;
+    if (userId !== null) {
+      return true;
+    }
+    return this.router.createUrlTree(['/auth/login']);
   }
 }

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {take} from 'rxjs/operators';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
 import {ModalController, RefresherCustomEvent, SegmentCustomEvent} from '@ionic/angular';
 import {StateProvider} from '../../common/state.provider';
@@ -78,7 +79,7 @@ export class BloodresultsComponent implements OnInit {
 
   doRefresh(event: RefresherCustomEvent) {
     this.bioService.refresh();
-    this.bioService.data.subscribe((allResults) => {
+    this.bioService.data.pipe(take(1)).subscribe((allResults) => {
       allResults = allResults.sort((a, b) => {
         return b.date.getTime() - a.date.getTime();
       })

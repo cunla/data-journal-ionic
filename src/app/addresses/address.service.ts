@@ -1,6 +1,6 @@
 import {scan, take, tap} from 'rxjs/operators';
 import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
-import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
+import {AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 
@@ -133,15 +133,14 @@ export class AddressService {
       this._data.next(this.addresses);
     } else {
       return col.snapshotChanges().pipe(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        tap((arr: any) => {
+        tap((arr: DocumentChangeAction<DocumentData>[]) => {
           let values = arr.map(snap => {
             const data = snap.payload.doc.data();
-            data.id = snap.payload.doc.id;
+            data['id'] = snap.payload.doc.id;
             const doc = snap.payload.doc;
-            data.start = data.start ? data.start.toDate() : null;
-            data.end = data.end ? data.end.toDate() : null;
-            return {...data, doc};
+            data['start'] = data['start'] ? data['start'].toDate() : null;
+            data['end'] = data['end'] ? data['end'].toDate() : null;
+            return {...data, doc} as unknown as AddressInterface;
           });
           values = this.query.prepend ? values.reverse() : values;
           this.addresses = values;

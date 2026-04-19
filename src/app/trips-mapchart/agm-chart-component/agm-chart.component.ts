@@ -1,7 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from "../../addresses/address.service";
 import {environment} from '../../../environments/environment';
+import {combineLatest, Subject} from 'rxjs';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 export interface Point {
   lon: number;
@@ -26,7 +28,7 @@ export interface TripLine {
     styleUrls: ['./agm-chart.component.scss'],
     standalone: false
 })
-export class AgmChartComponent {
+export class AgmChartComponent implements OnDestroy {
   cities = new Set<Point>();
   tripLines: TripLine[] = [];
   years: number[] = [];
@@ -36,32 +38,47 @@ export class AgmChartComponent {
     minZoom: 2, maxZoom: 4, zoomControl: false, streetViewControl: false,
     mapId: environment.mapsMapId,
   };
+  private destroy$ = new Subject<void>();
 
   constructor(private tripsService: TripsService,
               private addressService: AddressService,) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this.addressService.data.subscribe((addresses) => {
-      this.currentAddress = this.getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
-
-      this.tripsService.data.subscribe(trips => {
-        trips.forEach(trip => {
-          if (!this.years.includes(trip.start.getFullYear())) {
-            this.years.push(trip.start.getFullYear());
-            this.years.sort((a, b) => b - a);
-          }
-        });
-        const sortedTrips: TripInterface[] = trips.sort(AgmChartComponent.sortByDates);
-        for (let ind = 0; ind < sortedTrips.length; ++ind) {
-          const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
-          const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
-          if (targetCity && targetCity.lat && targetCity.lon) {
-            this.addCityOptions(targetCity);
-            this.cities.add(targetCity);
-            this.addTripIfRelevant(sortedTrips[ind].start.getFullYear(), originCity, targetCity);
-          }
-        }
-      });
+    this.addressService.data.pipe(
+      switchMap(addresses => this.tripsService.data.pipe(
+        switchMap(trips => [{addresses, trips}])
+      )),
+      takeUntil(this.destroy$),
+    ).subscribe(({addresses, trips}) => {
+      this.rebuild(addresses, trips);
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private rebuild(addresses: AddressInterface[], trips: TripInterface[]) {
+    this.cities = new Set<Point>();
+    this.tripLines = [];
+    this.years = [];
+    this.currentAddress = this.getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
+    const sortedTrips = [...trips].sort(AgmChartComponent.sortByDates);
+    sortedTrips.forEach(trip => {
+      const year = trip.start.getFullYear();
+      if (!this.years.includes(year)) {
+        this.years.push(year);
+      }
+    });
+    this.years.sort((a, b) => b - a);
+    for (let ind = 0; ind < sortedTrips.length; ++ind) {
+      const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
+      const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
+      if (targetCity && targetCity.lat && targetCity.lon) {
+        this.addCityOptions(targetCity);
+        this.cities.add(targetCity);
+        this.addTripIfRelevant(sortedTrips[ind].start.getFullYear(), originCity, targetCity);
+      }
+    }
   }
 
   private static sortByDates(a: TripInterface, b: TripInterface) {

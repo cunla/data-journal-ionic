@@ -11,13 +11,14 @@ import {
   signInWithPopup,
   signOut,
   TwitterAuthProvider,
+  User,
 } from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   private auth = inject(Auth);
-  user: any;
+  user: User | null = null;
   isLoginSubject = new BehaviorSubject<boolean>(this.isLoggedIn);
 
   constructor() {
