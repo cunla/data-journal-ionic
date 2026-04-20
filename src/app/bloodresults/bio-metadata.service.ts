@@ -37,7 +37,7 @@ export class BioMetadataService implements AutoCompleteService {
     this.iconMap.set('Immunity', 'medkit-outline');
     this.iconMap.set('Iron Markers & Complete Blood Count', 'medkit-outline');
 
-    this.http.get('/assets/bloodtest-data.json')
+    this.http.get<Array<BioResultMeta>>('/assets/bloodtest-data.json')
       .subscribe((res: Array<BioResultMeta>) => {
         this.bloodtestData = res;
         this.bloodtestDataMap = new Map(res.map((x) => [x.test.toLowerCase(), x]));

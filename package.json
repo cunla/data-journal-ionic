@@ -54,15 +54,15 @@
     "@types/google.maps": "^3.64.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "~25.6.0",
-    "@typescript-eslint/eslint-plugin": "^8.58.2",
-    "@typescript-eslint/parser": "^8.58.2",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
     "eslint": "^10.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.3",
     "ts-node": "~10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "packageManager": "pnpm@10.33.0",
   "pnpm": {

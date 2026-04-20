@@ -1,8 +1,9 @@
-import {FormGroup, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
 
 export class Dates {
   static dateLessThanValidator(from: string, to: string): ValidatorFn {
-    return (group: FormGroup) => {
+    return (control: AbstractControl) => {
+      const group = control as FormGroup;
       const f = group.controls[from];
       const t = group.controls[to];
       if (f.value !== null && t.value !== null && f.value > t.value) {
