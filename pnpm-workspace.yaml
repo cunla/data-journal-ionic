@@ -1,3 +1,10 @@
+allowBuilds:
+  '@firebase/util': set this to true or false
+  '@parcel/watcher': set this to true or false
+  esbuild: set this to true or false
+  lmdb: set this to true or false
+  msgpackr-extract: set this to true or false
+  protobufjs: set this to true or false
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@parcel/watcher'
