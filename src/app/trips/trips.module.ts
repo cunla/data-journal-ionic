@@ -9,8 +9,6 @@ import { TripComponent } from './trip/trip.component';
 import { HomeGuard } from '../guard/home.guard';
 import { HomeGuardModule } from '../guard/home.guard.module';
 import { ToolsModule } from '../common/tools.module';
-import { AngularFireModule } from '@angular/fire/compat';
-import { environment } from '../../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { IonicModule } from '@ionic/angular';
 import { PlacesModule } from "../places/places.module";
@@ -28,7 +26,6 @@ const routes: Routes = [
     TripComponent,
   ],
   imports: [
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     CommonModule,
     RouterModule.forChild(routes),
