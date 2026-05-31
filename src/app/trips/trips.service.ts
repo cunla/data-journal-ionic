@@ -1,8 +1,7 @@
-import {scan, take, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentData} from '@angular/fire/compat/firestore';
-import {BehaviorSubject, Observable} from 'rxjs';
-// import * as firebase from 'firebase/compat/app';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {containsCaseInsensitive} from '../common/string.tools';
 
@@ -48,15 +47,17 @@ export const EMPTY_TRIP: TripInterface = {
   providedIn: 'root'
 })
 export class TripsService {
-  // Observable data
   private trips: Array<TripInterface> = null;
-  data: Observable<TripInterface[]>;
-  // Source data
+  // Stable subject and observable — never reassigned so async pipe stays subscribed
+  private readonly _data = new BehaviorSubject<TripInterface[]>([]);
+  readonly data: Observable<TripInterface[]> = this._data.asObservable();
+  private _subscription: Subscription | null = null;
+
   private _done = new BehaviorSubject(false);
   done: Observable<boolean> = this._done.asObservable();
   private _loading = new BehaviorSubject(false);
   loading: Observable<boolean> = this._loading.asObservable();
-  private _data = new BehaviorSubject([]);
+
   private query: QueryConfig;
   private readonly userId: string;
 
@@ -85,17 +86,6 @@ export class TripsService {
     this.refresh();
   }
 
-  // Retrieves additional data from firestore
-  more() {
-    runInInjectionContext(this.envInjector, () => {
-      const cursor = this.getCursor();
-      const more = this.userDoc().collection(this.query.path, ref => {
-        return this.queryFn(ref).startAfter(cursor);
-      });
-      this.mapAndUpdate(more);
-    });
-  }
-
   get(key) {
     return runInInjectionContext(this.envInjector, () =>
       this.userDoc().collection(this.query.path).doc(key).snapshotChanges()
@@ -122,24 +112,11 @@ export class TripsService {
 
   refresh() {
     runInInjectionContext(this.envInjector, () => {
-      console.log('trips refresh ', this.query.path);
-      const first = this.userDoc().collection(this.query.path, ref => {
-        return this.queryFn(ref);
-      });
-      this.data = null;
+      const first = this.userDoc().collection(this.query.path, ref => this.queryFn(ref));
       this._done.next(false);
       this._loading.next(false);
-      this._data = new BehaviorSubject([]);
+      this._data.next([]);
       this.mapAndUpdate(first);
-      // Create the observable array for consumption in components
-      this.data = this._data.asObservable()
-        .pipe(scan((acc: TripInterface[], values: TripInterface[]) => {
-          const val = values.filter((item: TripInterface) => {
-            return containsCaseInsensitive(item.locationName, this.query.searchValue)
-              || containsCaseInsensitive(item.purpose, this.query.searchValue);
-          });
-          return this.query.prepend ? val.concat(acc) : acc.concat(val);
-        }));
     });
   }
 
@@ -149,24 +126,13 @@ export class TripsService {
       .limit(this.query.limit);
   }
 
-  // Determines the doc snapshot to paginate query
-  private getCursor() {
-    const current = this._data.value;
-    if (current.length) {
-      return this.query.prepend ? current[0].doc : current[current.length - 1].doc;
-    }
-    return null;
-  }
-
-  // Maps the snapshot to usable format the updates source
+  // Maps the snapshot to usable format then updates source
   private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {
-    if (this._done.value || this._loading.value) {
-      return;
-    }
-    // loading
+    // Cancel the previous live listener before starting a new one
+    this._subscription?.unsubscribe();
     this._loading.next(true);
-    // Map snapshot with doc ref (needed for cursor)
-    return col.snapshotChanges().pipe(
+
+    this._subscription = col.snapshotChanges().pipe(
       tap((arr: DocumentChangeAction<DocumentData>[]) => {
         let values = arr.map(snap => {
           const data = snap.payload.doc.data();
@@ -177,21 +143,18 @@ export class TripsService {
           return {...data, doc} as unknown as TripInterface;
         });
 
-        // If prepending, reverse the batch order
         values = this.query.prepend ? values.reverse() : values;
-
         this.trips = values;
-        // update source with new values, done loading
-        this._data.next(values);
         this._loading.next(false);
+        this._done.next(!values.length);
 
-        // no more values, mark done
-        if (!values.length) {
-          this._done.next(true);
-        }
-      }),
-      take(1),)
-      .subscribe();
+        // Apply search filter and push — stable _data reference keeps async pipe subscribed
+        this._data.next(values.filter(item =>
+          containsCaseInsensitive(item.locationName, this.query.searchValue) ||
+          containsCaseInsensitive(item.purpose, this.query.searchValue)
+        ));
+      })
+    ).subscribe();
   }
 
   private userDoc() {
