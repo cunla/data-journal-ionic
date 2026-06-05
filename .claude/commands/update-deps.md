@@ -1,3 +1,7 @@
+---
+description: Update all npm deps to latest, install, verify, build, commit, push, deploy
+---
+
 Update all npm dependencies to their latest versions, install them, verify the app runs and builds, commit, push, and deploy to Firebase.
 
 ## Steps
