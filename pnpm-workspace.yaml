@@ -24,3 +24,13 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - protobufjs
+overrides:
+  protobufjs: '>=7.5.5'
+  picomatch: '>=4.0.4'
+  brace-expansion: '>=1.1.13'
+  hono: '>=4.12.14'
+  '@hono/node-server': '>=1.19.13'
+  follow-redirects: '>=1.16.0'
+peerDependencyRules:
+  allowedVersions:
+    'rxfire>firebase': '^12.0.0'
