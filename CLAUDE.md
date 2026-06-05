@@ -9,7 +9,6 @@ pnpm start        # Start dev server (ionic serve with live reload)
 pnpm build        # Production build (output: www/)
 pnpm test         # Run unit tests (Karma)
 pnpm lint         # Run ESLint
-pnpm e2e          # Run end-to-end tests (Protractor)
 ```
 
 Single test file: `pnpm ng test --include='**/foo.spec.ts'`
