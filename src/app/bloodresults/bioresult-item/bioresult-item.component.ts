@@ -14,7 +14,7 @@ export class BioresultItemComponent {
   @Input() low: number;
   @Input() high: number;
   @Input() value: number;
-  @Input() units: number;
+  @Input() units: string;
   @Output() editClicked = new EventEmitter();
   @Output() deleteClicked = new EventEmitter();
 
