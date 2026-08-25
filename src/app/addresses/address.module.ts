@@ -10,7 +10,7 @@ import { HomeGuard } from '../guard/home.guard';
 import { HomeGuardModule } from '../guard/home.guard.module';
 import { ToolsModule } from '../common/tools.module';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular/lazy';
 import { PlacesModule } from "../places/places.module";
 import { GoogleMapsModule } from "@angular/google-maps";
 

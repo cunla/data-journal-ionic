@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {BioresultBarComponent} from "./bioresult-bar/bioresult-bar.component";
 import {BioresultItemComponent} from "./bioresult-item.component";
-import {IonicModule} from "@ionic/angular";
+import {IonicModule} from "@ionic/angular/lazy";
 
 @NgModule({
   imports: [

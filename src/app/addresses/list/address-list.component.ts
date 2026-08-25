@@ -3,7 +3,7 @@ import {take} from 'rxjs/operators';
 import {ADDRESS_HISTORY_PATH, AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
-import {ModalController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular/lazy';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";

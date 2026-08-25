@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 
-import {Platform} from '@ionic/angular';
+import {Platform} from '@ionic/angular/lazy';
 import {AuthService} from './auth/auth.service';
 import {NavigationEnd, Router} from '@angular/router';
 import {Observable} from 'rxjs';

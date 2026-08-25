@@ -2,7 +2,7 @@ import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-import {IonicModule} from '@ionic/angular';
+import {IonicModule} from '@ionic/angular/lazy';
 
 import {AutoCompleteComponent} from './component/auto-complete.component';
 import {BoldPrefix} from './bold-prefix.pipe';

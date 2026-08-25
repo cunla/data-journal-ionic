@@ -3,11 +3,10 @@ import {take} from 'rxjs/operators';
 import {EMPTY_TRIP, TripInterface, TripsService} from '../trips.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
-import {ModalController} from '@ionic/angular';
+import {ModalController, RefresherCustomEvent} from '@ionic/angular/lazy';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
-import {IonRefresherCustomEvent, RefresherEventDetail} from "@ionic/core/dist/types/components";
 
 @Component({
     selector: 'app-trips',
@@ -80,7 +79,7 @@ export class TripsListComponent implements OnInit {
     return res;
   }
 
-  doRefresh(event: IonRefresherCustomEvent<RefresherEventDetail>) {
+  doRefresh(event: RefresherCustomEvent) {
     this.trips.refresh();
     event?.target.complete().then();
   }

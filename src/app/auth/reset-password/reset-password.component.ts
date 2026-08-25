@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../auth.service';
-import {AlertController} from '@ionic/angular';
+import {AlertController} from '@ionic/angular/lazy';
 
 @Component({
     selector: 'app-reset-password',

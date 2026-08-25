@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {take} from 'rxjs/operators';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
-import {ModalController, RefresherCustomEvent, SegmentCustomEvent} from '@ionic/angular';
+import {ModalController, RefresherCustomEvent, SegmentCustomEvent} from '@ionic/angular/lazy';
 import {StateProvider} from '../../common/state.provider';
 import {EditBioresultComponent} from '../edit/edit-bioresult.component';
 import {AddBioresultComponent} from "../add/add-bioresult.component";
