@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {AbstractControlOptions, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dates} from '../../common/dates';
-import {ModalController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular/lazy';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";

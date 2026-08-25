@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {TripInterface, TripsService} from '../trips.service';
 import {Dates} from '../../common/dates';
-import {AlertController} from '@ionic/angular';
+import {AlertController} from '@ionic/angular/lazy';
 
 @Component({
     selector: 'app-trip',

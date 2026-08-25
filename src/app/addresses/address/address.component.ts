@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AddressInterface, AddressService} from '../address.service';
 import {Dates} from '../../common/dates';
-import {AlertController} from '@ionic/angular';
+import {AlertController} from '@ionic/angular/lazy';
 import {environment} from '../../../environments/environment';
 
 @Component({

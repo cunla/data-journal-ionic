@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BioService} from "../bio.service";
-import {ModalController} from "@ionic/angular";
+import {ModalController} from "@ionic/angular/lazy";
 import {StateProvider} from "../../common/state.provider";
 
 @Component({

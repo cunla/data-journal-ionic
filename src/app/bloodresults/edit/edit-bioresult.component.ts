@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
 import {StateProvider} from '../../common/state.provider';
-import {ModalController} from '@ionic/angular';
+import {ModalController} from '@ionic/angular/lazy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BioMetadataService} from '../bio-metadata.service';
 import {DateTime} from "luxon";
