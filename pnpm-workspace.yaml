@@ -16,7 +16,7 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/typescript-estree@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0'
   - '@typescript-eslint/utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0'
   - '@typescript-eslint/visitor-keys@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0'
-  - '@types/node@25.9.1 || 26.0.0 || 26.1.2 || 26.3.0'
+  - '@types/node@25.9.1 || 26.0.0 || 26.1.2 || 26.3.0 || 26.6.2'
   - '@angular-devkit/architect@0.2200.3'
   - '@angular-devkit/core@22.0.3'
   - '@angular-devkit/schematics@22.0.3'
@@ -24,7 +24,7 @@ minimumReleaseAgeExclude:
   - '@angular/cli@22.0.3'
   - '@schematics/angular@22.0.3'
   - prettier@3.9.3 || 3.9.4
-  - eslint@10.7.0
+  - eslint@10.7.0 || 10.11.0
   - proj4@2.21.0
 onlyBuiltDependencies:
   - '@firebase/util'
@@ -42,15 +42,19 @@ overrides:
   sigstore: '>=4.1.1'
   '@sigstore/core': '>=3.2.1'
   body-parser: '>=2.3.0 <3'
-  hono: '>=4.13.4'
+  hono: '>=4.13.5'
   '@hono/node-server': '>=1.19.17'
   follow-redirects: '>=1.16.0'
-  qs: '>=6.15.3'
+  qs: '>=6.16.0'
   ip-address: '>=10.5.0'
   fast-uri: '>=3.1.6 <4'
   '@grpc/grpc-js': '>=1.9.16 <1.10'
   websocket-driver: '>=0.7.5'
   tar: '>=7.5.22'
+  browserslist: '>=4.28.7 <5'
+  baseline-browser-mapping: '>=2.11.0 <3'
+  '@humanfs/node': '>=0.16.8 <0.17'
+  less: '>=4.9.1 <5'
 peerDependencyRules:
   allowedVersions:
     'rxfire>firebase': '^12.0.0'
