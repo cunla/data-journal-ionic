@@ -13,6 +13,7 @@ import {
   User,
 } from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { readStoredUser, writeStoredUser } from './stored-user';
 
 @Injectable()
 export class AuthService {
@@ -24,28 +25,26 @@ export class AuthService {
     onAuthStateChanged(this.auth, user => {
       if (user) {
         this.user = user;
-        localStorage.setItem('user', JSON.stringify(user));
+        writeStoredUser(user);
         this.isLoginSubject.next(true);
       } else {
-        localStorage.removeItem('user');
+        this.user = null;
+        writeStoredUser(null);
         this.isLoginSubject.next(false);
       }
     });
   }
 
   get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
+    return readStoredUser() !== null;
   }
 
   get userId(): string | null {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user?.uid ?? null;
+    return readStoredUser()?.uid ?? null;
   }
 
   get userEmail() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user ? user.email : '';
+    return readStoredUser()?.email ?? '';
   }
 
   loggedinSubject(): Observable<boolean> {
@@ -73,7 +72,7 @@ export class AuthService {
   }
 
   doLogout() {
-    localStorage.setItem('user', null);
+    writeStoredUser(null);
     return signOut(this.auth);
   }
 
