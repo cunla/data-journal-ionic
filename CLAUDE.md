@@ -35,7 +35,7 @@ This is a personal data-journaling **hybrid mobile app** (web + mobile) built wi
 | `/trips` | `trips/` | Travel records — list, add, edit |
 | `/addresses` | `addresses/` | Historical address records |
 | `/bloodresults` | `bloodresults/` | Health metrics — CRUD + Highcharts charts |
-| `/map` | `trips-mapchart/` | Geographic map view of trips |
+| `/map` | `trips-mapchart/` | Geographic map view of trips, with visited countries shaded by days |
 | `/reports` | `reports/` | Time-away totals, address-history gaps/overlaps, range and full-backup exports |
 | `/auth` | `auth/` | Login / signup / password reset (email + social providers) |
 
@@ -64,6 +64,7 @@ Other services: `AuthService`, `BioMetadataService`, `CsvTools` (static utility)
 - Build output: `www/browser/` (this is Firebase Hosting's `public` dir). Never commit `www/`
 - Environment files `src/environments/environment.ts` and `environment.prod.ts` are gitignored and exist only locally. They hold the Firebase config
 - Firebase project: `trips-journal-1` (see `.firebaserc`, `firebase.json`, `firestore.rules`, `firestore.indexes.json`)
+- **Google Cloud setup the map depends on:** `environment.mapsMapId` must be a Map ID with the **COUNTRY feature layer** enabled (data-driven styling), or country shading silently does nothing — `CountryShadingService` detects this and the page says so. Country-to-Place-ID lookups go through the Geocoding API and are cached in `localStorage` under `countryPlaceIds`
 - Bundle budget: 2 MB warning / 5 MB error for initial chunk
 
 ## Dependencies
