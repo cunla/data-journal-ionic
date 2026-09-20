@@ -33,10 +33,10 @@ This is a personal data-journaling **hybrid mobile app** (web + mobile) built wi
 | Route | Module | Purpose |
 |-------|--------|---------|
 | `/trips` | `trips/` | Travel records — list, add, edit |
-| `/addresses` | `addresses/` | Historical address records |
+| `/addresses` | `addresses/` | Historical address records, with a gap/overlap check at the top |
 | `/bloodresults` | `bloodresults/` | Health metrics — CRUD + Highcharts charts |
 | `/map` | `trips-mapchart/` | Geographic map view of trips, with visited countries shaded by days |
-| `/reports` | `reports/` | Time-away totals, address-history gaps/overlaps, range and full-backup exports |
+| `/reports` | `reports/` | Time-away totals by country, range and full-backup exports |
 | `/auth` | `auth/` | Login / signup / password reset (email + social providers) |
 
 Shared utilities live in `common/` (CSV read/write, date helpers, string tools, `StateProvider`, and `UserCollectionService`, the base class every per-user Firestore collection extends).
