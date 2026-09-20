@@ -54,7 +54,7 @@ export interface LocationInterface {
         (ionClear)="ClearAutocomplete()">
       </ion-searchbar>
       <ion-list [hidden]="autocompleteItems.length === 0">
-        @for (item of autocompleteItems; track item) {
+        @for (item of autocompleteItems; track item.place_id) {
           <ion-item tappable
             (click)="selectedItem(item)">
             {{ item.description }}

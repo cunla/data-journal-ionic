@@ -28,7 +28,7 @@
   </ion-fab>
   <ion-list>
 
-    @for (item of addressService.data | async; track item) {
+    @for (item of addressService.data | async; track item.id) {
       <app-address (editClicked)="presentModal(item)"
         [address]="item">
       </app-address>

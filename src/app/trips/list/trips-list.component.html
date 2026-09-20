@@ -29,7 +29,7 @@
 
   <ion-list>
 
-    @for (item of trips.data | async; track item) {
+    @for (item of trips.data | async; track item.id) {
       <app-trip (editClicked)="presentModal(item)"
         [trip]="item">
       </app-trip>

@@ -8,7 +8,7 @@
           <ion-list-header>Data journal</ion-list-header>
           <ion-note>{{authService.userEmail}}</ion-note>
 
-          @for (p of appPages; track p; let i = $index) {
+          @for (p of appPages; track p.url; let i = $index) {
             <ion-menu-toggle auto-hide="false">
               <ion-item (click)="selectedIndex = i" [class.selected]="selectedIndex === i" [routerLink]="[p.url]"
                 detail="false"

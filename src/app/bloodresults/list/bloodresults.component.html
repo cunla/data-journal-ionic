@@ -44,7 +44,7 @@
           }
           @if (groupby === 'date' || this.graphOrListMap[header] !== 'chart') {
             <div>
-              @for (item of data.get(header); track item) {
+              @for (item of data.get(header); track item.id) {
                 <app-bioresult-item (deleteClicked)="delete(item)"
                   (editClicked)="presentEditModal(item)"
                   [high]="item.metadata?.high"
