@@ -66,9 +66,9 @@ export interface LocationInterface {
     standalone: false
 })
 export class GooglePlacesAutocompleteComponent implements OnInit {
-  @Output() callback: EventEmitter<LocationInterface> = new EventEmitter();
-  @Input() placeholder: string = 'Search for place';
-  @Input() initialValue: string = '';
+  @Output() callback = new EventEmitter<LocationInterface>();
+  @Input() placeholder = 'Search for place';
+  @Input() initialValue = '';
   autocomplete: { input: string; };
   autocompleteItems: google.maps.places.AutocompletePrediction[];
   private googlePlaces: google.maps.places.AutocompleteService;
@@ -82,8 +82,8 @@ export class GooglePlacesAutocompleteComponent implements OnInit {
 
   private async initGoogleServices() {
     await Promise.all([
-      (google.maps as any).importLibrary('places'),
-      (google.maps as any).importLibrary('geocoding'),
+      google.maps.importLibrary('places'),
+      google.maps.importLibrary('geocoding'),
     ]);
     this.googlePlaces = new google.maps.places.AutocompleteService();
     this.geocoder = new google.maps.Geocoder();

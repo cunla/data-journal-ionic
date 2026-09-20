@@ -19,7 +19,7 @@ const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42, year: new Date()
 export interface TripLine {
   polyline: google.maps.LatLngLiteral[];
   year: number;
-  options?: any;
+  options?: google.maps.PolylineOptions;
 }
 
 @Component({
@@ -32,7 +32,7 @@ export class AgmChartComponent implements OnDestroy {
   cities = new Set<Point>();
   tripLines: TripLine[] = [];
   years: number[] = [];
-  selectedYear: number = -1;
+  selectedYear = -1;
   currentAddress: Point;
   readonly mapOptions = {
     minZoom: 2, maxZoom: 4, zoomControl: false, streetViewControl: false,
@@ -109,9 +109,8 @@ export class AgmChartComponent implements OnDestroy {
     const date = tripInd == -1 ? new Date() : trips[tripInd].start;
     if (trips.length > 0) {
       let low = 0, high = trips.length - 1;
-      let mid = Math.floor((low + high) / 2);
       while (low <= high) {
-        mid = Math.floor((low + high) / 2);
+        const mid = Math.floor((low + high) / 2);
         if (mid == tripInd && tripInd > 0 && trips[tripInd - 1].start <= date && date <= trips[tripInd - 1].end) {
           return AgmChartComponent.itemToPoint(trips[tripInd - 1]);
         } else if (date < trips[mid].start) {

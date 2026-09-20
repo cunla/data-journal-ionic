@@ -40,8 +40,6 @@ export class AppComponent {
   constructor(private platform: Platform,
               public authService: AuthService,
               private router: Router,) {
-    this.platform.ready().then(() => {
-    });
     this.loggedInSubject = this.authService.loggedinSubject();
     this.loggedInSubject.subscribe((val) => {
       if (val) {
@@ -67,7 +65,6 @@ export class AppComponent {
   }
 
   logout() {
-    this.authService.doLogout().then(() => {
-    });
+    this.authService.doLogout();
   }
 }

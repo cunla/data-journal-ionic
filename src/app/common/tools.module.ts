@@ -13,6 +13,4 @@ import {StateProvider} from './state.provider';
   ]
 })
 export class ToolsModule {
-  constructor() {
-  }
 }

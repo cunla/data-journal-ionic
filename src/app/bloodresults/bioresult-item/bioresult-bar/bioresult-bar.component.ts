@@ -11,14 +11,12 @@ export class BioresultBarComponent implements OnInit {
   @Input() low: number;
   @Input() high: number;
   @Input() value: number;
-  @Input() colorLow: string = "red";
-  @Input() colorHigh: string = "red";
-  @Input() colorNormal: string = "green";
+  @Input() colorLow = "red";
+  @Input() colorHigh = "red";
+  @Input() colorNormal = "green";
   showString: string;
   color: string;
 
-  constructor() {
-  }
 
   ngOnInit() {
     if (this.value < this.low) {

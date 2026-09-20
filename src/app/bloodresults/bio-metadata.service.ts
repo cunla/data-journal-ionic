@@ -26,7 +26,7 @@ export class BioMetadataService implements AutoCompleteService {
   // Emits true once the reference-range data has been loaded
   readonly loaded$ = new BehaviorSubject<boolean>(false);
   private bloodtestDataMap = new Map<string, BioResultMeta>();
-  private bloodtestData: Array<BioResultMeta> = [];
+  private bloodtestData: BioResultMeta[] = [];
   private iconMap = new Map<string, string>();
 
   constructor(private http: HttpClient,
@@ -39,8 +39,8 @@ export class BioMetadataService implements AutoCompleteService {
     this.iconMap.set('Immunity', 'medkit-outline');
     this.iconMap.set('Iron Markers & Complete Blood Count', 'medkit-outline');
 
-    this.http.get<Array<BioResultMeta>>('/assets/bloodtest-data.json')
-      .subscribe((res: Array<BioResultMeta>) => {
+    this.http.get<BioResultMeta[]>('/assets/bloodtest-data.json')
+      .subscribe((res: BioResultMeta[]) => {
         this.bloodtestData = res;
         this.bloodtestDataMap = new Map(res.map((x) => [x.test.toLowerCase(), x]));
         this.loaded$.next(true);

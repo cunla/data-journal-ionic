@@ -84,12 +84,10 @@ export abstract class UserCollectionService<T> {
   protected abstract toRecord(data: DocumentData, id: string): T;
 
   /** Field to order by, newest first; null leaves the order to Firestore. */
-  protected get orderBy(): string | null {
-    return null;
-  }
+  protected readonly orderBy: string | null = null;
 
-  /** Whether a record survives the current search term. */
-  protected matches(item: T, searchValue: string): boolean {
+  /** Whether a record survives the current search term; every record by default. */
+  protected matches(_item: T, _searchValue: string): boolean {
     return true;
   }
 

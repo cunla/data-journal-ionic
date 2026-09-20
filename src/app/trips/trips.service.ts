@@ -42,9 +42,7 @@ export class TripsService extends UserCollectionService<TripInterface> {
     super(db, afAuth, envInjector, 'trips');
   }
 
-  protected override get orderBy(): string {
-    return 'start';
-  }
+  protected override readonly orderBy = 'start';
 
   protected toRecord(data: DocumentData, id: string): TripInterface {
     return {

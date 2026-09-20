@@ -16,11 +16,11 @@ import {DateTime} from "luxon";
     standalone: false
 })
 export class BloodresultsComponent implements OnInit, OnDestroy {
-  data: Map<string, Array<BioResult>> = new Map<string, Array<BioResult>>();
+  data: Map<string, BioResult[]> = new Map<string, BioResult[]>();
   groupby = 'date';
   newResult = EMPTY_RESULT;
   headers: string[] = [];
-  graphOrListMap: Map<string, string> = new Map();
+  graphOrListMap = new Map<string, string>();
   private allResults: BioResult[] = [];
   private readonly destroy$ = new Subject<void>();
 
@@ -108,7 +108,7 @@ export class BloodresultsComponent implements OnInit, OnDestroy {
   // Groups the latest results by date or by test type for display
   private regroup() {
     const sorted = [...this.allResults].sort((a, b) => b.date.getTime() - a.date.getTime());
-    this.data = new Map<string, Array<BioResult>>();
+    this.data = new Map<string, BioResult[]>();
     this.headers = [];
     sorted.forEach((res: BioResult) => {
       res.metadata = this.bioMetadataService.getTestMetaData(res.type);

@@ -44,9 +44,7 @@ export class AddressService extends UserCollectionService<AddressInterface> {
     super(db, afAuth, envInjector, ADDRESS_HISTORY_PATH);
   }
 
-  protected override get orderBy(): string {
-    return 'start';
-  }
+  protected override readonly orderBy = 'start';
 
   protected toRecord(data: DocumentData, id: string): AddressInterface {
     return {

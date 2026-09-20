@@ -11,8 +11,8 @@ import {BioMetadataService, BioResultMeta} from '../bio-metadata.service';
     standalone: false
 })
 export class ResultChartComponent implements OnInit {
-  @Input() chartData: Array<BioResult>;
-  @Input() title: string = '';
+  @Input() chartData: BioResult[];
+  @Input() title = '';
   chartOptions: Highcharts.Options = {
     chart: {
       height: '30%',
