@@ -15,14 +15,28 @@
       }
     </ion-select>
   </ion-item>
+  @if (shadingAvailable === false) {
+    <ion-note class="shading-note">
+      Country shading needs the COUNTRY feature layer enabled for this Map ID
+      in the Google Cloud Console. Day counts are shown regardless.
+    </ion-note>
+  }
   <google-map height="100%" width="100%"
     [center]="{lat: currentAddress?.lat, lng: currentAddress?.lon}"
-    [options]="mapOptions">
+    [options]="mapOptions"
+    (mapInitialized)="onMapReady($event)">
     @for (item of cities; track item) {
       <map-advanced-marker
         [position]="{lat: item.lat, lng: item.lon}"
         [title]="item.title || ''"
         [content]="item.content"
+      ></map-advanced-marker>
+    }
+    @for (label of countryLabels; track label.title) {
+      <map-advanced-marker
+        [position]="label.position"
+        [title]="label.title"
+        [content]="label.content"
       ></map-advanced-marker>
     }
     @for (item of tripLines; track item) {

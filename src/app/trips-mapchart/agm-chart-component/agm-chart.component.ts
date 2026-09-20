@@ -2,11 +2,20 @@ import {Component, OnDestroy} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from "../../addresses/address.service";
 import {getOriginPointOnDate, itemToPoint, Point} from '../origin-point';
+import {ALL_YEARS, countryVisits, CountryVisit, fillOpacityForDays} from '../country-days';
+import {CountryShadingService} from '../country-shading.service';
 import {environment} from '../../../environments/environment';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42, year: new Date().getFullYear()};
+const SHADE_COLOR = '#1a73e8';
+
+export interface CountryLabel {
+  position: google.maps.LatLngLiteral;
+  title: string;
+  content: HTMLElement;
+}
 
 export interface TripLine {
   polyline: google.maps.LatLngLiteral[];
@@ -24,24 +33,44 @@ export class AgmChartComponent implements OnDestroy {
   cities = new Set<Point>();
   tripLines: TripLine[] = [];
   years: number[] = [];
-  selectedYear = -1;
+  selectedYear = ALL_YEARS;
   currentAddress: Point;
+  countryLabels: CountryLabel[] = [];
+  /** False once we know this Map ID has no country layer enabled. */
+  shadingAvailable: boolean | null = null;
   readonly mapOptions = {
     minZoom: 2, maxZoom: 4, zoomControl: false, streetViewControl: false,
     mapId: environment.mapsMapId,
   };
   private destroy$ = new Subject<void>();
 
+  private trips: TripInterface[] = [];
+
   constructor(private tripsService: TripsService,
-              private addressService: AddressService,) {
+              private addressService: AddressService,
+              private shading: CountryShadingService,) {
     this.addressService.data.pipe(
       switchMap(addresses => this.tripsService.data.pipe(
         switchMap(trips => [{addresses, trips}])
       )),
       takeUntil(this.destroy$),
     ).subscribe(({addresses, trips}) => {
+      this.trips = trips;
       this.rebuild(addresses, trips);
+      this.updateCountries();
     });
+  }
+
+  onMapReady(map: google.maps.Map) {
+    this.shading.attach(map, days => ({
+      fillColor: SHADE_COLOR,
+      fillOpacity: fillOpacityForDays(days),
+      strokeColor: SHADE_COLOR,
+      strokeOpacity: 0.6,
+      strokeWeight: 1,
+    }));
+    this.shadingAvailable = this.shading.available;
+    this.updateCountries();
   }
 
   ngOnDestroy() {
@@ -122,5 +151,29 @@ export class AgmChartComponent implements OnDestroy {
   updateOptions() {
     this.tripLines.forEach(trip => this.addPolyLineOptions(trip));
     this.cities.forEach(city => this.addCityOptions(city));
+    this.updateCountries();
+  }
+
+  // Shades each visited country and drops its day count on the map
+  private updateCountries() {
+    const visits = countryVisits(this.trips, this.selectedYear);
+    this.countryLabels = visits
+      .filter(visit => visit.lat !== null && visit.lng !== null)
+      .map(visit => ({
+        position: {lat: visit.lat, lng: visit.lng},
+        title: `${visit.country}: ${visit.days} days`,
+        content: AgmChartComponent.createLabelContent(visit),
+      }));
+    this.shading.shade(visits).then(() => this.shadingAvailable = this.shading.available);
+  }
+
+  private static createLabelContent(visit: CountryVisit): HTMLElement {
+    const pill = document.createElement('div');
+    pill.textContent = `${visit.days}d`;
+    pill.title = `${visit.country}: ${visit.days} days`;
+    pill.style.cssText = 'padding:2px 6px;border-radius:10px;background:rgba(255,255,255,.92);'
+      + `border:1px solid ${SHADE_COLOR};color:#1b1b1b;font:600 11px/1.2 system-ui,sans-serif;`
+      + 'white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.25)';
+    return pill;
   }
 }
