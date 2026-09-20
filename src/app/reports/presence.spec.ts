@@ -4,6 +4,7 @@ import {AddressInterface} from '../addresses/address.service';
 import {
   currentHomeCountry,
   daysAwayBetween,
+  effectiveHomeCountry,
   homeCountryOn,
   overlapDays,
   rollingWindow,
@@ -65,14 +66,42 @@ describe('homeCountryOn', () => {
   });
 });
 
+describe('effectiveHomeCountry', () => {
+  const history = [
+    address('Canada', '2026-01-01', null),
+    address('Israel', '2020-01-01', '2025-12-31'),
+  ];
+
+  it('uses the address covering the date', () => {
+    expect(effectiveHomeCountry(history, new Date('2022-06-01'))).toBe('Israel');
+  });
+
+  it('falls back to the earliest address for dates before the history', () => {
+    expect(effectiveHomeCountry(history, new Date('2015-01-01'))).toBe('Israel');
+  });
+
+  it('falls back to the last address started before an uncovered date', () => {
+    const gapped = [
+      address('Israel', '2020-01-01', '2024-12-31'),
+      address('Canada', '2026-01-01', null),
+    ];
+    expect(effectiveHomeCountry(gapped, new Date('2025-06-01'))).toBe('Israel');
+  });
+
+  it('is null with no address history', () => {
+    expect(effectiveHomeCountry([], new Date('2026-01-01'))).toBeNull();
+  });
+});
+
 describe('daysAwayBetween', () => {
+  const home = [address('Canada', '2020-01-01', null)];
   const trips = [
     trip('France', '2026-03-01', '2026-03-10'),   // 10 days
     trip('France', '2026-06-01', '2026-06-05'),   // 5 days
     trip('Japan', '2026-07-01', '2026-07-04'),    // 4 days
     trip('Canada', '2026-08-01', '2026-08-20'),   // home, not counted
   ];
-  const summary = daysAwayBetween(trips, 'Canada', new Date('2026-01-01'), new Date('2026-12-31'));
+  const summary = daysAwayBetween(trips, home, new Date('2026-01-01'), new Date('2026-12-31'));
 
   it('ignores trips inside the home country', () => {
     expect(summary.byCountry.map(c => c.country)).toEqual(['France', 'Japan']);
@@ -90,15 +119,45 @@ describe('daysAwayBetween', () => {
     expect(summary.daysHome).toBe(365 - 19);
   });
 
-  it('counts every country when no home country is known', () => {
-    const all = daysAwayBetween(trips, null, new Date('2026-01-01'), new Date('2026-12-31'));
+  it('names the home country of the window', () => {
+    expect(summary.homeCountries).toEqual(['Canada']);
+  });
+
+  it('counts every country when there is no address history', () => {
+    const all = daysAwayBetween(trips, [], new Date('2026-01-01'), new Date('2026-12-31'));
     expect(all.daysAway).toBe(19 + 20);
+    expect(all.homeCountries).toEqual([]);
   });
 
   it('files a trip with no country under Unknown', () => {
-    const summaryUnknown = daysAwayBetween([trip(null, '2026-02-01', '2026-02-02')], 'Canada',
+    const summaryUnknown = daysAwayBetween([trip(null, '2026-02-01', '2026-02-02')], home,
       new Date('2026-01-01'), new Date('2026-12-31'));
     expect(summaryUnknown.byCountry).toEqual([{country: 'Unknown', days: 2}]);
+  });
+
+  it('follows a move abroad: the old country becomes time away', () => {
+    const moved = [
+      address('Israel', '2020-01-01', '2025-12-31'),
+      address('Canada', '2026-01-01', null),
+    ];
+    const visits = [
+      trip('Canada', '2024-05-01', '2024-05-10'),   // away while living in Israel
+      trip('Canada', '2026-05-01', '2026-05-10'),   // home once moved
+      trip('Israel', '2026-07-01', '2026-07-05'),   // away, now that home moved
+    ];
+    const before = daysAwayBetween(visits, moved, new Date('2024-01-01'), new Date('2024-12-31'));
+    const after = daysAwayBetween(visits, moved, new Date('2026-01-01'), new Date('2026-12-31'));
+    expect(before.byCountry).toEqual([{country: 'Canada', days: 10}]);
+    expect(after.byCountry).toEqual([{country: 'Israel', days: 5}]);
+  });
+
+  it('lists both home countries when the window spans a move', () => {
+    const moved = [
+      address('Israel', '2020-01-01', '2025-12-31'),
+      address('Canada', '2026-01-01', null),
+    ];
+    const span = daysAwayBetween([], moved, new Date('2024-01-01'), new Date('2026-12-31'));
+    expect(span.homeCountries).toEqual(['Israel', 'Canada']);
   });
 });
 
@@ -107,7 +166,7 @@ describe('summariseByYear', () => {
     trip('France', '2025-12-28', '2026-01-03'),
     trip('Japan', '2026-07-01', '2026-07-04'),
   ];
-  const rows = summariseByYear(trips, 'Canada');
+  const rows = summariseByYear(trips, [address('Canada', '2020-01-01', null)]);
 
   it('gives a row per year touched, newest first', () => {
     expect(rows.map(r => r.year)).toEqual([2026, 2025]);
@@ -124,7 +183,8 @@ describe('rollingWindow', () => {
     const today = new Date();
     const recent = new Date(today.getTime() - 30 * 24 * 3600 * 1000);
     const summary = rollingWindow(
-      [{...({} as TripInterface), country: 'France', start: recent, end: recent}], 'Canada', 5);
+      [{...({} as TripInterface), country: 'France', start: recent, end: recent}],
+      [address('Canada', '2020-01-01', null)], 5);
     expect(summary.daysAway).toBe(1);
     expect(summary.from.getFullYear()).toBe(today.getFullYear() - 5);
   });
@@ -133,7 +193,8 @@ describe('rollingWindow', () => {
     const old = new Date();
     old.setFullYear(old.getFullYear() - 7);
     const summary = rollingWindow(
-      [{...({} as TripInterface), country: 'France', start: old, end: old}], 'Canada', 5);
+      [{...({} as TripInterface), country: 'France', start: old, end: old}],
+      [address('Canada', '2020-01-01', null)], 5);
     expect(summary.daysAway).toBe(0);
   });
 });

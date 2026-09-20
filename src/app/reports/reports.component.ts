@@ -8,13 +8,7 @@ import {BioResult, BioService} from '../bloodresults/bio.service';
 import {CsvTools} from '../common/csvtools.service';
 import {backupFilename, buildBackup, rangeFilename, tripsInRange} from './export';
 import {findGaps, findOverlaps, Gap, Overlap} from './address-history';
-import {
-  currentHomeCountry,
-  rollingWindow,
-  summariseByYear,
-  WindowSummary,
-  YearSummary,
-} from './presence';
+import {rollingWindow, summariseByYear, WindowSummary, YearSummary} from './presence';
 
 @Component({
   selector: 'app-reports',
@@ -25,8 +19,6 @@ import {
 export class ReportsComponent implements OnInit, OnDestroy {
   readonly windowOptions = [1, 2, 3, 5, 10];
   windowYears = 5;
-  homeCountry: string | null = null;
-  countries: string[] = [];
   window: WindowSummary | null = null;
   years: YearSummary[] = [];
   expandedYear: number | null = null;
@@ -40,7 +32,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
   private trips: TripInterface[] = [];
   private addresses: AddressInterface[] = [];
   private bioResults: BioResult[] = [];
-  private homeCountryPinned = false;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private tripsService: TripsService,
@@ -67,13 +58,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
       .subscribe(([trips, addresses]) => {
         this.trips = trips;
         this.addresses = addresses;
-        if (!this.homeCountryPinned) {
-          this.homeCountry = currentHomeCountry(addresses);
-        }
-        this.countries = [...new Set([
-          ...addresses.map(a => a.country),
-          ...trips.map(t => t.country),
-        ].filter(country => !!country))].sort();
         this.recalculate();
       });
     this.bioService.data.pipe(takeUntil(this.destroy$))
@@ -90,12 +74,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   setWindowYears(event: CustomEvent) {
     this.windowYears = event?.detail?.value ?? this.windowYears;
-    this.recalculate();
-  }
-
-  setHomeCountry(event: CustomEvent) {
-    this.homeCountry = event?.detail?.value ?? null;
-    this.homeCountryPinned = true;
     this.recalculate();
   }
 
@@ -133,12 +111,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
   }
 
   private recalculate() {
-    this.window = rollingWindow(this.trips, this.homeCountry, this.windowYears);
+    this.window = rollingWindow(this.trips, this.addresses, this.windowYears);
     if (!this.rangeFrom) {
       this.rangeFrom = ReportsComponent.asInputValue(this.window.from);
       this.rangeTo = ReportsComponent.asInputValue(this.window.to);
     }
-    this.years = summariseByYear(this.trips, this.homeCountry);
+    this.years = summariseByYear(this.trips, this.addresses);
     this.addressCount = this.addresses.length;
     this.gaps = findGaps(this.addresses);
     this.overlaps = findOverlaps(this.addresses);

@@ -77,6 +77,22 @@ describe('findOverlaps', () => {
     expect(overlap.days).toBe(10);
   });
 
+  it('ignores a single shared changeover day', () => {
+    const history = [
+      address('Toronto', '2020-01-01', '2024-01-01'),
+      address('Ottawa', '2024-01-01', null),
+    ];
+    expect(findOverlaps(history, TODAY)).toEqual([]);
+  });
+
+  it('still reports two shared days', () => {
+    const history = [
+      address('Toronto', '2020-01-01', '2024-01-02'),
+      address('Ottawa', '2024-01-01', null),
+    ];
+    expect(findOverlaps(history, TODAY)[0].days).toBe(2);
+  });
+
   it('catches two open-ended addresses at once', () => {
     const history = [
       address('Toronto', '2020-01-01', null),

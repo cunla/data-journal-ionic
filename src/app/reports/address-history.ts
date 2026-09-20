@@ -73,7 +73,10 @@ export function findGaps(addresses: AddressInterface[], until: Date = new Date()
   return gaps;
 }
 
-/** Pairs of address records claiming the same days. */
+/**
+ * Pairs of address records claiming the same days. A single shared day is left
+ * out: moving out and moving in on the same date is normal, not a conflict.
+ */
 export function findOverlaps(addresses: AddressInterface[], until: Date = new Date()): Overlap[] {
   const sorted = dated(addresses);
   const today = startOfDay(until);
@@ -90,10 +93,11 @@ export function findOverlaps(addresses: AddressInterface[], until: Date = new Da
       const bEnd = b.end ? startOfDay(b.end) : today;
       const from = bStart;
       const to = aEnd < bEnd ? aEnd : bEnd;
-      overlaps.push({
-        from, to, days: inclusiveDays(from, to),
-        first: label(a), second: label(b),
-      });
+      const days = inclusiveDays(from, to);
+      if (days <= 1) {
+        continue;   // a shared changeover day is not a conflict
+      }
+      overlaps.push({from, to, days, first: label(a), second: label(b)});
     }
   }
   return overlaps;

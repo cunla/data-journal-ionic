@@ -12,21 +12,10 @@
     <ion-card-header>
       <ion-card-title>Time away</ion-card-title>
       <ion-card-subtitle>
-        Counting the day you left and the day you came back
+        Home comes from your address history; counting the day you left and the day you came back
       </ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
-      <ion-item lines="none">
-        <ion-select interface="popover"
-          label="Home country"
-          [value]="homeCountry"
-          (ionChange)="setHomeCountry($event)">
-          <ion-select-option [value]="null">Not set</ion-select-option>
-          @for (country of countries; track country) {
-            <ion-select-option [value]="country">{{ country }}</ion-select-option>
-          }
-        </ion-select>
-      </ion-item>
       <ion-item lines="none">
         <ion-select interface="popover"
           label="Window"
@@ -51,6 +40,11 @@
         </div>
         <p class="window-range">
           {{ window.from | date: 'yyyy-MM-dd' }} to {{ window.to | date: 'yyyy-MM-dd' }}
+          @if (window.homeCountries.length) {
+            · home: {{ window.homeCountries.join(', ') }}
+          } @else {
+            · no address history, so every trip counts as away
+          }
         </p>
         @if (window.byCountry.length) {
           <ion-list lines="full">

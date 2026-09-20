@@ -20,6 +20,8 @@ export interface WindowSummary {
   daysAway: number;
   daysHome: number;
   byCountry: CountryDays[];
+  /** The home countries that applied during the window, oldest first. */
+  homeCountries: string[];
 }
 
 /** Midnight local time, so a day counts as a day whatever the clock says. */
@@ -65,9 +67,43 @@ export function homeCountryOn(addresses: AddressInterface[], date: Date): string
 
 /** The country lived in most recently, used as the default home country. */
 export function currentHomeCountry(addresses: AddressInterface[]): string | null {
-  return homeCountryOn(addresses, new Date())
-    ?? addresses.map(a => a.country).find(country => !!country)
-    ?? null;
+  return effectiveHomeCountry(addresses, new Date());
+}
+
+/**
+ * The home country to judge a date by. Prefers the address covering that date;
+ * failing that, the last address started before it, so trips recorded before
+ * the address history begins are still measured against somewhere sensible.
+ */
+export function effectiveHomeCountry(addresses: AddressInterface[], date: Date): string | null {
+  const exact = homeCountryOn(addresses, date);
+  if (exact) {
+    return exact;
+  }
+  const known = addresses
+    .filter(address => address.start && address.country)
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+  if (!known.length) {
+    return null;
+  }
+  const day = startOfDay(date);
+  const previous = known.filter(address => startOfDay(address.start) <= day).pop();
+  return (previous ?? known[0]).country;
+}
+
+/** Every home country that applied during [from, to], oldest first. */
+export function homeCountriesBetween(addresses: AddressInterface[],
+                                     from: Date,
+                                     to: Date): string[] {
+  const countries = addresses
+    .filter(address => address.country && overlapDays(address.start, address.end, from, to) > 0)
+    .sort((a, b) => a.start.getTime() - b.start.getTime())
+    .map(address => address.country);
+  const fallback = effectiveHomeCountry(addresses, to);
+  if (!countries.length && fallback) {
+    countries.push(fallback);
+  }
+  return [...new Set(countries)];
 }
 
 function tally(counts: Map<string, number>): CountryDays[] {
@@ -76,18 +112,23 @@ function tally(counts: Map<string, number>): CountryDays[] {
     .sort((a, b) => b.days - a.days || a.country.localeCompare(b.country));
 }
 
-/** Days spent in each country other than home, within [from, to]. */
+/**
+ * Days spent in each country other than home, within [from, to]. Home is taken
+ * from the address history as it stood on each trip's start date, so a move
+ * abroad changes what counts as away from that point on.
+ */
 export function daysAwayBetween(trips: TripInterface[],
-                                homeCountry: string | null,
+                                addresses: AddressInterface[],
                                 from: Date,
                                 to: Date): WindowSummary {
   const counts = new Map<string, number>();
   for (const trip of trips) {
-    if (homeCountry && trip.country === homeCountry) {
-      continue;
-    }
     const days = overlapDays(trip.start, trip.end, from, to);
     if (days <= 0) {
+      continue;
+    }
+    const home = effectiveHomeCountry(addresses, trip.start);
+    if (home && trip.country === home) {
       continue;
     }
     const country = trip.country || 'Unknown';
@@ -96,11 +137,16 @@ export function daysAwayBetween(trips: TripInterface[],
   const byCountry = tally(counts);
   const daysAway = byCountry.reduce((sum, entry) => sum + entry.days, 0);
   const windowDays = overlapDays(from, to, from, to);
-  return {from, to, daysAway, daysHome: Math.max(windowDays - daysAway, 0), byCountry};
+  return {
+    from, to, daysAway, byCountry,
+    daysHome: Math.max(windowDays - daysAway, 0),
+    homeCountries: homeCountriesBetween(addresses, from, to),
+  };
 }
 
 /** One row per calendar year that any trip touches, newest first. */
-export function summariseByYear(trips: TripInterface[], homeCountry: string | null): YearSummary[] {
+export function summariseByYear(trips: TripInterface[],
+                                addresses: AddressInterface[]): YearSummary[] {
   const years = new Set<number>();
   const today = new Date();
   for (const trip of trips) {
@@ -115,7 +161,7 @@ export function summariseByYear(trips: TripInterface[], homeCountry: string | nu
   return [...years]
     .sort((a, b) => b - a)
     .map(year => {
-      const summary = daysAwayBetween(trips, homeCountry,
+      const summary = daysAwayBetween(trips, addresses,
         new Date(year, 0, 1), new Date(year, 11, 31));
       return {year, daysAway: summary.daysAway, byCountry: summary.byCountry};
     });
@@ -123,9 +169,9 @@ export function summariseByYear(trips: TripInterface[], homeCountry: string | nu
 
 /** A window of whole years ending today, the shape residency rules tend to use. */
 export function rollingWindow(trips: TripInterface[],
-                              homeCountry: string | null,
+                              addresses: AddressInterface[],
                               years: number): WindowSummary {
   const to = startOfDay(new Date());
   const from = startOfDay(new Date(to.getFullYear() - years, to.getMonth(), to.getDate() + 1));
-  return daysAwayBetween(trips, homeCountry, from, to);
+  return daysAwayBetween(trips, addresses, from, to);
 }
