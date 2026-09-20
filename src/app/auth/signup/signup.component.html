@@ -16,11 +16,11 @@
       <ion-label position="floating">Password</ion-label>
       <ion-input [(ngModel)]="userPassword" required type="password"></ion-input>
     </ion-item>
-    <ion-button (click)="authService.doRegister(userEmail, userPassword)" color="dark" expand="full">
+    <ion-button (click)="signupWithEmail()" color="dark" expand="full">
       Sign up with email
     </ion-button>
     <ion-item-divider></ion-item-divider>
-    <ion-button (click)="authService.doGoogleLogin()" color="danger" expand="full">
+    <ion-button (click)="signupWithGoogle()" color="danger" expand="full">
       Google sign up
     </ion-button>
 <!--

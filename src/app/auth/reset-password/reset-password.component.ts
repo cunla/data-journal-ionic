@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {AlertController} from '@ionic/angular/lazy';
+import {authErrorMessage} from '../auth-errors';
 
 @Component({
     selector: 'app-reset-password',
@@ -18,7 +19,7 @@ export class ResetPasswordComponent {
   resetPassword(email: string) {
     this.authService.resetPassword(email)
       .then(() => this.presentAlert('sent Password Reset Email!'))
-      .catch((error) => this.presentAlert(error));
+      .catch((error) => this.presentAlert(authErrorMessage(error) || 'Could not send the reset email.'));
   }
 
   async presentAlert(msg: string) {
