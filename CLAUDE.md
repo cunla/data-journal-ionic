@@ -12,9 +12,9 @@ firebase deploy       # Deploy www/browser to Hosting, plus Firestore rules and 
 
 `pnpm build` runs plain `ng build` with no configuration. Use `ionic build --prod` for anything you deploy.
 
-**Broken, not regressions** — don't treat these failures as caused by your change:
-- `pnpm test` — there is no test setup. The repo has no `*.spec.ts` files, Karma isn't installed, and the `test` target in `angular.json` points at `src/test.ts`, `karma.conf.js` and `tsconfig.spec.json`, none of which exist. Verify changes with `ionic build --prod` and by loading the dev server.
-- `pnpm lint` — fails with "Could not find config file". The repo has a legacy `.eslintrc.json`, but ESLint 10 only reads flat config (`eslint.config.js`).
+`pnpm test` runs vitest through `@angular/build:unit-test`; `pnpm lint` uses `eslint.config.js` (flat config). Both pass — treat a failure as something your change caused.
+
+Tests cover pure logic only (`CsvTools`, date helpers, the trip-origin logic, presence and address-history reports, CSV import). There are no component tests, so anything touching Firestore or Ionic still needs `ionic build --prod` plus a look in the dev server.
 
 ## Architecture
 
@@ -36,25 +36,29 @@ This is a personal data-journaling **hybrid mobile app** (web + mobile) built wi
 | `/addresses` | `addresses/` | Historical address records |
 | `/bloodresults` | `bloodresults/` | Health metrics — CRUD + Highcharts charts |
 | `/map` | `trips-mapchart/` | Geographic map view of trips |
+| `/reports` | `reports/` | Time-away totals, address-history gaps/overlaps, range and full-backup exports |
 | `/auth` | `auth/` | Login / signup / password reset (email + social providers) |
 
-Shared utilities live in `common/` (CSV export, date helpers, string tools, `StateProvider`).
+Shared utilities live in `common/` (CSV read/write, date helpers, string tools, `StateProvider`, and `UserCollectionService`, the base class every per-user Firestore collection extends).
 The `autocomplete/` and `places/` modules provide location autocomplete backed by Google Places.
 
 ### Routing & Auth Guards
 - Default route redirects to `/trips`
-- The logged-in user is cached in `localStorage` under `user` (written by `AuthService` on auth state change); guards and services read `uid` from there
-- **HomeGuard** (`guard/home.guard.ts`) redirects to `/auth/login` when no user is cached. It is only applied to `trips/list` and `addresses/list`; `/bloodresults` and `/map` are unguarded
+- The signed-in user's id and email are cached in `localStorage` under `user` (see `auth/stored-user.ts`); Firebase keeps the real credentials in its own storage. Guards read that cache; **services do not** — they take the uid from `afAuth.authState`
+- **HomeGuard** (`guard/home.guard.ts`) redirects to `/auth/login` when no user is cached. It guards `trips/list`, `addresses/list`, `/bloodresults`, `/map` and `/reports`
 - **AuthGuard** (`auth/auth.guard.ts`) guards the `/auth/*` pages and redirects already-logged-in users to `/trips`
 - All feature modules are lazy-loaded with `PreloadAllModules` strategy
 
 ### Service Pattern
-Data services follow a consistent reactive pattern:
-- `BehaviorSubject` for local state
-- Firestore `snapshotChanges()` for real-time sync
-- User-scoped queries: data always filtered by authenticated `userId`
+`TripsService`, `AddressService` and `BioService` all extend `UserCollectionService<T>` (`common/user-collection.service.ts`), which owns the shared behaviour:
+- One stable `BehaviorSubject` and an observable that is never reassigned
+- One live Firestore `snapshotChanges()` listener, replaced on refresh
+- The user id comes from `afAuth.authState`, so a logout or account switch re-queries; nothing is held while signed out
+- `search()` filters what is already loaded rather than re-querying
 
-Key services: `AuthService`, `TripsService`, `AddressService`, `BioService`, `BioMetadataService`, `CsvTools` (static utility).
+A subclass supplies only its collection path, sort field, document mapping (`toRecord`) and search rule (`matches`).
+
+Other services: `AuthService`, `BioMetadataService`, `CsvTools` (static utility).
 
 ### Build Outputs & Environments
 - Build output: `www/browser/` (this is Firebase Hosting's `public` dir). Never commit `www/`
