@@ -70,6 +70,37 @@
 
   <ion-card>
     <ion-card-header>
+      <ion-card-title>Export</ion-card-title>
+      <ion-card-subtitle>
+        A range of trips as CSV, or everything as JSON
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-input label="From" labelPlacement="fixed" type="date"
+          [(ngModel)]="rangeFrom"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="To" labelPlacement="fixed" type="date"
+          [(ngModel)]="rangeTo"></ion-input>
+      </ion-item>
+      <ion-button expand="block" fill="outline"
+        [disabled]="!rangeIsValid"
+        (click)="exportRangeCsv()">
+        <ion-icon name="download-outline" slot="start"></ion-icon>
+        Export trips in range
+      </ion-button>
+      <ion-button expand="block" fill="outline"
+        [disabled]="!recordCount"
+        (click)="downloadBackup()">
+        <ion-icon name="archive-outline" slot="start"></ion-icon>
+        Download all data ({{ recordCount }} records)
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
       <ion-card-title>Address history</ion-card-title>
       <ion-card-subtitle>
         Forms that ask for an unbroken address history trip over these

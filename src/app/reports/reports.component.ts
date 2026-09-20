@@ -1,8 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {saveAs} from 'file-saver';
 import {TripInterface, TripsService} from '../trips/trips.service';
 import {AddressInterface, AddressService} from '../addresses/address.service';
+import {BioResult, BioService} from '../bloodresults/bio.service';
+import {CsvTools} from '../common/csvtools.service';
+import {backupFilename, buildBackup, rangeFilename, tripsInRange} from './export';
 import {findGaps, findOverlaps, Gap, Overlap} from './address-history';
 import {
   currentHomeCountry,
@@ -29,14 +33,32 @@ export class ReportsComponent implements OnInit, OnDestroy {
   gaps: Gap[] = [];
   overlaps: Overlap[] = [];
   addressCount = 0;
+  // yyyy-MM-dd, as <ion-input type="date"> works in
+  rangeFrom = '';
+  rangeTo = '';
 
   private trips: TripInterface[] = [];
   private addresses: AddressInterface[] = [];
+  private bioResults: BioResult[] = [];
   private homeCountryPinned = false;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private tripsService: TripsService,
-              private addressService: AddressService) {
+              private addressService: AddressService,
+              private bioService: BioService) {
+  }
+
+  private static asDay(value: string): Date | null {
+    if (!value) {
+      return null;
+    }
+    const [year, month, day] = value.split('-').map(Number);
+    return year && month && day ? new Date(year, month - 1, day) : null;
+  }
+
+  private static asInputValue(date: Date): string {
+    const pad = (n: number) => `${n}`.padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   }
 
   ngOnInit() {
@@ -54,8 +76,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
         ].filter(country => !!country))].sort();
         this.recalculate();
       });
+    this.bioService.data.pipe(takeUntil(this.destroy$))
+      .subscribe(results => this.bioResults = results);
     this.tripsService.refresh();
     this.addressService.refresh();
+    this.bioService.refresh();
   }
 
   ngOnDestroy() {
@@ -74,12 +99,45 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.recalculate();
   }
 
+  // Exports the trips touching the chosen range, not only those wholly inside it
+  exportRangeCsv() {
+    const from = ReportsComponent.asDay(this.rangeFrom);
+    const to = ReportsComponent.asDay(this.rangeTo);
+    if (!from || !to) {
+      return;
+    }
+    const rows = tripsInRange(this.trips, from, to);
+    const csv = CsvTools.convertToCsv(rows,
+      ['start', 'end', 'locationName', 'city', 'country', 'purpose']);
+    saveAs(new Blob([csv], {type: 'text/csv;charset=utf-8'}), rangeFilename(from, to));
+  }
+
+  downloadBackup() {
+    const backup = buildBackup(this.trips, this.addresses, this.bioResults);
+    const json = JSON.stringify(backup, null, 2);
+    saveAs(new Blob([json], {type: 'application/json;charset=utf-8'}), backupFilename());
+  }
+
+  get rangeIsValid(): boolean {
+    const from = ReportsComponent.asDay(this.rangeFrom);
+    const to = ReportsComponent.asDay(this.rangeTo);
+    return !!from && !!to && from <= to;
+  }
+
+  get recordCount(): number {
+    return this.trips.length + this.addresses.length + this.bioResults.length;
+  }
+
   toggleYear(year: number) {
     this.expandedYear = this.expandedYear === year ? null : year;
   }
 
   private recalculate() {
     this.window = rollingWindow(this.trips, this.homeCountry, this.windowYears);
+    if (!this.rangeFrom) {
+      this.rangeFrom = ReportsComponent.asInputValue(this.window.from);
+      this.rangeTo = ReportsComponent.asInputValue(this.window.to);
+    }
     this.years = summariseByYear(this.trips, this.homeCountry);
     this.addressCount = this.addresses.length;
     this.gaps = findGaps(this.addresses);
