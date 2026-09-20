@@ -1,18 +1,10 @@
 import {Component, OnDestroy} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from "../../addresses/address.service";
+import {getOriginPointOnDate, itemToPoint, Point} from '../origin-point';
 import {environment} from '../../../environments/environment';
 import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
-
-export interface Point {
-  lon: number;
-  id: string;
-  year: number;
-  lat: number;
-  title?: string;
-  content?: HTMLElement;
-}
 
 const DEFAULT_ADDRESS = {id: 'Toronto', lat: 43.7, lon: -79.42, year: new Date().getFullYear()};
 
@@ -61,7 +53,7 @@ export class AgmChartComponent implements OnDestroy {
     this.cities = new Set<Point>();
     this.tripLines = [];
     this.years = [];
-    this.currentAddress = this.getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
+    this.currentAddress = getOriginPointOnDate([], addresses, -1) || DEFAULT_ADDRESS;
     const sortedTrips = [...trips].sort(AgmChartComponent.sortByDates);
     sortedTrips.forEach(trip => {
       const year = trip.start.getFullYear();
@@ -71,8 +63,8 @@ export class AgmChartComponent implements OnDestroy {
     });
     this.years.sort((a, b) => b - a);
     for (let ind = 0; ind < sortedTrips.length; ++ind) {
-      const originCity = this.getOriginPointOnDate(sortedTrips, addresses, ind);
-      const targetCity = AgmChartComponent.itemToPoint(sortedTrips[ind]);
+      const originCity = getOriginPointOnDate(sortedTrips, addresses, ind);
+      const targetCity = itemToPoint(sortedTrips[ind]);
       if (targetCity && targetCity.lat && targetCity.lon) {
         this.addCityOptions(targetCity);
         this.cities.add(targetCity);
@@ -105,45 +97,7 @@ export class AgmChartComponent implements OnDestroy {
     this.tripLines.push(t);
   }
 
-  private getOriginPointOnDate(trips: TripInterface[], addresses: AddressInterface[], tripInd: number): Point {
-    const date = tripInd == -1 ? new Date() : trips[tripInd].start;
-    if (trips.length > 0) {
-      let low = 0, high = trips.length - 1;
-      while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        if (mid == tripInd && tripInd > 0 && trips[tripInd - 1].start <= date && date <= trips[tripInd - 1].end) {
-          return AgmChartComponent.itemToPoint(trips[tripInd - 1]);
-        } else if (date < trips[mid].start) {
-          high = mid - 1;
-        } else if (trips[mid].end < date) {
-          low = mid + 1;
-        } else if (mid != tripInd && trips[mid].start <= date && date <= trips[mid].end) {
-          return AgmChartComponent.itemToPoint(trips[mid]);
-        } else {
-          break;
-        }
-      }
-    }
-    let ind = 0;
-    while (ind < addresses.length) {
-      if (addresses[ind].start <= date &&
-        (!addresses[ind].end || addresses[ind].end >= date)) {
-        return AgmChartComponent.itemToPoint(addresses[ind]);
-      }
-      ++ind;
-    }
-    return null;
-  }
 
-
-  private static itemToPoint(item: TripInterface | AddressInterface): Point {
-    return item ? {
-      id: item.city,
-      lon: +item.lng,
-      lat: +item.lat,
-      year: item.start.getFullYear(),
-    } : null;
-  }
 
   addPolyLineOptions(item: TripLine) {
     if (this.selectedYear === -1 || this.selectedYear === item.year) {
