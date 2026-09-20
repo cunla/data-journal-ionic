@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LoadingController, ModalController} from '@ionic/angular/lazy';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular/lazy';
 import {BioMetadataService} from '../bio-metadata.service';
 import {DateTime} from "luxon";
 
@@ -16,7 +16,8 @@ export class AddBioresultComponent implements OnInit {
   bioresultForm: FormGroup;
 
 
-  constructor(private modalController: ModalController,
+  constructor(private alertController: AlertController,
+              private modalController: ModalController,
               private fb: FormBuilder,
               private bioService: BioService,
               public bioMetadataService: BioMetadataService,
@@ -45,6 +46,15 @@ export class AddBioresultComponent implements OnInit {
     Promise.all(p).then(() => {
       loading.dismiss();
       this.dismissModal();
+    }).catch(async (err) => {
+      console.error('Failed to add results', err);
+      await loading.dismiss();
+      const alert = await this.alertController.create({
+        header: 'Could not save',
+        message: 'Your results were not saved. Please check your connection and try again.',
+        buttons: ['OK'],
+      });
+      await alert.present();
     });
   }
 

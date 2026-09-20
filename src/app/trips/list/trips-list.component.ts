@@ -15,7 +15,10 @@ import {DateTime} from "luxon";
     standalone: false
 })
 export class TripsListComponent implements OnInit {
-  newTrip: TripInterface = EMPTY_TRIP;
+  // A fresh copy per click; EMPTY_TRIP is shared and must stay untouched
+  get newTrip(): TripInterface {
+    return {...EMPTY_TRIP};
+  }
 
   constructor(public trips: TripsService,
               private state: StateProvider,

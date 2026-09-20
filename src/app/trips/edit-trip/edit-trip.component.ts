@@ -63,10 +63,8 @@ export class EditTripComponent implements OnInit {
 
 
   detail(location: LocationInterface) {
-    console.log(location);
+    // Only the local copy moves; the trip itself changes on save
     this.location = location;
-    this.trip.lat = this.location.lat;
-    this.trip.lng = this.location.lng;
   }
 
   private createForm() {

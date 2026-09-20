@@ -15,7 +15,10 @@ import {DateTime} from "luxon";
     standalone: false
 })
 export class AddressListComponent {
-  newAddress: AddressInterface = EMPTY_ADDRESS;
+  // A fresh copy per click; EMPTY_ADDRESS is shared and must stay untouched
+  get newAddress(): AddressInterface {
+    return {...EMPTY_ADDRESS};
+  }
 
   constructor(public addressService: AddressService,
               private state: StateProvider,

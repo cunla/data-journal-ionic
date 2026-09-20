@@ -68,10 +68,8 @@ export class EditAddressComponent implements OnInit {
   }
 
   detail(location: LocationInterface) {
-    console.log(location);
+    // Only the local copy moves; the address itself changes on save
     this.location = location;
-    this.address.lat = this.location.lat;
-    this.address.lng = this.location.lng;
   }
 
   private createForm() {

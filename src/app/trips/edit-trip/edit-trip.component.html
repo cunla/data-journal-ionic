@@ -64,11 +64,11 @@
     <ion-card>
       <ion-card-content>
         <google-map width="100%"
-          [center]="{lat: trip.lat || 43.7, lng: trip.lng || -79.42}"
+          [center]="{lat: location.lat || 43.7, lng: location.lng || -79.42}"
           [options]="mapOptions">
-          @if (trip.lat && trip.lng) {
+          @if (location.lat && location.lng) {
             <map-advanced-marker
-              [position]="{lat: trip.lat, lng: trip.lng}">
+              [position]="{lat: location.lat, lng: location.lng}">
             </map-advanced-marker>
           }
         </google-map>
