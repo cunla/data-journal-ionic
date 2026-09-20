@@ -54,9 +54,8 @@ export class TripsListComponent implements OnInit {
     this.trips.data.pipe(take(1)).subscribe(res => {
       const tripsCsv = CsvTools.convertToCsv(res,
         ['start', 'end', 'locationName', 'purpose']);
-      console.log(tripsCsv);
-      const blob = new Blob([tripsCsv], {type: 'text/plain;charset=utf-8'});
-      saveAs(blob, 'data.csv');
+      const blob = new Blob([tripsCsv], {type: 'text/csv;charset=utf-8'});
+      saveAs(blob, 'trips.csv');
     });
   }
 

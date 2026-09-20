@@ -46,11 +46,10 @@ export class AddressListComponent {
 
   exportCsv() {
     this.addressService.data.pipe(take(1)).subscribe(res => {
-      const tripsCsv = CsvTools.convertToCsv(res,
-        ['start', 'end', 'locationName', 'purpose']);
-      console.log(tripsCsv);
-      const blob = new Blob([tripsCsv], {type: 'text/plain;charset=utf-8'});
-      saveAs(blob, 'data.csv');
+      const addressesCsv = CsvTools.convertToCsv(res,
+        ['start', 'end', 'locationName', 'address']);
+      const blob = new Blob([addressesCsv], {type: 'text/csv;charset=utf-8'});
+      saveAs(blob, 'addresses.csv');
     });
   }
 
