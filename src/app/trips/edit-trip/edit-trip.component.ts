@@ -3,7 +3,6 @@ import {TripInterface, TripsService} from '../trips.service';
 import {AbstractControlOptions, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular/lazy';
-import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface, toLocation} from "../../places/google-places/google-places.component";
 import {environment} from '../../../environments/environment';
@@ -22,7 +21,6 @@ export class EditTripComponent implements OnInit {
   readonly mapOptions = {maxZoom: 8, minZoom: 5, mapId: environment.mapsMapId};
 
   constructor(public trips: TripsService,
-              private state: StateProvider,
               private fb: FormBuilder,
               public modalController: ModalController,) {
   }
@@ -58,7 +56,6 @@ export class EditTripComponent implements OnInit {
   }
 
   public dismissModal() {
-    this.state.modalOpen = false;
     this.modalController.dismiss({
       dismissed: true
     });

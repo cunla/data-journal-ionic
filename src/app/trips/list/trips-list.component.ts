@@ -32,6 +32,8 @@ export class TripsListComponent implements OnInit {
       component: EditTripComponent,
       componentProps: {trip,}
     });
+    // Clear the flag however the modal is closed, including backdrop/Esc/back
+    modal.onDidDismiss().then(() => this.state.modalOpen = false);
     return await modal.present();
   }
 

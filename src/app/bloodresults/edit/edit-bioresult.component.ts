@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BioResult, BioService} from '../bio.service';
-import {StateProvider} from '../../common/state.provider';
 import {ModalController} from '@ionic/angular/lazy';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BioMetadataService} from '../bio-metadata.service';
@@ -17,8 +16,7 @@ export class EditBioresultComponent implements OnInit {
   bioresultForm: FormGroup;
 
 
-  constructor(private state: StateProvider,
-              private modalController: ModalController,
+  constructor(private modalController: ModalController,
               private fb: FormBuilder,
               private bioService: BioService,
               public bioMetadataService: BioMetadataService,
@@ -43,8 +41,6 @@ export class EditBioresultComponent implements OnInit {
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
-    }).then(() => {
-      this.state.modalOpen = false;
     });
   }
 

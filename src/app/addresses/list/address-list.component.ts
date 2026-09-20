@@ -32,6 +32,8 @@ export class AddressListComponent {
       component: EditAddressComponent,
       componentProps: {address,}
     });
+    // Clear the flag however the modal is closed, including backdrop/Esc/back
+    modal.onDidDismiss().then(() => this.state.modalOpen = false);
     return await modal.present();
   }
 

@@ -67,6 +67,8 @@ export class BloodresultsComponent implements OnInit, OnDestroy {
       component: AddBioresultComponent,
       componentProps: {bioresult: item,}
     });
+    // Clear the flag however the modal is closed, including backdrop/Esc/back
+    modal.onDidDismiss().then(() => this.state.modalOpen = false);
     return await modal.present();
   }
 
@@ -85,6 +87,8 @@ export class BloodresultsComponent implements OnInit, OnDestroy {
       component: EditBioresultComponent,
       componentProps: {bioresult: item,}
     });
+    // Clear the flag however the modal is closed, including backdrop/Esc/back
+    modal.onDidDismiss().then(() => this.state.modalOpen = false);
     return await modal.present();
   }
 

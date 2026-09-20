@@ -3,7 +3,6 @@ import {AddressInterface, AddressService} from '../address.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular/lazy';
-import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
 import {EMPTY_LOCATION, LocationInterface, toLocation} from "../../places/google-places/google-places.component";
 
@@ -22,7 +21,6 @@ export class EditAddressComponent implements OnInit {
   location: LocationInterface = {...EMPTY_LOCATION};
 
   constructor(public addressService: AddressService,
-              private state: StateProvider,
               private fb: FormBuilder,
               public modalController: ModalController,) {
   }
@@ -66,8 +64,6 @@ export class EditAddressComponent implements OnInit {
   public dismissModal() {
     this.modalController.dismiss({
       dismissed: true
-    }).then(() => {
-      this.state.modalOpen = false;
     });
   }
 
