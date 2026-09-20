@@ -7,8 +7,7 @@ import {AddressInterface, AddressService} from '../addresses/address.service';
 import {BioResult, BioService} from '../bloodresults/bio.service';
 import {CsvTools} from '../common/csvtools.service';
 import {backupFilename, buildBackup, rangeFilename, tripsInRange} from './export';
-import {findGaps, findOverlaps, Gap, Overlap} from './address-history';
-import {rollingWindow, summariseByYear, WindowSummary, YearSummary} from './presence';
+import {rollingWindow, WindowSummary} from './presence';
 
 @Component({
   selector: 'app-reports',
@@ -20,11 +19,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
   readonly windowOptions = [1, 2, 3, 5, 10];
   windowYears = 5;
   window: WindowSummary | null = null;
-  years: YearSummary[] = [];
-  expandedYear: number | null = null;
-  gaps: Gap[] = [];
-  overlaps: Overlap[] = [];
-  addressCount = 0;
   // yyyy-MM-dd, as <ion-input type="date"> works in
   rangeFrom = '';
   rangeTo = '';
@@ -112,9 +106,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
     (event.target as HTMLImageElement).style.display = 'none';
   }
 
-  toggleYear(year: number) {
-    this.expandedYear = this.expandedYear === year ? null : year;
-  }
 
   private recalculate() {
     this.window = rollingWindow(this.trips, this.addresses, this.windowYears);
@@ -122,9 +113,5 @@ export class ReportsComponent implements OnInit, OnDestroy {
       this.rangeFrom = ReportsComponent.asInputValue(this.window.from);
       this.rangeTo = ReportsComponent.asInputValue(this.window.to);
     }
-    this.years = summariseByYear(this.trips, this.addresses);
-    this.addressCount = this.addresses.length;
-    this.gaps = findGaps(this.addresses);
-    this.overlaps = findOverlaps(this.addresses);
   }
 }

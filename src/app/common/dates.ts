@@ -1,3 +1,17 @@
+export const MS_PER_DAY = 24 * 3600 * 1000;
+
+/** Midnight local time, so a day counts as a day whatever the clock says. */
+export function startOfDay(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+/** Calendar days from a to b, counting both ends. */
+export function inclusiveDays(from: Date, to: Date): number {
+  return Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / MS_PER_DAY) + 1;
+}
+
 import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
 
 export class Dates {

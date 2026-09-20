@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {AddressInterface} from '../addresses/address.service';
+import {AddressInterface} from './address.service';
 import {findGaps, findOverlaps} from './address-history';
 
 const address = (name: string, start: string, end: string | null): AddressInterface => ({

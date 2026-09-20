@@ -8,7 +8,6 @@ import {
   homeCountryOn,
   overlapDays,
   rollingWindow,
-  summariseByYear,
 } from './presence';
 
 const trip = (country: string, start: string, end: string | null,
@@ -174,23 +173,6 @@ describe('daysAwayBetween', () => {
     ];
     const span = daysAwayBetween([], moved, new Date('2024-01-01'), new Date('2026-12-31'));
     expect(span.homeCountries).toEqual(['Israel', 'Canada']);
-  });
-});
-
-describe('summariseByYear', () => {
-  const trips = [
-    trip('France', '2025-12-28', '2026-01-03'),
-    trip('Japan', '2026-07-01', '2026-07-04'),
-  ];
-  const rows = summariseByYear(trips, [address('Canada', '2020-01-01', null)]);
-
-  it('gives a row per year touched, newest first', () => {
-    expect(rows.map(r => r.year)).toEqual([2026, 2025]);
-  });
-
-  it('splits a new-year trip across both years', () => {
-    expect(rows.find(r => r.year === 2025).daysAway).toBe(4);
-    expect(rows.find(r => r.year === 2026).daysAway).toBe(3 + 4);
   });
 });
 

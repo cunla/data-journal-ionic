@@ -1,5 +1,5 @@
-import {AddressInterface} from '../addresses/address.service';
-import {MS_PER_DAY, startOfDay} from './presence';
+import {AddressInterface} from './address.service';
+import {inclusiveDays, startOfDay} from '../common/dates';
 
 export interface Gap {
   from: Date;
@@ -19,10 +19,6 @@ export interface Overlap {
 
 function label(address: AddressInterface): string {
   return address.locationName || address.city || address.address || 'Unnamed address';
-}
-
-function inclusiveDays(from: Date, to: Date): number {
-  return Math.round((startOfDay(to).getTime() - startOfDay(from).getTime()) / MS_PER_DAY) + 1;
 }
 
 function dated(addresses: AddressInterface[]): AddressInterface[] {

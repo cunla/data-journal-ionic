@@ -1,11 +1,13 @@
-import {Component} from '@angular/core';
-import {take} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 import {AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
 import {ModalController} from '@ionic/angular/lazy';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
 import {StateProvider} from '../../common/state.provider';
+import {findGaps, findOverlaps, Gap, Overlap} from '../address-history';
 
 @Component({
     selector: 'app-trips',
@@ -13,7 +15,12 @@ import {StateProvider} from '../../common/state.provider';
     styleUrls: ['./address-list.component.scss'],
     standalone: false
 })
-export class AddressListComponent {
+export class AddressListComponent implements OnInit, OnDestroy {
+  gaps: Gap[] = [];
+  overlaps: Overlap[] = [];
+  addressCount = 0;
+  private readonly destroy$ = new Subject<void>();
+
   // A fresh copy per click; EMPTY_ADDRESS is shared and must stay untouched
   get newAddress(): AddressInterface {
     return {...EMPTY_ADDRESS};
@@ -23,6 +30,20 @@ export class AddressListComponent {
               private state: StateProvider,
               public modalController: ModalController,
   ) {
+  }
+
+  ngOnInit() {
+    // Checks the history as it changes, so editing an address updates the notice
+    this.addressService.data.pipe(takeUntil(this.destroy$)).subscribe(addresses => {
+      this.addressCount = addresses.length;
+      this.gaps = findGaps(addresses);
+      this.overlaps = findOverlaps(addresses);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async presentModal(address: AddressInterface) {

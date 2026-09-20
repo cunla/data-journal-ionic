@@ -26,6 +26,46 @@
       <ion-icon name="add-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  @if (addressCount && (gaps.length || overlaps.length)) {
+    <ion-card class="history-check">
+      <ion-card-header>
+        <ion-card-title>Check your history</ion-card-title>
+        <ion-card-subtitle>
+          Forms that ask for an unbroken address history trip over these
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full">
+          @for (gap of gaps; track gap.from) {
+            <ion-item>
+              <ion-icon color="warning" name="alert-circle-outline" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h3>{{ gap.open ? 'No current address' : 'Gap' }}</h3>
+                <p>
+                  {{ gap.from | date: 'yyyy-MM-dd' }} to {{ gap.to | date: 'yyyy-MM-dd' }}
+                  ({{ gap.days }} days)
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+          @for (overlap of overlaps; track overlap.from) {
+            <ion-item>
+              <ion-icon color="danger" name="git-compare-outline" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h3>Overlap</h3>
+                <p>
+                  {{ overlap.first }} and {{ overlap.second }},
+                  {{ overlap.from | date: 'yyyy-MM-dd' }} to {{ overlap.to | date: 'yyyy-MM-dd' }}
+                  ({{ overlap.days }} days)
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  }
+
   <ion-list>
 
     @for (item of addressService.data | async; track item.id) {

@@ -1,19 +1,14 @@
 import {TripInterface} from '../trips/trips.service';
 import {AddressInterface} from '../addresses/address.service';
+import {MS_PER_DAY, startOfDay} from '../common/dates';
 
-export const MS_PER_DAY = 24 * 3600 * 1000;
+export {MS_PER_DAY, startOfDay};
 
 export interface CountryDays {
   country: string;
   /** ISO 3166-1 alpha-2, for the flag; null when no trip recorded one. */
   countryCode: string | null;
   days: number;
-}
-
-export interface YearSummary {
-  year: number;
-  daysAway: number;
-  byCountry: CountryDays[];
 }
 
 export interface WindowSummary {
@@ -24,13 +19,6 @@ export interface WindowSummary {
   byCountry: CountryDays[];
   /** The home countries that applied during the window, oldest first. */
   homeCountries: string[];
-}
-
-/** Midnight local time, so a day counts as a day whatever the clock says. */
-export function startOfDay(date: Date): Date {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
 }
 
 /**
@@ -148,29 +136,6 @@ export function daysAwayBetween(trips: TripInterface[],
     daysHome: Math.max(windowDays - daysAway, 0),
     homeCountries: homeCountriesBetween(addresses, from, to),
   };
-}
-
-/** One row per calendar year that any trip touches, newest first. */
-export function summariseByYear(trips: TripInterface[],
-                                addresses: AddressInterface[]): YearSummary[] {
-  const years = new Set<number>();
-  const today = new Date();
-  for (const trip of trips) {
-    if (!trip.start) {
-      continue;
-    }
-    const last = trip.end ?? today;
-    for (let year = trip.start.getFullYear(); year <= last.getFullYear(); year++) {
-      years.add(year);
-    }
-  }
-  return [...years]
-    .sort((a, b) => b - a)
-    .map(year => {
-      const summary = daysAwayBetween(trips, addresses,
-        new Date(year, 0, 1), new Date(year, 11, 31));
-      return {year, daysAway: summary.daysAway, byCountry: summary.byCountry};
-    });
 }
 
 /** A window of whole years ending today, the shape residency rules tend to use. */
