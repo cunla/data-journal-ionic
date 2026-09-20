@@ -14,6 +14,24 @@ export const EMPTY_LOCATION: LocationInterface = {
   population: null,
 }
 
+// Builds a location from a stored trip/address so an edit form starts out
+// holding that record's own location instead of a blank one.
+export function toLocation(record: {
+  locationName?: string; city?: string; state?: string;
+  country?: string; countryCode?: string; lat?: number; lng?: number;
+}): LocationInterface {
+  return {
+    ...EMPTY_LOCATION,
+    locationName: record?.locationName || null,
+    city: record?.city ?? null,
+    state: record?.state ?? null,
+    country: record?.country ?? null,
+    iso2: record?.countryCode ?? null,
+    lat: record?.lat ?? null,
+    lng: record?.lng ?? null,
+  };
+}
+
 export interface LocationInterface {
   country: string;
   city: string;
@@ -93,7 +111,8 @@ export class GooglePlacesAutocompleteComponent implements OnInit {
       (results, status) => {
         console.log(status);
         const address = results[0];
-        const location: LocationInterface = EMPTY_LOCATION;
+        // Copy, never mutate EMPTY_LOCATION — it is shared by every form
+        const location: LocationInterface = {...EMPTY_LOCATION};
         location.lat = address.geometry.location.lat();
         location.lng = address.geometry.location.lng();
         address.address_components.forEach(component => {

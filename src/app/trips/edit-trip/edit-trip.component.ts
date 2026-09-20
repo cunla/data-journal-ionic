@@ -5,7 +5,7 @@ import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular/lazy';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
-import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
+import {EMPTY_LOCATION, LocationInterface, toLocation} from "../../places/google-places/google-places.component";
 import {environment} from '../../../environments/environment';
 
 
@@ -18,7 +18,7 @@ import {environment} from '../../../environments/environment';
 export class EditTripComponent implements OnInit {
   @Input() trip: TripInterface;
   tripForm: FormGroup;
-  location: LocationInterface = EMPTY_LOCATION;
+  location: LocationInterface = {...EMPTY_LOCATION};
   readonly mapOptions = {maxZoom: 8, minZoom: 5, mapId: environment.mapsMapId};
 
   constructor(public trips: TripsService,
@@ -28,6 +28,8 @@ export class EditTripComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Start from the record's own location so editing other fields keeps it
+    this.location = toLocation(this.trip);
     this.createForm();
   }
 

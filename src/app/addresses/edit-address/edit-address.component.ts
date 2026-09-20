@@ -5,7 +5,7 @@ import {Dates} from '../../common/dates';
 import {ModalController} from '@ionic/angular/lazy';
 import {StateProvider} from '../../common/state.provider';
 import {DateTime} from "luxon";
-import {EMPTY_LOCATION, LocationInterface} from "../../places/google-places/google-places.component";
+import {EMPTY_LOCATION, LocationInterface, toLocation} from "../../places/google-places/google-places.component";
 
 @Component({
     selector: 'app-edit-address',
@@ -19,7 +19,7 @@ export class EditAddressComponent implements OnInit {
   // filteredOptions: Observable<any[]>;
 
   // _filter = CitiesService.filterCities;
-  location: LocationInterface = EMPTY_LOCATION;
+  location: LocationInterface = {...EMPTY_LOCATION};
 
   constructor(public addressService: AddressService,
               private state: StateProvider,
@@ -28,7 +28,8 @@ export class EditAddressComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.address);
+    // Start from the record's own location so editing other fields keeps it
+    this.location = toLocation(this.address);
     this.createForm();
   }
 
