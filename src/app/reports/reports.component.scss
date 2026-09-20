@@ -1,0 +1,32 @@
+.totals {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0 4px;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+}
+
+.figure {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.caption {
+  color: var(--ion-color-medium);
+  font-size: 0.85rem;
+}
+
+.window-range {
+  color: var(--ion-color-medium);
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+
+.breakdown {
+  --padding-start: 32px;
+  font-size: 0.9rem;
+}

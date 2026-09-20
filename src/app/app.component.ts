@@ -30,6 +30,11 @@ export class AppComponent {
       icon: 'map'
     },
     {
+      title: 'Reports',
+      url: '/reports',
+      icon: 'stats-chart'
+    },
+    {
       title: 'Blood results',
       url: '/bloodresults',
       icon: 'eyedrop'

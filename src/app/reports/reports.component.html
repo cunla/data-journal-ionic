@@ -1,0 +1,98 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Reports</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Time away</ion-card-title>
+      <ion-card-subtitle>
+        Counting the day you left and the day you came back
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-select interface="popover"
+          label="Home country"
+          [value]="homeCountry"
+          (ionChange)="setHomeCountry($event)">
+          <ion-select-option [value]="null">Not set</ion-select-option>
+          @for (country of countries; track country) {
+            <ion-select-option [value]="country">{{ country }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-select interface="popover"
+          label="Window"
+          [value]="windowYears"
+          (ionChange)="setWindowYears($event)">
+          @for (option of windowOptions; track option) {
+            <ion-select-option [value]="option">Last {{ option }} years</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      @if (window) {
+        <div class="totals">
+          <div class="total">
+            <span class="figure">{{ window.daysAway }}</span>
+            <span class="caption">days away</span>
+          </div>
+          <div class="total">
+            <span class="figure">{{ window.daysHome }}</span>
+            <span class="caption">days home</span>
+          </div>
+        </div>
+        <p class="window-range">
+          {{ window.from | date: 'yyyy-MM-dd' }} to {{ window.to | date: 'yyyy-MM-dd' }}
+        </p>
+        @if (window.byCountry.length) {
+          <ion-list lines="full">
+            @for (entry of window.byCountry; track entry.country) {
+              <ion-item>
+                <ion-label>{{ entry.country }}</ion-label>
+                <ion-note slot="end">{{ entry.days }} days</ion-note>
+              </ion-item>
+            }
+          </ion-list>
+        } @else {
+          <p>No trips recorded in this window.</p>
+        }
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>By year</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (years.length) {
+        <ion-list lines="full">
+          @for (row of years; track row.year) {
+            <ion-item button detail="false" (click)="toggleYear(row.year)">
+              <ion-label>{{ row.year }}</ion-label>
+              <ion-note slot="end">{{ row.daysAway }} days away</ion-note>
+            </ion-item>
+            @if (expandedYear === row.year) {
+              @for (entry of row.byCountry; track entry.country) {
+                <ion-item class="breakdown">
+                  <ion-label>{{ entry.country }}</ion-label>
+                  <ion-note slot="end">{{ entry.days }} days</ion-note>
+                </ion-item>
+              }
+            }
+          }
+        </ion-list>
+      } @else {
+        <p>No trips recorded yet.</p>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>
