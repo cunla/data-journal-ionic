@@ -70,6 +70,53 @@
 
   <ion-card>
     <ion-card-header>
+      <ion-card-title>Address history</ion-card-title>
+      <ion-card-subtitle>
+        Forms that ask for an unbroken address history trip over these
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      @if (!addressCount) {
+        <p>No addresses recorded yet.</p>
+      } @else if (!gaps.length && !overlaps.length) {
+        <ion-item lines="none">
+          <ion-icon color="success" name="checkmark-circle-outline" slot="start"></ion-icon>
+          <ion-label>No gaps or overlaps found.</ion-label>
+        </ion-item>
+      } @else {
+        <ion-list lines="full">
+          @for (gap of gaps; track gap.from) {
+            <ion-item>
+              <ion-icon color="warning" name="alert-circle-outline" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h3>{{ gap.open ? 'No current address' : 'Gap' }}</h3>
+                <p>
+                  {{ gap.from | date: 'yyyy-MM-dd' }} to {{ gap.to | date: 'yyyy-MM-dd' }}
+                  ({{ gap.days }} days)
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+          @for (overlap of overlaps; track overlap.from) {
+            <ion-item>
+              <ion-icon color="danger" name="git-compare-outline" slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                <h3>Overlap</h3>
+                <p>
+                  {{ overlap.first }} and {{ overlap.second }},
+                  {{ overlap.from | date: 'yyyy-MM-dd' }} to {{ overlap.to | date: 'yyyy-MM-dd' }}
+                  ({{ overlap.days }} days)
+                </p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
       <ion-card-title>By year</ion-card-title>
     </ion-card-header>
     <ion-card-content>

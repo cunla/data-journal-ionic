@@ -3,6 +3,7 @@ import {combineLatest, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {TripInterface, TripsService} from '../trips/trips.service';
 import {AddressInterface, AddressService} from '../addresses/address.service';
+import {findGaps, findOverlaps, Gap, Overlap} from './address-history';
 import {
   currentHomeCountry,
   rollingWindow,
@@ -25,6 +26,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
   window: WindowSummary | null = null;
   years: YearSummary[] = [];
   expandedYear: number | null = null;
+  gaps: Gap[] = [];
+  overlaps: Overlap[] = [];
+  addressCount = 0;
 
   private trips: TripInterface[] = [];
   private addresses: AddressInterface[] = [];
@@ -77,5 +81,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   private recalculate() {
     this.window = rollingWindow(this.trips, this.homeCountry, this.windowYears);
     this.years = summariseByYear(this.trips, this.homeCountry);
+    this.addressCount = this.addresses.length;
+    this.gaps = findGaps(this.addresses);
+    this.overlaps = findOverlaps(this.addresses);
   }
 }
