@@ -40,3 +40,44 @@ describe('CsvTools.convertToCsv', () => {
     expect(csv.split('\r\n')[1]).toContain('2026-01-02T');
   });
 });
+
+describe('CsvTools.parseCsv', () => {
+  it('reads plain rows', () => {
+    expect(CsvTools.parseCsv('a,b\n1,2\n')).toEqual([['a', 'b'], ['1', '2']]);
+  });
+
+  it('reads quoted values and drops the quotes', () => {
+    expect(CsvTools.parseCsv('"a","b"\r\n"1","2"\r\n')).toEqual([['a', 'b'], ['1', '2']]);
+  });
+
+  it('keeps separators and newlines inside quotes', () => {
+    expect(CsvTools.parseCsv('"Paris, France","line one\nline two"'))
+      .toEqual([['Paris, France', 'line one\nline two']]);
+  });
+
+  it('turns a doubled quote back into one', () => {
+    expect(CsvTools.parseCsv('"Said ""hi"", then left"'))
+      .toEqual([['Said "hi", then left']]);
+  });
+
+  it('skips blank lines', () => {
+    expect(CsvTools.parseCsv('a,b\n\n1,2\n\n')).toEqual([['a', 'b'], ['1', '2']]);
+  });
+
+  it('accepts a space after the separator', () => {
+    expect(CsvTools.parseCsv('"1", "Paris"')).toEqual([['1', 'Paris']]);
+  });
+
+  it('reads back what convertToCsv writes', () => {
+    const csv = CsvTools.convertToCsv(
+      [{locationName: 'Say "hi", Paris', purpose: 'holiday'}], ['locationName', 'purpose']);
+    expect(CsvTools.parseCsv(csv)).toEqual([
+      ['Line#', 'locationName', 'purpose'],
+      ['1', 'Say "hi", Paris', 'holiday'],
+    ]);
+  });
+
+  it('is empty for empty input', () => {
+    expect(CsvTools.parseCsv('')).toEqual([]);
+  });
+});

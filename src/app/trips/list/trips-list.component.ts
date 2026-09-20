@@ -3,9 +3,10 @@ import {take} from 'rxjs/operators';
 import {EMPTY_TRIP, TripInterface, TripsService} from '../trips.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
-import {ModalController, RefresherCustomEvent} from '@ionic/angular/lazy';
+import {AlertController, LoadingController, ModalController, RefresherCustomEvent} from '@ionic/angular/lazy';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
 import {StateProvider} from '../../common/state.provider';
+import {parseTripsCsv} from '../import-trips';
 
 @Component({
     selector: 'app-trips',
@@ -21,8 +22,64 @@ export class TripsListComponent implements OnInit {
 
   constructor(public trips: TripsService,
               private state: StateProvider,
+              private alertController: AlertController,
+              private loadingController: LoadingController,
               private modalController: ModalController,
   ) {
+  }
+
+  // Reads a CSV the user picked, shows what it found, and saves on confirmation
+  async importCsv(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';   // so picking the same file again still fires a change
+    if (!file) {
+      return;
+    }
+    const {trips, skipped} = parseTripsCsv(await file.text());
+    if (!trips.length) {
+      await this.tellUser('Nothing to import', skipped.join('<br>') || 'No trips found in that file.');
+      return;
+    }
+    const confirmed = await this.confirmImport(trips.length, skipped);
+    if (!confirmed) {
+      return;
+    }
+    const loading = await this.loadingController.create({message: `Importing ${trips.length} trips`});
+    await loading.present();
+    try {
+      for (const trip of trips) {
+        await this.trips.create(trip);
+      }
+      await loading.dismiss();
+      await this.tellUser('Import complete', `Added ${trips.length} trips.`);
+    } catch (err) {
+      console.error('Failed to import trips', err);
+      await loading.dismiss();
+      await this.tellUser('Import failed',
+        'Some trips may not have been saved. Check your connection and try again.');
+    }
+  }
+
+  private async confirmImport(count: number, skipped: string[]): Promise<boolean> {
+    const detail = skipped.length
+      ? `<br><br>${skipped.length} row(s) will be skipped:<br>${skipped.slice(0, 5).join('<br>')}`
+      : '';
+    return new Promise(resolve => {
+      this.alertController.create({
+        header: 'Import trips',
+        message: `Add ${count} trips to your journal?${detail}`,
+        buttons: [
+          {text: 'Cancel', role: 'cancel', handler: () => resolve(false)},
+          {text: 'Import', handler: () => resolve(true)},
+        ],
+      }).then(alert => alert.present());
+    });
+  }
+
+  private async tellUser(header: string, message: string) {
+    const alert = await this.alertController.create({header, message, buttons: ['OK']});
+    await alert.present();
   }
 
   async presentModal(trip: TripInterface) {

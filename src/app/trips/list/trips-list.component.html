@@ -5,10 +5,15 @@
     </ion-buttons>
     <ion-title>User trips journal</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="exportCsv()" color="primary" mat-raised-button>
+      <ion-button (click)="csvInput.click()" color="primary" title="Import trips from CSV">
+        <ion-icon name="cloud-upload-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="exportCsv()" color="primary" title="Export trips as CSV">
         <ion-icon name="download-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <input #csvInput accept=".csv,text/csv" hidden type="file"
+      (change)="importCsv($event)">
   </ion-toolbar>
   <ion-toolbar>
     <ion-searchbar (ionInput)="searchByName($event)"
