@@ -6,7 +6,6 @@ import {saveAs} from 'file-saver';
 import {ModalController, RefresherCustomEvent} from '@ionic/angular/lazy';
 import {EditTripComponent} from '../edit-trip/edit-trip.component';
 import {StateProvider} from '../../common/state.provider';
-import {DateTime} from "luxon";
 
 @Component({
     selector: 'app-trips',
@@ -62,26 +61,6 @@ export class TripsListComponent implements OnInit {
     });
   }
 
-  calculateDaysPerYear(year: number): Map<string, number> {
-    const res = new Map<string, number>();
-    this.trips.data.pipe(take(1)).subscribe((trips) => {
-      trips.forEach(trip => {
-        if (!res.has(trip.country)) {
-          res.set(trip.country, 0);
-        }
-        const end = DateTime.min(
-          DateTime.fromJSDate(trip.end),
-          DateTime.local(year, 12, 31));
-        const start = DateTime.max(
-          DateTime.fromJSDate(trip.start),
-          DateTime.local(year, 1, 1));
-        const days = end.diff(start).as('days');
-        res.set(trip.country, days + res.get(trip.country));
-        res.set(trip.country, res.get(trip.country) + days);
-      });
-    });
-    return res;
-  }
 
   doRefresh(event: RefresherCustomEvent) {
     this.trips.refresh();

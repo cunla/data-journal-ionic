@@ -2,7 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {TripInterface, TripsService} from '../../trips/trips.service';
 import {AddressInterface, AddressService} from "../../addresses/address.service";
 import {environment} from '../../../environments/environment';
-import {combineLatest, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 export interface Point {
@@ -95,11 +95,6 @@ export class AgmChartComponent implements OnDestroy {
     if (!origin || origin.id === target.id) {
       return;
     }
-    // const t = {
-    //   name: `${origin.id} - ${target.id}`,
-    //   origin,
-    //   target,
-    // };
     const t: TripLine = {
       year: year,
       polyline: [

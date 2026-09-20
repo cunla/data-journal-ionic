@@ -11,7 +11,6 @@ export interface QueryConfig {
   reverse: boolean; // reverse order?
   prepend: boolean; // prepend to source?
   searchValue: string;
-  filter: boolean;
 }
 
 export interface TripInterface {
@@ -46,7 +45,6 @@ export const EMPTY_TRIP: TripInterface = {
   providedIn: 'root'
 })
 export class TripsService {
-  private trips: Array<TripInterface> = null;
   // Stable subject and observable — never reassigned so async pipe stays subscribed
   private readonly _data = new BehaviorSubject<TripInterface[]>([]);
   readonly data: Observable<TripInterface[]> = this._data.asObservable();
@@ -78,7 +76,6 @@ export class TripsService {
       reverse: true,
       prepend: false,
       searchValue: '',
-      filter: true,
       ...opts
     };
     this.refresh();
@@ -115,7 +112,6 @@ export class TripsService {
     if (!this.userId) {
       this._subscription?.unsubscribe();
       this._subscription = null;
-      this.trips = null;
       return;
     }
     runInInjectionContext(this.envInjector, () => {
@@ -163,7 +159,6 @@ export class TripsService {
         });
 
         values = this.query.prepend ? values.reverse() : values;
-        this.trips = values;
         this._loading.next(false);
         this._done.next(!values.length);
 
@@ -182,10 +177,4 @@ export class TripsService {
       .doc(this.userId);
   }
 
-  public getTrips(): Array<TripInterface> {
-    if (!this.trips) {
-      this.refresh();
-    }
-    return this.trips;
-  }
 }

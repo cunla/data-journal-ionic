@@ -15,7 +15,6 @@ export interface QueryConfig {
   reverse: boolean; // reverse order?
   prepend: boolean; // prepend to source?
   searchValue: string;
-  filter: boolean;
 }
 
 export interface AddressInterface {
@@ -75,7 +74,6 @@ export class AddressService {
       reverse: true,
       prepend: false,
       searchValue: '',
-      filter: true,
       ...opts
     };
     this.refresh();

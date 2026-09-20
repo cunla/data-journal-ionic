@@ -15,9 +15,6 @@ import {EMPTY_LOCATION, LocationInterface, toLocation} from "../../places/google
 export class EditAddressComponent implements OnInit {
   @Input() address: AddressInterface;
   addressForm: FormGroup;
-  // filteredOptions: Observable<any[]>;
-
-  // _filter = CitiesService.filterCities;
   location: LocationInterface = {...EMPTY_LOCATION};
 
   constructor(public addressService: AddressService,
@@ -32,7 +29,6 @@ export class EditAddressComponent implements OnInit {
   }
 
   onSubmit(value) {
-    // const location: LocationInterface = CitiesService.filterLocation(value.locationName);
     const location = this.location;
     value.locationName = location.locationName;
     value.city = location.city;

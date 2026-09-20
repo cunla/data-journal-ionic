@@ -32,7 +32,6 @@ export class EditTripComponent implements OnInit {
   }
 
   onSubmit(value) {
-    // const location: LocationInterface = CitiesService.filterLocation(value.locationName);
     const location = this.location;
     value.locationName = location.locationName;
     value.city = location.city;
@@ -81,11 +80,4 @@ export class EditTripComponent implements OnInit {
     }, controlOptions);
   }
 
-  // setDate(formControlName: string, value: string) {
-  //   this.tripForm.get(formControlName)
-  //     .setValue(format(parseISO(value), 'yyyy/MM/dd'));
-  // }
-  // resetLocation($event: any) {
-  //   this.tripForm.get('locationName').reset();
-  // }
 }

@@ -6,7 +6,6 @@ import {saveAs} from 'file-saver';
 import {ModalController} from '@ionic/angular/lazy';
 import {EditAddressComponent} from '../edit-address/edit-address.component';
 import {StateProvider} from '../../common/state.provider';
-import {DateTime} from "luxon";
 
 @Component({
     selector: 'app-trips',
@@ -56,23 +55,4 @@ export class AddressListComponent {
     });
   }
 
-  calculateDaysPerYear(year: number): Map<string, number> {
-    const res = new Map<string, number>();
-    this.addressService.data.pipe(take(1)).subscribe((addresses) => {
-      addresses.forEach(address => {
-        if (!res.has(address.country)) {
-          res.set(address.country, 0);
-        }
-        const end = DateTime.min(
-          DateTime.fromJSDate(address.end),
-          DateTime.local(year, 12, 31));
-        const start = DateTime.max(
-          DateTime.fromJSDate(address.start),
-          DateTime.local(year, 1, 1));
-        const days = end.diff(start).as('days');
-        res.set(address.country, days + res.get(address.country));
-      });
-    });
-    return res;
-  }
 }

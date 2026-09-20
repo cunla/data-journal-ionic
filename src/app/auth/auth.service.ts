@@ -10,7 +10,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  TwitterAuthProvider,
   User,
 } from '@angular/fire/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -57,9 +56,6 @@ export class AuthService {
     return this.loginWithProvider(new FacebookAuthProvider());
   }
 
-  doTwitterLogin() {
-    return this.loginWithProvider(new TwitterAuthProvider());
-  }
 
   doGoogleLogin() {
     const provider = new GoogleAuthProvider();
