@@ -8,7 +8,6 @@ import {containsCaseInsensitive} from '../common/string.tools';
 export interface QueryConfig {
   path: string; //  path to collection
   field: string; // field to orderBy
-  limit: number; // limit per query
   reverse: boolean; // reverse order?
   prepend: boolean; // prepend to source?
   searchValue: string;
@@ -76,7 +75,6 @@ export class TripsService {
     this.query = {
       path: path,
       field: field,
-      limit: 50,
       reverse: true,
       prepend: false,
       searchValue: '',
@@ -121,9 +119,9 @@ export class TripsService {
   }
 
   private queryFn(ref) {
+    // No limit: the list, search, CSV export and map all read this stream
     return ref
-      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
-      .limit(this.query.limit);
+      .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc');
   }
 
   // Maps the snapshot to usable format then updates source
