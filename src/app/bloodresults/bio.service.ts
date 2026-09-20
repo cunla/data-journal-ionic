@@ -1,6 +1,6 @@
-import {scan, take, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection, DocumentData} from '@angular/fire/compat/firestore';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {BioResultMeta} from "./bio-metadata.service";
@@ -26,9 +26,10 @@ export const EMPTY_RESULT: BioResult = {
   providedIn: 'root'
 })
 export class BioService {
-  // Observable data
-  data: Observable<BioResult[]>;
-  private _data = new BehaviorSubject([]);
+  // Stable subject and observable — never reassigned so subscribers stay attached
+  private readonly _data = new BehaviorSubject<BioResult[]>([]);
+  readonly data: Observable<BioResult[]> = this._data.asObservable();
+  private _subscription: Subscription | null = null;
   private path: string = 'bio-results';
   private readonly userId: string;
 
@@ -73,50 +74,28 @@ export class BioService {
 
   refresh() {
     runInInjectionContext(this.envInjector, () => {
-      const first = this.userDoc().collection(this.path, ref => {
-        return this.queryFn(ref);
-      });
-      this.data = null;
-      this._data = new BehaviorSubject([]);
-      this.mapAndUpdate(first);
-      // Create the observable array for consumption in components
-      this.data = this._data.asObservable()
-        .pipe(scan((acc, values) => {
-          return values;
-        }));
+      this.mapAndUpdate(this.userDoc().collection(this.path));
     });
   }
 
-  private queryFn(ref) {
-    return ref;
-  }
-
-  // Determines the doc snapshot to paginate query
-  private getCursor() {
-    const current = this._data.value;
-    if (current.length) {
-      return current[current.length - 1].doc;
-    }
-    return null;
-  }
-
-  // Maps the snapshot to usable format the updates source
+  // Maps the snapshot to usable format then updates source
   private mapAndUpdate(col: AngularFirestoreCollection<DocumentData>) {
-    // Map snapshot with doc ref (needed for cursor)
-    return col.snapshotChanges().pipe(
+    // Cancel the previous live listener before starting a new one
+    this._subscription?.unsubscribe();
+
+    this._subscription = col.snapshotChanges().pipe(
       tap((arr) => {
         const values = arr.map(snap => {
           const data = snap.payload.doc.data();
           data.id = snap.payload.doc.id;
           const doc = snap.payload.doc;
           data.date = data.date ? data.date.toDate() : null;
-          return {...data, doc};
+          return {...data, doc} as unknown as BioResult;
         });
 
         // update source with new values, done loading
         this._data.next(values);
-      }),
-      take(1),)
+      }))
       .subscribe();
   }
 

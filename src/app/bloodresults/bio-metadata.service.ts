@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {AutoCompleteService} from "../autocomplete/auto-complete.service";
@@ -23,7 +23,9 @@ export interface BioResultMeta {
 })
 export class BioMetadataService implements AutoCompleteService {
   formValueAttribute = 'test';
-  private bloodtestDataMap: Map<string, BioResultMeta>;
+  // Emits true once the reference-range data has been loaded
+  readonly loaded$ = new BehaviorSubject<boolean>(false);
+  private bloodtestDataMap = new Map<string, BioResultMeta>();
   private bloodtestData: Array<BioResultMeta> = [];
   private iconMap = new Map<string, string>();
 
@@ -41,6 +43,7 @@ export class BioMetadataService implements AutoCompleteService {
       .subscribe((res: Array<BioResultMeta>) => {
         this.bloodtestData = res;
         this.bloodtestDataMap = new Map(res.map((x) => [x.test.toLowerCase(), x]));
+        this.loaded$.next(true);
       });
   }
 
@@ -71,7 +74,10 @@ export class BioMetadataService implements AutoCompleteService {
     return this.iconMap.get(icon) || 'eyedrop-outline';
   }
 
-  getTestMetaData(testName: string): BioResultMeta {
+  getTestMetaData(testName: string): BioResultMeta | null {
+    if (!testName) {
+      return null;
+    }
     testName = testName.toLowerCase();
     const res = this.bloodtestDataMap.get(testName);
     if (res) {
@@ -82,6 +88,7 @@ export class BioMetadataService implements AutoCompleteService {
         return value;
       }
     }
+    return null;
   }
 
   getMetaData() {

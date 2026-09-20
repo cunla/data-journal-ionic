@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {take} from 'rxjs/operators';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {BioResult, BioService, EMPTY_RESULT} from '../bio.service';
 import {ModalController, RefresherCustomEvent, SegmentCustomEvent} from '@ionic/angular/lazy';
 import {StateProvider} from '../../common/state.provider';
@@ -14,12 +15,14 @@ import {DateTime} from "luxon";
     styleUrls: ['./bloodresults.component.scss'],
     standalone: false
 })
-export class BloodresultsComponent implements OnInit {
+export class BloodresultsComponent implements OnInit, OnDestroy {
   data: Map<string, Array<BioResult>> = new Map<string, Array<BioResult>>();
   groupby = 'date';
   newResult = EMPTY_RESULT;
   headers: string[] = [];
   graphOrListMap: Map<string, string> = new Map();
+  private allResults: BioResult[] = [];
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private modalController: ModalController,
               private state: StateProvider,
@@ -32,12 +35,23 @@ export class BloodresultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.doRefresh(null);
+    this.bioService.data.pipe(takeUntil(this.destroy$)).subscribe((allResults) => {
+      this.allResults = allResults;
+      this.regroup();
+    });
+    // Reference ranges load asynchronously; regroup once they are available
+    this.bioMetadataService.loaded$.pipe(takeUntil(this.destroy$)).subscribe(() => this.regroup());
+    this.bioService.refresh();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   segmentChanged(groupby: CustomEvent) {
     this.groupby = groupby?.detail?.value || this.groupby;
-    this.doRefresh(null);
+    this.regroup();
   }
 
   graphOrList(header: string, $event: SegmentCustomEvent) {
@@ -53,15 +67,12 @@ export class BloodresultsComponent implements OnInit {
       component: AddBioresultComponent,
       componentProps: {bioresult: item,}
     });
-    modal.present().then(() => {
-      this.doRefresh(null);
-    });
+    return await modal.present();
   }
 
   delete(item: BioResult) {
     this.bioService.delete(item.id).then(() => {
       console.log(`Deleted ${item.id}`);
-      this.doRefresh(null);
     });
   }
 
@@ -79,27 +90,30 @@ export class BloodresultsComponent implements OnInit {
 
   doRefresh(event: RefresherCustomEvent) {
     this.bioService.refresh();
-    this.bioService.data.pipe(take(1)).subscribe((allResults) => {
-      allResults = allResults.sort((a, b) => {
-        return b.date.getTime() - a.date.getTime();
-      })
-      this.data = new Map<string, Array<BioResult>>();
-      this.headers = [];
-      allResults.forEach((res: BioResult) => {
-        res.metadata = this.bioMetadataService.getTestMetaData(res.type);
-        const group = (this.groupby === 'date') ? BloodresultsComponent.transform(res.date) : res.type;
-        if (!this.data.has(group)) {
-          this.data.set(group, []);
-          this.headers.push(group);
-        }
-        this.data.get(group).push(res);
-      });
-      event?.target.complete();
-    });
+    event?.target.complete();
   }
 
   itemBadgeColor(item: BioResult) {
     const metadata = item.metadata || this.bioMetadataService.getTestMetaData(item.type);
+    if (!metadata) {
+      return 'medium';
+    }
     return (item.value < metadata.low || item.value > metadata.high) ? 'danger' : 'success';
+  }
+
+  // Groups the latest results by date or by test type for display
+  private regroup() {
+    const sorted = [...this.allResults].sort((a, b) => b.date.getTime() - a.date.getTime());
+    this.data = new Map<string, Array<BioResult>>();
+    this.headers = [];
+    sorted.forEach((res: BioResult) => {
+      res.metadata = this.bioMetadataService.getTestMetaData(res.type);
+      const group = (this.groupby === 'date') ? BloodresultsComponent.transform(res.date) : res.type;
+      if (!this.data.has(group)) {
+        this.data.set(group, []);
+        this.headers.push(group);
+      }
+      this.data.get(group).push(res);
+    });
   }
 }
