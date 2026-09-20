@@ -41,7 +41,7 @@ export class AddBioresultComponent implements OnInit {
     value.date = DateTime.fromISO(value.date).toJSDate();
     const p = [];
     for (const val of value.values) {
-      p.push(this.bioService.create(value.date, val.type, val.value));
+      p.push(this.bioService.createResult(value.date, val.type, val.value));
     }
     Promise.all(p).then(() => {
       loading.dismiss();
