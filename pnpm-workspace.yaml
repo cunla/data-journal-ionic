@@ -25,7 +25,6 @@ minimumReleaseAgeExclude:
   - '@schematics/angular@22.0.3'
   - prettier@3.9.3 || 3.9.4
   - eslint@10.7.0 || 10.11.0
-  - proj4@2.21.0
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@parcel/watcher'
