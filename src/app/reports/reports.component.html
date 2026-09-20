@@ -50,6 +50,11 @@
           <ion-list lines="full">
             @for (entry of window.byCountry; track entry.country) {
               <ion-item>
+                @if (entry.countryCode) {
+                  <img alt="" class="flag" slot="start"
+                    [src]="'/assets/flags/' + entry.countryCode.toLowerCase() + '.svg'"
+                    (error)="hideFlag($event)">
+                }
                 <ion-label>{{ entry.country }}</ion-label>
                 <ion-note slot="end">{{ entry.days }} days</ion-note>
               </ion-item>
@@ -155,6 +160,11 @@
             @if (expandedYear === row.year) {
               @for (entry of row.byCountry; track entry.country) {
                 <ion-item class="breakdown">
+                  @if (entry.countryCode) {
+                    <img alt="" class="flag" slot="start"
+                      [src]="'/assets/flags/' + entry.countryCode.toLowerCase() + '.svg'"
+                      (error)="hideFlag($event)">
+                  }
                   <ion-label>{{ entry.country }}</ion-label>
                   <ion-note slot="end">{{ entry.days }} days</ion-note>
                 </ion-item>

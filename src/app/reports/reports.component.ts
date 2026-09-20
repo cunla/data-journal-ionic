@@ -106,6 +106,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
     return this.trips.length + this.addresses.length + this.bioResults.length;
   }
 
+  // Not every country code has a flag file; drop the image rather than show
+  // a broken one
+  hideFlag(event: Event) {
+    (event.target as HTMLImageElement).style.display = 'none';
+  }
+
   toggleYear(year: number) {
     this.expandedYear = this.expandedYear === year ? null : year;
   }

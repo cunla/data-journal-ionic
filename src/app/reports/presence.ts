@@ -5,6 +5,8 @@ export const MS_PER_DAY = 24 * 3600 * 1000;
 
 export interface CountryDays {
   country: string;
+  /** ISO 3166-1 alpha-2, for the flag; null when no trip recorded one. */
+  countryCode: string | null;
   days: number;
 }
 
@@ -106,9 +108,9 @@ export function homeCountriesBetween(addresses: AddressInterface[],
   return [...new Set(countries)];
 }
 
-function tally(counts: Map<string, number>): CountryDays[] {
+function tally(counts: Map<string, number>, codes: Map<string, string>): CountryDays[] {
   return [...counts.entries()]
-    .map(([country, days]) => ({country, days}))
+    .map(([country, days]) => ({country, countryCode: codes.get(country) ?? null, days}))
     .sort((a, b) => b.days - a.days || a.country.localeCompare(b.country));
 }
 
@@ -122,6 +124,7 @@ export function daysAwayBetween(trips: TripInterface[],
                                 from: Date,
                                 to: Date): WindowSummary {
   const counts = new Map<string, number>();
+  const codes = new Map<string, string>();
   for (const trip of trips) {
     const days = overlapDays(trip.start, trip.end, from, to);
     if (days <= 0) {
@@ -133,8 +136,11 @@ export function daysAwayBetween(trips: TripInterface[],
     }
     const country = trip.country || 'Unknown';
     counts.set(country, (counts.get(country) ?? 0) + days);
+    if (trip.countryCode && !codes.has(country)) {
+      codes.set(country, trip.countryCode);
+    }
   }
-  const byCountry = tally(counts);
+  const byCountry = tally(counts, codes);
   const daysAway = byCountry.reduce((sum, entry) => sum + entry.days, 0);
   const windowDays = overlapDays(from, to, from, to);
   return {

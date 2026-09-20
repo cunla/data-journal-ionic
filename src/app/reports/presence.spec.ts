@@ -11,8 +11,10 @@ import {
   summariseByYear,
 } from './presence';
 
-const trip = (country: string, start: string, end: string | null): TripInterface => ({
-  ...({} as TripInterface), country, start: new Date(start), end: end ? new Date(end) : null,
+const trip = (country: string, start: string, end: string | null,
+              countryCode: string = null): TripInterface => ({
+  ...({} as TripInterface), country, countryCode,
+  start: new Date(start), end: end ? new Date(end) : null,
 });
 
 const address = (country: string, start: string, end: string | null): AddressInterface => ({
@@ -108,7 +110,7 @@ describe('daysAwayBetween', () => {
   });
 
   it('adds up repeat visits to the same country', () => {
-    expect(summary.byCountry[0]).toEqual({country: 'France', days: 15});
+    expect(summary.byCountry[0]).toEqual({country: 'France', countryCode: null, days: 15});
   });
 
   it('totals the days away', () => {
@@ -117,6 +119,20 @@ describe('daysAwayBetween', () => {
 
   it('reports the rest of the window as days home', () => {
     expect(summary.daysHome).toBe(365 - 19);
+  });
+
+  it('carries the country code through, for the flag', () => {
+    const coded = daysAwayBetween(
+      [trip('France', '2026-03-01', '2026-03-03', 'FR')], home,
+      new Date('2026-01-01'), new Date('2026-12-31'));
+    expect(coded.byCountry).toEqual([{country: 'France', countryCode: 'FR', days: 3}]);
+  });
+
+  it('takes the code from whichever trip recorded one', () => {
+    const mixed = daysAwayBetween(
+      [trip('France', '2026-03-01', '2026-03-03'), trip('France', '2026-05-01', '2026-05-02', 'FR')],
+      home, new Date('2026-01-01'), new Date('2026-12-31'));
+    expect(mixed.byCountry).toEqual([{country: 'France', countryCode: 'FR', days: 5}]);
   });
 
   it('names the home country of the window', () => {
@@ -132,7 +148,7 @@ describe('daysAwayBetween', () => {
   it('files a trip with no country under Unknown', () => {
     const summaryUnknown = daysAwayBetween([trip(null, '2026-02-01', '2026-02-02')], home,
       new Date('2026-01-01'), new Date('2026-12-31'));
-    expect(summaryUnknown.byCountry).toEqual([{country: 'Unknown', days: 2}]);
+    expect(summaryUnknown.byCountry).toEqual([{country: 'Unknown', countryCode: null, days: 2}]);
   });
 
   it('follows a move abroad: the old country becomes time away', () => {
@@ -147,8 +163,8 @@ describe('daysAwayBetween', () => {
     ];
     const before = daysAwayBetween(visits, moved, new Date('2024-01-01'), new Date('2024-12-31'));
     const after = daysAwayBetween(visits, moved, new Date('2026-01-01'), new Date('2026-12-31'));
-    expect(before.byCountry).toEqual([{country: 'Canada', days: 10}]);
-    expect(after.byCountry).toEqual([{country: 'Israel', days: 5}]);
+    expect(before.byCountry).toEqual([{country: 'Canada', countryCode: null, days: 10}]);
+    expect(after.byCountry).toEqual([{country: 'Israel', countryCode: null, days: 5}]);
   });
 
   it('lists both home countries when the window spans a move', () => {

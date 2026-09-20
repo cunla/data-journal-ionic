@@ -30,3 +30,12 @@
   --padding-start: 32px;
   font-size: 0.9rem;
 }
+
+.flag {
+  width: 24px;
+  height: 18px;
+  object-fit: cover;
+  margin-inline-end: 12px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
