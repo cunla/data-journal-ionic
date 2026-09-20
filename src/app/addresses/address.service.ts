@@ -92,6 +92,12 @@ export class AddressService {
     });
   }
 
+  // Narrows the loaded addresses; no Firestore round trip
+  search(searchValue: string) {
+    this.query.searchValue = searchValue ?? '';
+    this._data.next(this._data.value);
+  }
+
   get(key) {
     return runInInjectionContext(this.envInjector, () =>
       this.userDoc().collection(this.query.path).doc(key).snapshotChanges()

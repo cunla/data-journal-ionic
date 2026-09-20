@@ -40,16 +40,11 @@ export class TripsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const searchbar = document.querySelector('ion-searchbar');
-    searchbar.addEventListener('ionInput', this.searchByName.bind(this));
     this.trips.refresh();
   }
 
   searchByName(event) {
-    const query = event.target.value.toLowerCase();
-    this.trips.init('trips', 'start', {
-      reverse: true, prepend: false, searchValue: query,
-    });
+    this.trips.search(event.target.value?.toLowerCase());
   }
 
   exportCsv() {

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {take} from 'rxjs/operators';
-import {ADDRESS_HISTORY_PATH, AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
+import {AddressInterface, AddressService, EMPTY_ADDRESS} from '../address.service';
 import {CsvTools} from '../../common/csvtools.service';
 import {saveAs} from 'file-saver';
 import {ModalController} from '@ionic/angular/lazy';
@@ -40,10 +40,7 @@ export class AddressListComponent {
   }
 
   searchByName(event) {
-    const query = event.target.value.toLowerCase();
-    this.addressService.init(ADDRESS_HISTORY_PATH, 'start', {
-      reverse: true, prepend: false, searchValue: query,
-    });
+    this.addressService.search(event.target.value?.toLowerCase());
   }
 
   exportCsv() {

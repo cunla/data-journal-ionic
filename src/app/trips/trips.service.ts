@@ -1,4 +1,4 @@
-import {tap} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {EnvironmentInjector, Injectable, runInInjectionContext} from '@angular/core';
 import {AngularFirestore, AngularFirestoreCollection, DocumentChangeAction, DocumentData} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
@@ -47,7 +47,12 @@ export const EMPTY_TRIP: TripInterface = {
 export class TripsService {
   // Stable subject and observable — never reassigned so async pipe stays subscribed
   private readonly _data = new BehaviorSubject<TripInterface[]>([]);
-  readonly data: Observable<TripInterface[]> = this._data.asObservable();
+  // Filtering happens here, on what is already loaded — searching never re-queries
+  readonly data: Observable<TripInterface[]> = this._data.asObservable().pipe(
+    map(values => values.filter(item =>
+      containsCaseInsensitive(item.locationName, this.query.searchValue) ||
+      containsCaseInsensitive(item.purpose, this.query.searchValue)))
+  );
   private _subscription: Subscription | null = null;
 
   private _done = new BehaviorSubject(false);
@@ -79,6 +84,12 @@ export class TripsService {
       ...opts
     };
     this.refresh();
+  }
+
+  // Narrows the loaded trips; no Firestore round trip
+  search(searchValue: string) {
+    this.query.searchValue = searchValue ?? '';
+    this._data.next(this._data.value);
   }
 
   get(key) {
@@ -162,11 +173,7 @@ export class TripsService {
         this._loading.next(false);
         this._done.next(!values.length);
 
-        // Apply search filter and push — stable _data reference keeps async pipe subscribed
-        this._data.next(values.filter(item =>
-          containsCaseInsensitive(item.locationName, this.query.searchValue) ||
-          containsCaseInsensitive(item.purpose, this.query.searchValue)
-        ));
+        this._data.next(values);
       })
     ).subscribe();
   }

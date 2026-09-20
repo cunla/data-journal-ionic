@@ -11,7 +11,9 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-searchbar debounce="500" placeholder="Filter trips"></ion-searchbar>
+    <ion-searchbar (ionInput)="searchByName($event)"
+      debounce="500"
+      placeholder="Filter trips"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
