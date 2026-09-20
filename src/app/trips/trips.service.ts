@@ -58,15 +58,15 @@ export class TripsService {
   loading: Observable<boolean> = this._loading.asObservable();
 
   private query: QueryConfig;
-  private readonly userId: string;
+  // Follows the signed-in user; null while signed out
+  private userId: string | null = null;
 
 
   constructor(public db: AngularFirestore,
               public afAuth: AngularFireAuth,
               private envInjector: EnvironmentInjector) {
-    const user = JSON.parse(localStorage.getItem('user'));
-    this.userId = user.uid;
     this.init('trips', 'start', {reverse: true, prepend: false});
+    this.watchAuthState();
   }
 
   // Initial query sets options and defines the Observable
@@ -109,14 +109,35 @@ export class TripsService {
   }
 
   refresh() {
+    this._done.next(false);
+    this._loading.next(false);
+    this._data.next([]);
+    if (!this.userId) {
+      this._subscription?.unsubscribe();
+      this._subscription = null;
+      this.trips = null;
+      return;
+    }
     runInInjectionContext(this.envInjector, () => {
-      const first = this.userDoc().collection(this.query.path, ref => this.queryFn(ref));
-      this._done.next(false);
-      this._loading.next(false);
-      this._data.next([]);
-      this.mapAndUpdate(first);
+      this.mapAndUpdate(this.userDoc().collection(this.query.path, ref => this.queryFn(ref)));
     });
   }
+
+  // Re-queries as the signed-in user changes, so a logout or an account
+  // switch never leaves the previous user's data or id in place
+  private watchAuthState() {
+    runInInjectionContext(this.envInjector, () => {
+      this.afAuth.authState.subscribe(user => {
+        const userId = user?.uid ?? null;
+        if (userId === this.userId) {
+          return;
+        }
+        this.userId = userId;
+        this.refresh();
+      });
+    });
+  }
+
 
   private queryFn(ref) {
     // No limit: the list, search, CSV export and map all read this stream

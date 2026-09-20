@@ -16,10 +16,12 @@ import {BioMetadataService} from './bio-metadata.service';
 import {AddBioresultComponent} from './add/add-bioresult.component';
 import {BioresultItemModule} from "./bioresult-item/bioresult-item.module";
 import {AutoCompleteModule} from "../autocomplete/autocomplete.module";
+import {HomeGuardModule} from '../guard/home.guard.module';
 
 @NgModule({
   imports: [
     ToolsModule,
+    HomeGuardModule,
     CommonModule,
     FormsModule,
     IonicModule,
