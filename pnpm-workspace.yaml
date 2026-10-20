@@ -6,16 +6,16 @@ allowBuilds:
   msgpackr-extract: true
   protobufjs: true
 minimumReleaseAgeExclude:
-  - '@typescript-eslint/eslint-plugin@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/parser@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/project-service@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/scope-manager@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/tsconfig-utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/type-utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/types@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/typescript-estree@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
-  - '@typescript-eslint/visitor-keys@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0'
+  - '@typescript-eslint/eslint-plugin@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/parser@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/project-service@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/scope-manager@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/tsconfig-utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/type-utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/types@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/typescript-estree@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/utils@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
+  - '@typescript-eslint/visitor-keys@8.59.4 || 8.61.1 || 8.62.1 || 8.65.0 || 8.68.0 || 8.71.0 || 8.72.0'
   - '@types/node@25.9.1 || 26.0.0 || 26.1.2 || 26.3.0 || 26.6.2'
   - '@angular-devkit/architect@0.2200.3'
   - '@angular-devkit/core@22.0.3'
@@ -27,7 +27,7 @@ minimumReleaseAgeExclude:
   - eslint@10.7.0 || 10.11.0
   - '@angular/google-maps@22.2.0'
   - '@types/luxon@3.7.6'
-  - typescript-eslint@8.71.0
+  - typescript-eslint@8.71.0 || 8.72.0
   - '@angular-eslint/builder@22.6.0'
   - '@angular-eslint/bundled-angular-compiler@22.6.0'
   - '@angular-eslint/eslint-plugin-template@22.6.0'
