@@ -25,7 +25,7 @@ minimumReleaseAgeExclude:
   - '@schematics/angular@22.0.3'
   - prettier@3.9.3 || 3.9.4 || 3.9.9
   - eslint@10.7.0 || 10.11.0
-  - '@angular/google-maps@22.2.0'
+  - '@angular/google-maps@22.2.0 || 22.2.6'
   - '@types/luxon@3.7.6'
   - typescript-eslint@8.71.0 || 8.72.0
   - '@angular-eslint/builder@22.6.0'
@@ -60,7 +60,7 @@ overrides:
   follow-redirects: '>=1.16.0'
   qs: '>=6.16.0'
   ip-address: '>=10.5.0'
-  fast-uri: '>=3.1.8 <4'
+  fast-uri: '>=3.1.9 <4'
   '@grpc/grpc-js': '>=1.9.16 <1.10'
   websocket-driver: '>=0.7.5'
   tar: '>=7.5.22'
@@ -69,6 +69,7 @@ overrides:
   '@humanfs/node': '>=0.16.8 <0.17'
   less: '>=4.9.1 <5'
   source-map-js: '>=1.2.2 <2'
+  re2js: '>=2.8.7 <3'
 peerDependencyRules:
   allowedVersions:
     'rxfire>firebase': '^12.0.0'
