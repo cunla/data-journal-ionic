@@ -73,5 +73,6 @@ Other services: `AuthService`, `BioMetadataService`, `CsvTools` (static utility)
 - pnpm settings live in `pnpm-workspace.yaml`, not `package.json`: `overrides`, `allowBuilds`/`onlyBuiltDependencies`, `peerDependencyRules`, `minimumReleaseAgeExclude`
 - Transitive-dependency CVE fixes are `>=X` floors in `overrides`. pnpm won't re-resolve a package that already satisfies its floor, so when an audit flags one, raise the floor. Bound it below the next major (`'>=X <N'`) when that major would break the parent
 - **TypeScript is pinned** to whatever `@angular/compiler-cli`'s `peerDependencies.typescript` allows (currently `>=6.0 <6.1`, so `6.0.3`). `ncu -u` ignores this and proposes TS 7, which breaks `ionic serve`/`build`
-- `@angular/fire` is `21.0.0-rc.0` and declares Angular 21 peers, so `pnpm install` reports unmet peers against Angular 22. This is expected and harmless
+- `@angular/fire` is `21.0.0` and declares Angular 21 peers, so `pnpm install` reports unmet peers against Angular 22. This is expected and harmless. `22.0.0-rc.0` (on the `next` tag) is the first release with Angular 22 peers
+- **firebase is held on 12.** `@angular/fire` has `firebase ^12` as a hard dependency, so taking firebase 13 would install a second SDK copy and break auth/Firestore. Run `ncu -u --reject typescript,firebase` until `npm view @angular/fire dependencies.firebase` moves to the new major
 - The routine update flow is the `/update-deps` skill (`ncu -u` → install → serve → build → commit → deploy)
